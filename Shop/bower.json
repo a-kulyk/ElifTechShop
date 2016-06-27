@@ -1,0 +1,18 @@
+{
+  "name": "Shop",
+  "description": "",
+  "main": "",
+  "authors": [
+    "maftey <maftey@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/gameiro9k/ElifTechShop",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
