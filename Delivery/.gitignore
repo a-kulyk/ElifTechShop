@@ -82,4 +82,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-./idea
+.idea/
+.idea/Delivery.iml
+.idea/modules.xml
+

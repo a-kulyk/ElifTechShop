@@ -23,6 +23,6 @@ app.get('/', function (req, res) {
 app.post('/order', function (req, res) {
     var title = req.body.title;
     var price = req.body.price;
-    console.log(title + ' ' + price);
+    console.log(req.body);
     res.sendStatus(200);
 });
