@@ -17,5 +17,20 @@ function OrderService() {
         });
     }
 }
-
+var order = {
+    "title": "table",
+    "price": 854,
+    "from": {
+        "username": "Alex",
+        "lng": 45,
+        "lat": 28,
+    },
+    "to": {
+        "username": "Fred",
+        "lng": 96,
+        "lat": 41,
+    }
+};
+var os = new OrderService();
+os.createOrder(order);
 module.exports = OrderService;

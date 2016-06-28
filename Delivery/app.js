@@ -20,5 +20,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/order', function (req, res) {
+    var title = req.body.title;
+    var price = req.body.price;
     res.sendStatus(200);
 });
