@@ -11,7 +11,7 @@ function OrderService() {
     }
     this.getOrderById = function (id) {
         dbConnector.db.orders.find({
-            _id: dbConnector.mongojs.ObjectId('5772729c1993986d1ccba0b0')
+            _id: dbConnector.mongojs.ObjectId(id)
         }, function (err, doc) {
             console.log(doc);
         });
