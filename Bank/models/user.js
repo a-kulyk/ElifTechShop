@@ -1,6 +1,6 @@
 var crypto = require('crypto');
 
-var mongoose = require('./libs/mongoose'),
+var mongoose = require('../libs/mongoose'),
     Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -18,7 +18,7 @@ var schema = new Schema({
         required: true
     },
     amount: {
-        type: Double,
+        type: Number,
         default: 0
     }
 });
