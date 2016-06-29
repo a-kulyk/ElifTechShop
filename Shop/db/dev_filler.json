@@ -1,0 +1,71 @@
+{
+  "items": [
+    {
+      "name": "item_1",
+      "category": "ctegoria_1",
+      "property": {
+        "size": "big"
+      },
+      "price": 1,
+      "company": "company_1",
+      "quantity": 100,
+      "image": []
+    },
+    {
+      "name": "item_2",
+      "category": "ctegoria_1",
+      "property": {
+        "size": "big"
+      },
+      "price": 12,
+      "company": "company_1",
+      "quantity": 105,
+      "image": []
+    },
+    {
+      "name": "item_3",
+      "category": "ctegoria_1",
+      "property": {
+        "size": "small"
+      },
+      "price": 12,
+      "company": "company_2",
+      "quantity": 105,
+      "image": []
+    },
+    {
+      "name": "item_4",
+      "category": "ctegoria_2",
+      "property": {
+        "size": "big",
+        "guarantee" : true
+      },
+      "price": 1,
+      "company": "company_1",
+      "quantity": 100,
+      "image": []
+    },
+    {
+      "name": "item_5",
+      "category": "ctegoria_2",
+      "property": {
+        "size": "big"
+      },
+      "price": 12,
+      "company": "company_2",
+      "quantity": 105,
+      "image": []
+    },
+    {
+      "name": "item_6",
+      "category": "ctegoria_2",
+      "property": {
+        "size": "small"
+      },
+      "price": 12,
+      "company": "company_2",
+      "quantity": 105,
+      "image": []
+    }
+  ]
+}
