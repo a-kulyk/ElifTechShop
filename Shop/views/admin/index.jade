@@ -10,9 +10,29 @@ html(ng-app="adminCatalog")
         .container
             h1= title
             p Welcome to #{title}
-        #item-list
-            ul(ng-repeat="item in items")
-                li {{item.name}}
+            #item-list
+                table.table.table-hover
+                    thead
+                        tr
+                            th image
+                            th name
+                            th category
+                            th property
+                            th price
+                            th company
+                            th quantity
+                            th command
+
+                    tbody(ng-repeat="item in items")
+                        tr
+                            td
+                            td {{item.name}}
+                            td {{item.category}}
+                            td
+                            td {{item.price}}
+                            td {{item.company}}
+                            td {{item.quantity}}
+                            td
 
         script(type='text/javascript' src='/bower_components/angular/angular.js')
         script(type='text/javascript' src='/bower_components/jquery/dist/jquery.js')
