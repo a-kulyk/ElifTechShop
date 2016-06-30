@@ -1,9 +1,46 @@
 /**
  * Created by dmytro on 28.06.16.
  */
-function Order(title, price, from, to) {
-    this.title = title;
-    this.price = price;
-    this.from = from;
-    this.to = to;
-}
+var mongoose = require('../lib/mongoose');
+var Schema = mongoose.Schema;
+
+var schema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    from: {
+        username: {
+            type: String,
+            required: true
+        },
+        lng: {
+            type: Number,
+            required: true
+        },
+        lat: {
+            type: Number,
+            required: true
+        }
+    },
+    to: {
+        username: {
+            type: String,
+            required: true
+        },
+        lng: {
+            type: Number,
+            required: true
+        },
+        lat: {
+            type: Number,
+            required: true
+        }
+    }
+});
+
+module.exports = mongoose.model('Order', schema);

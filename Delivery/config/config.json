@@ -1,9 +1,6 @@
 {
   "port": 3000,
-  "db": {
-    "url": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd",
-    "collections": [
-      "orders"
-    ]
+  "mongoose": {
+    "uri": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd"
   }
 }
