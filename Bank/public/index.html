@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bank" ng-controller="loginController">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="javascripts/core.js"></script>
+</head>
+<body>
+<header>
+    <span>ElifTech Bank</span>
+    <button ng-click="transaction()">Transaction</button>
+</header>
+<div class="content">
+
+    <div id="auth">
+
+        <div class="panel panel-default col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <div class="panel-heading">Sign in</div>
+            <div class="panel-body">
+                <form id="login">
+                    <input class="form-control" placeholder="Username" name="username" type="text"
+                           ng-model="formData.username"
+                           required>
+
+                    <input class="form-control" placeholder="Password" name="password" type="password"
+                           ng-model="formData.password"
+                           required>
+
+                    <button class="btn btn-success" ng-click="login()">Submit</button>
+
+                </form>
+                <span> {{ loginError }}</span>
+            </div>
+        </div>
+        <div class="panel panel-default col-lg-5 col-md-5 col-sm-12 col-xs-12">
+            <div class="panel-heading">Sign up</div>
+            <div class="panel-body">
+                <form id="signup">
+                    <input class="form-control" placeholder="Username" name="username" type="text"
+                           ng-model="formData.username"
+                           required>
+
+                    <input class="form-control" placeholder="Password" name="password" type="password"
+                           ng-model="formData.password"
+                           required>
+
+                    <input class="form-control" placeholder="Repeat" name="repeat" type="password"
+                           ng-model="formData.repeat"
+                           required>
+
+                    <button class="btn btn-success" ng-click="signup()">Submit</button>
+
+                </form>
+                <span>{{ signupError }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="cabinet">
+        <div class="panel panel-default">
+            <div class="buttonBar">
+                <button class="btn btn-primary" ng-click="payModal()">Pay</button>
+                <button class="btn btn-primary" ng-click="logout()">Logout</button>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <h1>Username</h1>
+                <h2>{{ username }}</h2>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <h1>Card number</h1>
+                <h2>{{ id }}</h2>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <h1>Amount</h1>
+                <h2>{{ amount }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="modal">
+    <div class="panel panel-default">
+        <div class="panel-heading">Pay <button id="close" class="glyphicon glyphicon-remove" ng-click="closeModal()"></button></div>
+        <div class="panel-body">
+            <form>
+                <input class="form-control" placeholder="Amount" name="amount" type="number"
+                       ng-model="formData.amount" min="0"
+                       required>
+                <button class="btn btn-success" ng-click="pay()">Pay</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
