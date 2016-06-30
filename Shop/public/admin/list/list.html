@@ -1,0 +1,28 @@
+<div id="item-list">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>image</th>
+                <th>name</th>
+                <th>category</th>
+                <th>property</th>
+                <th>price</th>
+                <th>company</th>
+                <th>quantity</th>
+                <th>command</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="item in items">
+            <tr>
+                <td></td>
+                <td>{{item.name}}</td>
+                <td>{{item.category}}</td>
+                <td></td>
+                <td>{{item.price}}</td>
+                <td>{{item.company}}</td>
+                <td>{{item.quantity}}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
