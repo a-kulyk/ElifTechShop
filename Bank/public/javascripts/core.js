@@ -3,7 +3,7 @@ bank.controller('loginController', function ($scope, $http) {
     $scope.title = "Bank";
     $scope.formData = {};
     $scope.signup = function () {
-        if($scope.formData.password != $scope.formData.password){
+        if($scope.formData.password != $scope.formData.repeat){
             $scope.signup.error = "Passwords must be the same";
             return;
         }
@@ -108,20 +108,25 @@ bank.controller('loginController', function ($scope, $http) {
     //         })
     // }
 
-    // $scope.transaction = function () {
-    //     $http.post("/get_transaction", {
-    //         "id": "57740e570f1a20345ea4129a",
-    //         "from": "5773d50ef6e5bd063d119d27",
-    //         "to": "5773c1b809aaa4fd2f7c4f9e",
-    //         "date": new Date(2016,5,29),
-    //         "amount": 5
-    //     })
-    //         .success(function (data) {
-    //             console.log(data);
-    //         })
-    //         .error(function (err) {
-    //             console.log(err);
-    //         })
-    // }
+    $scope.transaction = function () {
+
+        $http({
+            method: "GET",
+            url: "/get_transaction",
+            params:{
+                "id": "57740e570f1a20345ea4129a",
+                "from": "5773d50ef6e5bd063d119d27",
+                "to": "5773c1b809aaa4fd2f7c4f9e",
+                "date": "2016-06-29",
+                "amount": 5
+            }
+        })
+            .success(function (data) {
+                console.log(data);
+            })
+            .error(function (err) {
+                console.log(err);
+            })
+    }
 
 });

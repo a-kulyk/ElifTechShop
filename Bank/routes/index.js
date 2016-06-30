@@ -183,14 +183,15 @@ module.exports = function(app){
        }
     });
 
-    app.post("/get_transaction", function (req, res) {
+    app.get("/get_transaction", function (req, res) {
+        console.log(req);
        Transaction.findOne({
-           _id: req.body.id,
-           from: req.body.from,
-           to: req.body.to,
-           amount: req.body.amount,
+           _id: req.query.id,
+           from: req.query.from,
+           to: req.query.to,
+           amount: req.query.amount,
            date: {
-               "$gte": req.body.date,
+               "$gte": req.query.date,
                "$lt": Date.now()
            }
        }, function (err, transaction) {
