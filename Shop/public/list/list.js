@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('adminCatalog.list', ['ngRoute'])
+angular.module('catalog.list', ['ngRoute'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/list', {
@@ -10,7 +10,7 @@ angular.module('adminCatalog.list', ['ngRoute'])
     }])
 
     .controller('listCtrl', function($scope, $http) {
-        $http.get('/admin/items')
+        $http.get('/items')
             .success(function (data) {
                 $scope.items = data.items;//ToDo: if fail
             }).error(function (data) {

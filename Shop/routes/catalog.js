@@ -1,19 +1,22 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-    res.render('admin/index', {title: 'Catalog'});
-});
+// router.get('/', function(req, res, next) {
+//     res.render('admin/index', {title: 'Catalog'});
+// });
 
 router.get('/items', function(req, res, next) {
-    var db = require("../../db");
+    var db = require("../db");
     db.items.find(function(err, items) {
         if(err) {
             console.error(err);
             //ToDo:
-            res.json({ });
+            res.json({ "success": false });//ToDO: fontend
         } else {
-            res.json({ "items": items});
+            res.json({
+                "success": true,
+                "items": items
+            });//ToDo: fontend
         }
     });
 

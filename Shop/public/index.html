@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="catalog">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catalog</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Catalog</h1>
+        <div id="content" ng-view=""></div>
+    </div>
+
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="list/list.js"></script>
+</body>
+</html>

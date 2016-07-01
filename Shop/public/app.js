@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('adminCatalog', [
+angular.module('catalog', [
     'ngRoute',
-    'adminCatalog.list'
+    'catalog.list'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
     $locationProvider.hashPrefix('!');
