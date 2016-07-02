@@ -1,9 +1,0 @@
-
-angular.module('app')
-    .controller('ProductShowController', function ($scope, Items, $routeParams) {
-      Items.find($routeParams.id).success(function(data) {
-     $scope.product = data;
-  };
-    })
-    
- 	

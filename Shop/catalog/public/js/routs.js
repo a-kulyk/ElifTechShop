@@ -9,6 +9,11 @@ angular.module('app').config(['$routeProvider', function($routeProvider) {
     	controller: 'ProductShowController',
     	controllerAs: 'product'
     })
+  .when('/page/:number', {
+      templateUrl: 'templates/pages/index.html',
+      controller: 'ProductItemsController',
+      controllerAs: 'product'
+    })
     .when('/category/:name', {
       templateUrl: 'templates/pages/category/show.html',
     	controller: 'CategoryShowController',
