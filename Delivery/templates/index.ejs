@@ -3,28 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_JCjSbuYTaArP7GiEwUS2YRlvgKMkcFY&libraries=places">
+    </script>
+    <script src="js/autocomplete.js"></script>
 </head>
-<body>
+<body ng-app="delivery" ng-controller="deliveryCtrl">
 <h1>Welcome</h1>
 <h2>Make order</h2>
-<form action="order" method="post">
+<form ng-submit="submit()">
     <h3>Product</h3>
     Product title:<br>
-    <input type="text" name="title"><br>
+    <input type="text" name="title" ng-model="title"><br>
     Approximate cost:<br>
-    <input type="number" name="price"><br>
-    <h3>From:</h3>
-    Addresser name:<br>
-    <input type="text" name="sender"><br>
-    Adress:<br>
-    <input type="text" name="from">
-    <h3>To:</h3>
-    Addressee name:<br>
-    <input type="text" name="getter"><br>
-    Adress:<br>
-    <input type="text" name="to">
+    <input type="number" name="price" ng-model="price"><br>
+    <h3>From</h3>
+    Username:<br>
+    <input type="text" name="fromUsername" ng-model="fromUsername"><br>
+    Address:<br>
+    <input type="text" id="fromAddress"><br>
+    <br>
+    <h3>To</h3>
+    Username:
+    <br>
+    <input type="text" name="toUsername" ng-model="toUsername"><br>
+    Address:<br>
+    <input type="text" id="toAddress"><br>
+    <br>
     <input type="submit" value="Submit">
 </form>
-<h2>Track order</h2>
+<script>
+    var app = angular.module('delivery', []);
+    app.controller('deliveryCtrl', function ($scope, $http) {
+        $scope.submit = function () {
+            var requestJSON = {};
+            requestJSON.title = $scope.title;
+            requestJSON.price = $scope.price;
+            requestJSON.from = {};
+            requestJSON.to = {};
+            requestJSON.from.username = $scope.fromUsername;
+            requestJSON.to.username = $scope.toUsername;
+            if (autocompleteFrom.getPlace()) {
+                console.log(autocompleteFrom.getPlace());
+                var fromPlace = autocompleteFrom.getPlace();
+                requestJSON.from.lat = fromPlace.geometry.location.lat();
+                requestJSON.from.lng = fromPlace.geometry.location.lng();
+            }
+            if (autocompleteTo.getPlace()) {
+                console.log(autocompleteTo.getPlace());
+                var toPlace = autocompleteTo.getPlace();
+                requestJSON.to.lat = toPlace.geometry.location.lat();
+                requestJSON.to.lng = toPlace.geometry.location.lng();
+            }
+            console.log(JSON.stringify(requestJSON));
+            $http.post("/order", requestJSON).success(function (data, status, headers, config) {
+                console.log(status);
+            }).error(function (data, status, header, config) {
+
+            });
+        }
+    });
+
+    var options = {types: ["address"]};
+
+    var fromAddress = document.getElementById('fromAddress');
+    var autocompleteFrom = new google.maps.places.Autocomplete(fromAddress, options);
+
+    var toAddress = document.getElementById('toAddress');
+    var autocompleteTo = new google.maps.places.Autocomplete(toAddress, options);
+
+    autocompleteFrom.setComponentRestrictions({country: 'ua'});
+    autocompleteTo.setComponentRestrictions({country: 'ua'});
+
+</script>
 </body>
 </html>
