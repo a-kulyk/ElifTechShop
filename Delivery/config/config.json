@@ -3,5 +3,9 @@
   "mongoose": {
     "uri": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd"
   },
-  "googleServerApiKey": "AIzaSyB-pvukBToutoo1Bi6ewOfGcazF5YMB7gc"
+  "googleApi": {
+    "host": "maps.googleapis.com",
+    "path": "/maps/api/distancematrix/json?",
+    "key": "AIzaSyB-pvukBToutoo1Bi6ewOfGcazF5YMB7gc"
+  }
 }
