@@ -12,8 +12,8 @@
                 <th>command</th>
             </tr>
         </thead>
-        <tbody ng-repeat="item in items">
-            <tr>
+        <tbody>
+            <tr ng-repeat="item in items">
                 <td></td>
                 <td>{{item.name}}</td>
                 <td>{{item.category}}</td>
@@ -21,7 +21,10 @@
                 <td>{{item.price}}</td>
                 <td>{{item.company}}</td>
                 <td>{{item.quantity}}</td>
-                <td></td>
+                <td>
+                    <a class="btn btn-default btn-xs" href="#!/item/{{item._id}}">Edit</a>
+                    <a class="btn btn-default btn-xs" href="#!/item/{{item._id}}/delete">Delete</a>
+                </td>
             </tr>
         </tbody>
     </table>

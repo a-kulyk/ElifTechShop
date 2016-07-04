@@ -1,0 +1,80 @@
+<div id="newItem">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" ng-model="form.name" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="category" class="col-sm-2 control-label">Category</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="category" ng-model="form.category" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="price" class="col-sm-2 control-label">Price</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="price" ng-model="form.price" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="company" class="col-sm-2 control-label">Company</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="company" ng-model="form.company" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Quantity" class="col-sm-2 control-label">quantity</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="quantity" ng-model="form.quantity" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Property</label>
+            <div class="row col-sm-offset-2 col-sm-10" ng-repeat="property in form.properties">
+                <div class="col-sm-4" >
+                    <input type="text" class="form-control"  ng-model="property.name" />
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control"   ng-model="property.value" />
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-default" ng-click="removeByIndex(form.properties, $index)">Remove</button>
+                </div>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button  class="btn btn-default" ng-click="addProperty(form)">Add</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Image</label>
+            <div class="row col-sm-offset-2 col-sm-10" ng-repeat="image in form.images track by $index">
+                <div class="col-sm-2">
+                    <img ng-src="{{form.images[$index]}}" height="64" width="64" class="img-responsive">
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" ng-model="form.images[$index]" />
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-default" ng-click="removeByIndex(form.images, $index)">Remove</button>
+                </div>
+            </div>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button  class="btn btn-default" ng-click="addImage(form)">Add</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" ng-click="submitItem()">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
