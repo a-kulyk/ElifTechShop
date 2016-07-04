@@ -13,7 +13,6 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-        console.log(req.params.id);
         Order.findById(req.params.id, function (err, doc) {
             if (err) {
                 res.json(orderNotFound);
@@ -24,7 +23,6 @@ module.exports = function (app) {
     })
 
     app.post('/order', function (req, res) {
-        console.log(req.body);
         new Order(req.body).save(function (err, doc) {
             if (err) {
                 res.sendStatus(400);
@@ -33,12 +31,17 @@ module.exports = function (app) {
                     lat: doc.to.lat,
                     lng: doc.to.lng
                 });
-                distanceEmitter.on('resultIsReady', function (resultJSON) {
+
+                function resFormer(resultJSON) {
                     var estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.text;
                     orderAccepted.estimatedTime = estimatedTime;
                     console.log(orderAccepted);
+                    //res.end(JSON.stringify(orderAccepted));
                     res.json(orderAccepted);
-                });
+                    distanceEmitter.removeListener('resultIsReady', resFormer);
+                }
+
+                distanceEmitter.on('resultIsReady', resFormer);
             }
         });
     });

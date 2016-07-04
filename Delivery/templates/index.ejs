@@ -45,7 +45,7 @@
             requestJSON.from.username = $scope.fromUsername;
             requestJSON.to.username = $scope.toUsername;
             if (autocompleteFrom.getPlace()) {
-                console.log(autocompleteFrom.getPlace());
+  /*              console.log(autocompleteFrom.getPlace());*/
                 var fromPlace = autocompleteFrom.getPlace();
                 requestJSON.from.lat = fromPlace.geometry.location.lat();
                 requestJSON.from.lng = fromPlace.geometry.location.lng();
@@ -56,9 +56,9 @@
                 requestJSON.to.lat = toPlace.geometry.location.lat();
                 requestJSON.to.lng = toPlace.geometry.location.lng();
             }
-            console.log(JSON.stringify(requestJSON));
+ /*           console.log(JSON.stringify(requestJSON));*/
             $http.post("/order", requestJSON).success(function (data, status, headers, config) {
-                console.log(status);
+                console.log(data);
             }).error(function (data, status, header, config) {
 
             });

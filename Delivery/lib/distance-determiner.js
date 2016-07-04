@@ -13,7 +13,6 @@ module.exports = function (from, to) {
 }
 
 function determineDistance(from, to) {
-
     var googleRequestOptions = {
         host: config.get('googleApi:host'),
         path: config.get('googleApi:path') + 'origins=' + from.lat + ',' + from.lng +
