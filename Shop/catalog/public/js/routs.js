@@ -19,6 +19,14 @@ angular.module('app').config(['$routeProvider', function($routeProvider) {
     	controller: 'CategoryShowController',
     	controllerAs: 'categories'
     })
+    .when('/filter/:name/:value/page/:number', {
+      templateUrl: 'templates/pages/product/filter.html',
+      controller: 'FilterItemsController',
+      controllerAs: 'product'
+    })
+    .when('/filter/:name/:value', {
+      redirectTo: "/filter/:name/:value/page/1"
+    })
     .otherwise({redirectTo: '/'});
 }]);
 

@@ -7,3 +7,11 @@ angular.module('app')
 		templateUrl: "templates/directives/product-items.html"
 	}
 }])
+.directive('filterItems',[function() {
+	return {
+		restrict:"E",
+		controller: 'FilterItemsController',
+		controllerAs: 'items',
+		templateUrl: "templates/directives/product-items.html"
+	}
+}])
