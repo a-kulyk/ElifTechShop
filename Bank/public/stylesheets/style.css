@@ -70,6 +70,7 @@ header span{
   background-color: #277554;
   border-color: transparent;
 }
+#modalTransfer>.panel-default,
 #modal>.panel-default{
   display: block;
   position: relative;
@@ -77,16 +78,22 @@ header span{
   height: 140px;
   margin: auto;
 }
-#modal{
+#modalTransfer>.panel-default{
+  height: 170px;
+}
+#modal,
+#modalTransfer{
   display: none;
   position: absolute;
   width: 100%;
 }
-button#close{
+button#close,
+button#closeWindow{
   float: right;
   background-color: transparent;
   border: none;
 }
-button#close:focus{
+button#close:focus,
+button#closeWindow:focus{
   outline: none;
 }
