@@ -94,10 +94,24 @@ module.exports = function(app){
                             "errorDescription": err
                         });
                     } else {
-                        res.send({
-                            "success": true,
-                            "amount": user.amount
+                        var transaction = new Transaction({
+                            from: user._id,
+                            to: user._id,
+                            amount: req.body.amount
                         });
+                        transaction.save(function (err) {
+                            if(err){
+                                res.send({
+                                    "success": false,
+                                    "errorDescription": err
+                                });
+                            }
+                            res.send({
+                                "success": true,
+                                "amount": user.amount
+                            });
+                        });
+
                     }
                 })
             } else {
@@ -108,7 +122,85 @@ module.exports = function(app){
             }
         });
     });
-
+    
+    app.post("/transfer",function (req, res) {
+        if(req.body.to == req.session.user){
+            res.send({
+                "success": false,
+                "errorDescription": "Disable"
+            });
+        } else {
+            User.findOne({_id: req.session.user}, function (err, from) {
+                if (err) {
+                    console.log(err);
+                    res.send({
+                        "success": false,
+                        "errorDescription": "Server error"
+                    });
+                } else {
+                    if (from.amount >= req.body.amount) {
+                        var transaction = new Transaction({
+                            from: req.session.user,
+                            to: req.body.to,
+                            amount: req.body.amount
+                        });
+                        transaction.save(function (err) {
+                            if (err) {
+                                console.log(err);
+                                res.send({
+                                    "success": false,
+                                    "errorDescription": "Server error"
+                                })
+                            } else {
+                                from.amount -= req.body.amount;
+                                User.findOne({_id: req.body.to}, function (err, to) {
+                                    if (err) {
+                                        console.log(err);
+                                        res.send({
+                                            "success": false,
+                                            "errorDescription": "Server error"
+                                        });
+                                    } else {
+                                        to.amount += req.body.amount;
+                                        from.save(function (err) {
+                                            if (err) {
+                                                console.log(err);
+                                                res.send({
+                                                    "success": false,
+                                                    "errorDescription": "Server error"
+                                                });
+                                            } else {
+                                                to.save(function (err) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                        res.send({
+                                                            "success": false,
+                                                            "errorDescription": "Server error"
+                                                        });
+                                                    } else {
+                                                        res.send({
+                                                            "success": true,
+                                                            "transaction_id": transaction._id
+                                                        });
+                                                    }
+                                                })
+                                            }
+                                        });
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        res.send({
+                            "success": false,
+                            "errorDescription": "Insufficient funds"
+                        });
+                    }
+                }
+            });
+        }
+    });
+    
     app.post("/transaction", function (req, res) {
        if(req.body.API_KEY != config.get("key")){
            res.send({
