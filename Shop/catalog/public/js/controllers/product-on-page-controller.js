@@ -4,6 +4,6 @@ angular.module('app')
       Items.page($routeParams.number).success(function(data) {
      $scope.product = data;
   });
-    }]);
+ }]);
     
  	

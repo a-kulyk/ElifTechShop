@@ -2,8 +2,8 @@ var express = require('express');
 var path= require('path');
 var app = express();
 var mongoose = require('mongoose');
-var shop = require('./routes/shop.js');
-var categories = require('./routes/categories.js');
+var catalog = require('./routes/catalog.js');
+
 var routes = require('./routes/index');
 mongoose.connect('mongodb://localhost/first_app', function(err) {
     if(err) {
@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 
 
 app.use(express.static(__dirname + '/public'));
-app.use('/shop',shop);
+app.use('/catalog',catalog);
 app.use('/', routes);
 
 

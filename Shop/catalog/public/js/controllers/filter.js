@@ -1,7 +1,8 @@
 
 angular.module('app')
-    .controller('ProductItemsController', ['$scope', 'Items', '$routeParams', '$location' ,function ($scope, Items, $routeParams, $location) {
-       Items.page($routeParams.number).success(function(data){
+    .controller('FilterItemsController', ['$scope', 'Items', '$routeParams', '$location' ,function ($scope, Items, $routeParams, $location) {
+
+       Items.filter($routeParams.name,$routeParams.value,parseInt($routeParams.number)).success(function(data){
        	if(angular.equals([], data)) {
        		$location.path("/");
        	}
@@ -9,7 +10,7 @@ angular.module('app')
         $scope.items = data;
 
         $scope.items.forEach(function(element,index,array) {
-          
+          console.log(element);
           element.properties.forEach(function (el,ind,ar) {
             el.url = encodeURIComponent(el.name) + '/' + encodeURIComponent(el.value);
             
@@ -22,4 +23,3 @@ angular.module('app')
       });
     }])
     
- 	

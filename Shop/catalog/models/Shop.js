@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var shopSchema = new mongoose.Schema({
   name : String,
   category: String,
+  description: String,
   properties: [{
     name : String,
     value : String
