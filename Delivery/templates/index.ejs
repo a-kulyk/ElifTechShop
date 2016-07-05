@@ -4,35 +4,89 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_JCjSbuYTaArP7GiEwUS2YRlvgKMkcFY&libraries=places">
     </script>
     <script src="js/autocomplete.js"></script>
 </head>
 <body ng-app="delivery" ng-controller="deliveryCtrl">
-<h1>Welcome</h1>
-<h2>Make order</h2>
-<form ng-submit="submit()">
-    <h3>Product</h3>
-    Product title:<br>
-    <input type="text" name="title" ng-model="title"><br>
-    Approximate cost:<br>
-    <input type="number" name="price" ng-model="price"><br>
-    <h3>From</h3>
-    Username:<br>
-    <input type="text" name="fromUsername" ng-model="fromUsername"><br>
-    Address:<br>
-    <input type="text" id="fromAddress"><br>
-    <br>
-    <h3>To</h3>
-    Username:
-    <br>
-    <input type="text" name="toUsername" ng-model="toUsername"><br>
-    Address:<br>
-    <input type="text" id="toAddress"><br>
-    <br>
-    <input type="submit" value="Submit">
-</form>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Delivery</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Make order</a></li>
+            <li><a href="#">Track order</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">New order</div>
+                <div class="panel-body">
+                    <form ng-submit="submit()" role="form">
+                        <!--<div class="row">-->
+                        <!-- <div class="col-md-4">-->
+                        <div class="form-group">
+                            <!--   <h3>Product</h3>-->
+                            Product title<br>
+                            <input type="text" name="title" ng-model="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            Approximate cost<br>
+                            <input type="number" name="price" ng-model="price" class="form-control">
+                        </div>
+                        <hr>
+                        <!--  </div>-->
+                        <!-- </div>-->
+                        <!--<div class="row">
+                            <div class="col-md-4">-->
+                        <div class="form-group">
+                            <h4>From:</h4>
+                            Username<br>
+                            <input type="text" name="fromUsername" ng-model="fromUsername" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            Address<br>
+                            <input type="text" id="fromAddress" class="form-control">
+                        </div>
+                        <!--</div>-->
+                        <!-- <div class="col-md-4">-->
+                        <hr>
+                        <div class="form-group">
+                            <h4>To:</h4>
+                            Username
+                            <br>
+                            <input type="text" name="toUsername" ng-model="toUsername" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            Address<br>
+                            <input type="text" id="toAddress" class="form-control">
+                        </div>
+                        <!--  </div>-->
+                        <!--</div>-->
+                        <br>
+
+                        <!--                        <div class="row">
+                                                    <div class="col-md-4">-->
+                        <input type="submit" value="Submit" class="form-control btn btn-success">
+                        <!--                            </div>
+                                                </div>-->
+                    </form>
+                </div>
+            </div>
+            <div><p>Estimated delivery time: {{estimatedTime}}</p></div>
+        </div>
+    </div>
+</div>
+</div>
 <script>
     var app = angular.module('delivery', []);
     app.controller('deliveryCtrl', function ($scope, $http) {
@@ -45,7 +99,7 @@
             requestJSON.from.username = $scope.fromUsername;
             requestJSON.to.username = $scope.toUsername;
             if (autocompleteFrom.getPlace()) {
-  /*              console.log(autocompleteFrom.getPlace());*/
+                /*              console.log(autocompleteFrom.getPlace());*/
                 var fromPlace = autocompleteFrom.getPlace();
                 requestJSON.from.lat = fromPlace.geometry.location.lat();
                 requestJSON.from.lng = fromPlace.geometry.location.lng();
@@ -56,9 +110,9 @@
                 requestJSON.to.lat = toPlace.geometry.location.lat();
                 requestJSON.to.lng = toPlace.geometry.location.lng();
             }
- /*           console.log(JSON.stringify(requestJSON));*/
             $http.post("/order", requestJSON).success(function (data, status, headers, config) {
                 console.log(data);
+                $scope.estimatedTime = data.estimatedTime;
             }).error(function (data, status, header, config) {
 
             });
