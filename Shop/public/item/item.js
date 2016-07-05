@@ -18,7 +18,7 @@ var removeByIndex = function(array, index) {
     array.splice(index,1);
 };
 
-angular.module('catalog.item', ['ngRoute'])
+angular.module('catalog.item', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/item/:id/delete', {
@@ -38,7 +38,11 @@ angular.module('catalog.item', ['ngRoute'])
         $scope.submitItem = function() {
             $http.put('/items', $scope.form)
                 .success(function (data) {
-                    $location.path('/list');//ToDo: if fail
+                    if(data.success) {
+                        $location.path('/list');
+                    } else {
+                        errorService.error(data.error);
+                    }
                 }).error(function (data) {
                     console.log(data);
                 });
@@ -53,7 +57,11 @@ angular.module('catalog.item', ['ngRoute'])
         $scope.form = {};
         $http.get('/items/' + $routeParams.id)
             .success(function (data) {
-                $scope.form = data.item;//ToDo: if fail
+                if(data.success) {
+                    $scope.form = data.item;
+                } else {
+                    errorService.error(data.error);
+                }
             }).error(function (data) {
                 console.log(data);//ToDo: if fail
             });
@@ -61,7 +69,11 @@ angular.module('catalog.item', ['ngRoute'])
         $scope.submitItem = function() {
             $http.post('/items/' + $routeParams.id, $scope.form)
                 .success(function (data) {
-                    $location.path('/list');//ToDo: if fail
+                    if(data.success) {
+                        $location.path('/list');
+                    } else {
+                        errorService.error(data.error);
+                    }
                 }).error(function (data) {
                     console.log(data);
                 });
@@ -75,14 +87,22 @@ angular.module('catalog.item', ['ngRoute'])
     .controller('deleteItemCtrl', function($scope, $http, $routeParams, $location) {
         $http.get('/items/' + $routeParams.id)
             .success(function (data) {
-                $scope.item = data.item;//ToDo: if fail
+                if(data.success) {
+                    $scope.item = data.item;
+                } else {
+                    errorService.error(data.error);
+                }
             }).error(function (data) {
                 console.log(data);//ToDo: if fail
             });
         $scope.deleteItem = function() {
             $http.delete('/items/' + $routeParams.id)
                 .success(function (data) {
-                    $location.path('/list');//ToDo: if fail
+                    if(data.success) {
+                        $location.path('/list');
+                    } else {
+                        errorService.error(data.error);
+                    }
                 }).error(function (data) {
                     console.log(data);//ToDo: if fail
                 });

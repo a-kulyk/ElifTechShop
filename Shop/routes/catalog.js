@@ -10,13 +10,12 @@ router.get('/items', function(req, res, next) {
     db.items.find(function(err, items) {
         if(err) {
             console.error(err);
-            //ToDo:
-            res.json({ "success": false });//ToDO: fontend
+            res.json({ success: false, error: {name: 'database error', message: err}});
         } else {
             res.json({
                 "success": true,
                 "items": items
-            });//ToDo: fontend
+            });
         }
     });
 
@@ -30,13 +29,12 @@ router.get('/items/:id', function(req, res, next) {
     },function(err, item) {
         if(err) {
             console.error(err);
-            //ToDo:
-            res.json({ "success": false });//ToDO: fontend
+            res.json({ "success": false, error: {name: 'database error', message: err} });
         } else {
             res.json({
                 "success": true,
                 "item": item
-            });//ToDo: fontend
+            });
         }
     });
 
@@ -48,9 +46,9 @@ router.put('/items', function(req, res, next) {
     db.items.save(item, function(err, result) {
         if(err) {
             console.error(err);
-            res.json({ "success": false });//ToDO: fontend
+            res.json({ "success": false, error: {name: 'database error', message: err}  });
         } else {
-            res.json({"success": true});//ToDo: fontend
+            res.json({"success": true});
         }
     });
 });
@@ -67,9 +65,9 @@ router.post('/items/:id', function(req, res, next) {
     }, function(err, doc, lastErrorObject) {
         if(err) {
             console.error(err);
-            res.json({ "success": false });//ToDO: fontend
+            res.json({ "success": false, error: {name: 'database error', message: err} });
         } else {
-            res.json({"success": true});//ToDo: fontend
+            res.json({"success": true});
         }
     });
 });
@@ -83,9 +81,9 @@ router.delete('/items/:id', function(req, res, next) {
     }, function(err, doc, lastErrorObject) {
         if(err) {
             console.error(err);
-            res.json({ "success": false });//ToDO: fontend
+            res.json({ "success": false, error: {name: 'database error', message: err}  });
         } else {
-            res.json({"success": true});//ToDo: fontend
+            res.json({"success": true});
         }
     });
 });

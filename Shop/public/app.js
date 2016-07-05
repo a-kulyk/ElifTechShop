@@ -3,7 +3,8 @@
 angular.module('catalog', [
     'ngRoute',
     'catalog.list',
-    'catalog.item'
+    'catalog.item',
+    'error'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
     $locationProvider.hashPrefix('!');

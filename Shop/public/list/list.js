@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('catalog.list', ['ngRoute'])
+angular.module('catalog.list', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/list', {
@@ -9,11 +9,19 @@ angular.module('catalog.list', ['ngRoute'])
         });
     }])
 
-    .controller('listCtrl', function($scope, $http) {
+    .controller('listCtrl', function($scope, $http, errorService, $location) {
+        //errorService.error({name: 'ssssss', message: '111111'});
         $http.get('/items')
             .success(function (data) {
-                $scope.items = data.items;//ToDo: if fail
-            }).error(function (data) {
-                console.log(data);
+                if(data.success) {
+                    $scope.items = data.items;
+                } else {
+                    errorService.error(data.error);
+                }
+            }).error(function (data, status, headers, config) {
+                errorService.error({//ToDO:
+                    name: "Request failed",
+                    message: "Request failed"
+                });
             });
     });
