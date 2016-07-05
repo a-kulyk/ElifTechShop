@@ -97,3 +97,24 @@ button#close:focus,
 button#closeWindow:focus{
   outline: none;
 }
+#cabinet table{
+  width: 100%;
+}
+#cabinet table tr{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px grey;
+}
+#cabinet table td{
+  padding: 10px;
+}
+tr#receive,
+tr#payment{
+  background-color: rgba(0,255,0,0.2);
+}
+tr#transfer{
+  background-color: rgba(255,0,0,0.2);
+}
+tr#title{
+  background-color: rgba(255,255,255,0.2);
+}

@@ -307,4 +307,29 @@ module.exports = function(app){
            }
        });
     });
+
+    app.get("/history", function (req, res) {
+        var user = req.session.user;
+        Transaction
+            .find({
+                $or: [
+                    { from: user },
+                    { to: user }
+                ]
+            })
+            .exec(function (err, transactions) {
+                if(err){
+                    res.send({
+                        "success": false,
+                        "errorDescription": "Server error"
+                    });
+                } else {
+                    console.log(transactions);
+                    res.send({
+                        "success": true,
+                        "transactions": transactions
+                    })
+                }
+            });
+    })
 };
