@@ -1,3 +1,4 @@
+let User = require("./user").User;
 var mongoose = require('../libs/mongoose'),
     Schema = mongoose.Schema;
 var schema = new Schema({
@@ -18,4 +19,14 @@ var schema = new Schema({
         default: Date.now
     }
 });
+
+schema.statics.action = function (from, to, amount) {
+    User.findOne({_id: from})
+        .then(function (result) {
+            return User.findOne({_id: to});
+        })
+        .then(function (result) {
+           console.log(result.all()); 
+        });
+};
 exports.Transaction = mongoose.model('Transaction', schema);

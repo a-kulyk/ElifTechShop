@@ -2,80 +2,11 @@ var User = require('../models/user').User;
 var Transaction = require('../models/transaction').Transaction;
 var config = require('../config');
 module.exports = function(app){
-  app.post('/signup', function(req, res) {
-      var username = req.body.username;
-      var password = req.body.password;
-      User.findOne({username: username}, function (err, user) {
-          if(err){
-              res.send({
-                  "success": false,
-                  "errorDescription": "Server error"
-              });
-          }
-          if(user){
-              res.send({
-                  "success": false,
-                  "errorDescription": "This username is occupy"
-              })
-          } else {
-              var newUser = new User({username: username, password: password});
-              newUser.save(function (err) {
-                  if(err){
-                      res.send({
-                          "success": false,
-                          "errorDescription": err
-                      });
-                  } else {
-                      req.session.user = newUser._id;
-                      res.send({
-                          "success": true,
-                          "user": newUser
-                      });
-                  }
-              })
-          }
-      });
+    app.post('/signup', require('./signup').post);
 
-  });
-
-    app.post("/login", function (req, res) {
-        var username = req.body.username;
-        var password = req.body.password;
-        User.findOne({username: username}, function (err, user) {
-            if(err){
-                res.send({
-                    "success": false,
-                    "errorDescription": "Server error"
-                });
-            }
-            if(user){
-                if(user.checkPassword(password)){
-                    req.session.user = user._id;
-                    res.send({
-                        "success": true,
-                        "user": user
-                    });
-                } else {
-                    res.send({
-                        "success": false,
-                        "errorDescription": "Invalid username or password"
-                    });
-                }
-            }else {
-                res.send({
-                    "success": false,
-                    "errorDescription": "Invalid username or password"
-                });
-            }
-        });
-    });
+    app.post("/login", require('./login').post);
     
-    app.post("/logout", function (req, res) {
-        req.session.destroy();
-        res.send({
-            "success": true
-        })
-    });
+    app.post("/logout", require('./logout').post);
 
     app.post("/pay", function(req, res){
         User.findOne({_id: req.session.user}, function (err, user) {
@@ -310,6 +241,7 @@ module.exports = function(app){
 
     app.get("/history", function (req, res) {
         var user = req.session.user;
+        console.log(user);
         Transaction
             .find({
                 $or: [
@@ -324,7 +256,6 @@ module.exports = function(app){
                         "errorDescription": "Server error"
                     });
                 } else {
-                    console.log(transactions);
                     res.send({
                         "success": true,
                         "transactions": transactions
