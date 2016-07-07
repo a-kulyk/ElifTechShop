@@ -80,6 +80,20 @@
                 <h1>Amount</h1>
                 <h2>{{ amount }}</h2>
             </div>
+            <table >
+                <tr id="title">
+                    <td>ID</td>
+                    <td>Amount</td>
+                    <td>Destination</td>
+                    <td>Date</td>
+                </tr>
+                <tr ng-repeat="record in history" id="{{ record.event }}">
+                    <td>{{ record._id }}</td>
+                    <td>{{ record.amount }}</td>
+                    <td>{{ record.destination }}</td>
+                    <td>{{ record.date }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 
