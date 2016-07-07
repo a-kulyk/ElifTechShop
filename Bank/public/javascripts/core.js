@@ -140,7 +140,8 @@ bank.controller('loginController', function ($scope, $http) {
             "amount": $scope.formData.amount
         })
             .success(function (data) {
-                console.log(data);
+                $scope.amount = data.amount;
+                document.getElementById("modalTransfer").style.display = "none";
                 history();
             })
             .error(function (err) {
@@ -165,51 +166,51 @@ bank.controller('loginController', function ($scope, $http) {
     //         })
     // };
 
-    $scope.transaction = function () {
-      $http.get("/history")
-          .success(function (data) {
-              $scope.history = [];
-
-              for (var transaction in data.transactions) {
-                  // skip loop if the property is from prototype
-                  if (!data.transactions.hasOwnProperty(transaction)) continue;
-                  var obj = data.transactions[transaction];
-                  if(obj.from == obj.to){
-                      obj.from = "Payment";
-                      obj.event = "payment";
-                  } else if(obj.from == $scope.id){
-                      obj.event = "transfer";
-                  } else if(obj.to = $scope.id){
-                      obj.event = "receive";
-                  }
-                    $scope.history.push(obj);
-
-              }
-          })
-          .error(function (err) {
-              console.log(err);
-          });
-    };
-
     // $scope.transaction = function () {
+    //   $http.get("/history")
+    //       .success(function (data) {
+    //           $scope.history = [];
     //
-    //     $http({
-    //         method: "GET",
-    //         url: "/get_transaction",
-    //         params:{
-    //             "id": "57740e570f1a20345ea4129a",
-    //             "from": "5773d50ef6e5bd063d119d27",
-    //             "to": "5773c1b809aaa4fd2f7c4f9e",
-    //             "date": "2016-06-29",
-    //             "amount": 5
-    //         }
-    //     })
-    //         .success(function (data) {
-    //             console.log(data);
-    //         })
-    //         .error(function (err) {
-    //             console.log(err);
-    //         })
-    // }
+    //           for (var transaction in data.transactions) {
+    //               // skip loop if the property is from prototype
+    //               if (!data.transactions.hasOwnProperty(transaction)) continue;
+    //               var obj = data.transactions[transaction];
+    //               if(obj.from == obj.to){
+    //                   obj.from = "Payment";
+    //                   obj.event = "payment";
+    //               } else if(obj.from == $scope.id){
+    //                   obj.event = "transfer";
+    //               } else if(obj.to = $scope.id){
+    //                   obj.event = "receive";
+    //               }
+    //                 $scope.history.push(obj);
+    //
+    //           }
+    //       })
+    //       .error(function (err) {
+    //           console.log(err);
+    //       });
+    // };
+
+    $scope.transaction = function () {
+
+        $http({
+            method: "GET",
+            url: "/get_transaction",
+            params:{
+                "id": "577e43023eff537121910095",
+                "from": "5773c1b809aaa4fd2f7c4f9e",
+                "to": "5773d50ef6e5bd063d119d27",
+                "date": "2016-07-07",
+                "amount": 2
+            }
+        })
+            .success(function (data) {
+                console.log(data);
+            })
+            .error(function (err) {
+                console.log(err);
+            })
+    }
 
 });

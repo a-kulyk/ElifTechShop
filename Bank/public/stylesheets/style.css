@@ -61,11 +61,16 @@ header span{
 }
 #cabinet .panel-default{
   display: inline-block;
-  padding: 2%;
+  padding: 0;
   width: 100%;
   text-align: center;
   margin: 0;
 }
+#cabinet .panel-default .panel-heading{
+  display: inline-block;
+  width: 100%;
+}
+
 .btn.btn-primary{
   background-color: #277554;
   border-color: transparent;
@@ -117,4 +122,33 @@ tr#transfer{
 }
 tr#title{
   background-color: rgba(255,255,255,0.2);
+}
+#cabinet .item{
+  float: left;
+  margin-left: 2%;
+}
+#cabinet .item span{
+  color: white;
+  font-size: 1.4em;
+}
+#cabinet .item .title{
+  font-size: 1.5em;
+  color: #333333;
+}
+.buttonBar{
+  display: inline-block;
+  margin-bottom: 2%;
+  border-radius: 2px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  padding: 0;
+  overflow: hidden;
+  padding: 0;
+  background-color: #277554;
+}
+.buttonBar .btn{
+  margin: 0;
+  border-radius: 0;
+  border-left: solid 1px #75AF96;
 }
