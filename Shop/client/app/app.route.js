@@ -3,12 +3,10 @@ var myApp = angular.module('myApp', ['ngRoute']);
 myApp.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/home.html',
-      // controller: 'mainController',
       access: {restricted: true}
     })
     .when('/login', {
-      templateUrl: 'partials/login.html',
+      templateUrl: './app/components/auth/login.html',
       controller: 'loginController',
       access: {restricted: false}
     })
@@ -17,7 +15,7 @@ myApp.config(function ($routeProvider) {
       access: {restricted: true}
     })
     .when('/register', {
-      templateUrl: 'partials/register.html',
+      templateUrl: './app/components/auth/register.html',
       controller: 'registerController',
       access: {restricted: false}
     })
@@ -28,12 +26,12 @@ myApp.config(function ($routeProvider) {
 .run(function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart',
     function (event, next, current) {
-      AuthService.getUserStatus()
-      .then(function(){
-        if (next.access.restricted && !AuthService.isLoggedIn()){
-          $location.path('/login');
-          $route.reload();
-        }
-      });
+        AuthService.getUserStatus()
+        .then(function(){
+          if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()){
+            $location.path('/login');
+            $route.reload();
+          }
+        });
   });
 });

@@ -8,7 +8,7 @@ angular.module('myApp').factory('AuthService',
     // return available functions for use in the controllers
     return ({
       isLoggedIn: isLoggedIn,
-      // getUser: getUser,
+      getUser: getUser,
       getUserStatus: getUserStatus,
       login: login,
       logout: logout,
@@ -23,24 +23,10 @@ angular.module('myApp').factory('AuthService',
       }
     }
 
-    // function getUser() {
-
-    //   // create a new instance of deferred
-    //   var deferred = $q.defer();
-
-    //   $http.get('/user/getUser')
-    //   .success(function (data) {
-    //     console.log(data);
-    //     deferred.resolve();
-    //   })
-    //   // handle error
-    //   .error(function (data) {
-    //     deferred.reject();
-    //   });
-
-    //   // return promise object
-    //   return deferred.promise;
-    // }
+    function getUser() {
+      return $http.get('/user/getUser')
+      .then(function(res){ return res.data;});
+    }
 
     function getUserStatus() {
       return $http.get('/user/status')
@@ -108,27 +94,30 @@ angular.module('myApp').factory('AuthService',
       return deferred.promise;
     }
 
-    function register(username, password) {
+    function register(formData) {
 
       // create a new instance of deferred
       var deferred = $q.defer();
 
       // send a post request to the server
-      $http.post('/user/register',
-        {username: username, password: password})
+      $http.post('/user/register', {
+          username: formData.username,
+          password: formData.password,
+          email: formData.email,
+          country: formData.country,
+          city: formData.city,
+          street: formData.street
+        })
         // handle success
         .success(function (data, status) {
           if(status === 200 && data.status){
             deferred.resolve();
           } else {
-            deferred.reject();
+            console.log(data);
+            deferred.reject(data.message);
           }
-        })
-        // handle error
-        .error(function (data) {
-          deferred.reject();
         });
-
+        
       // return promise object
       return deferred.promise;
     }

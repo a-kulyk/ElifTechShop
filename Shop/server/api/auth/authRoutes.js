@@ -1,16 +1,30 @@
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
 var passport = require('passport');
+var localStrategy = require('passport-local' ).Strategy;
 
-var User = require('../models/user.js');
+var User = require('./userModel.js');
+
+// configure passport
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 router.post('/register', function(req, res) {
-  User.register(new User({ username: req.body.username }),
-    req.body.password, function(err, account) {
+  console.log(req.body);
+  User.register(new User({ 
+    username: req.body.username,
+    email: req.body.email,
+    address:  {
+      country: req.body.country,
+      city: req.body.city,
+      street: req.body.street
+    }
+   }), req.body.password, function(err, account) {
     if (err) {
-      return res.status(500).json({
-        err: err
+      console.log(err.message);
+      return res.status(200).json({
+        message: err.message
       });
     }
     passport.authenticate('local')(req, res, function () {
@@ -33,7 +47,7 @@ router.post('/login', function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) {
-        return res.status(500).json({
+        return res.status(200).json({
           err: 'Could not log in user'
         });
       }
@@ -63,7 +77,7 @@ router.get('/status', function(req, res) {
 });
 
 router.get('/getUser', function(req, res) {
-  return req.user;
+  return res.send(req.user);
 });
 
 module.exports = router;
