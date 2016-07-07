@@ -1,0 +1,47 @@
+#newItem
+    form.form-horizontal
+        .form-group
+            label.col-sm-2.control-label(for='name') Name
+            .col-sm-10
+                input#name.form-control(type='text', ng-model='form.name')
+        .form-group
+            label.col-sm-2.control-label(for='category') Category
+            .col-sm-10
+                input#category.form-control(type='text', ng-model='form.category')
+        .form-group
+            label.col-sm-2.control-label(for='price') Price
+            .col-sm-10
+                input#price.form-control(type='text', ng-model='form.price')
+        .form-group
+            label.col-sm-2.control-label(for='company') Company
+            .col-sm-10
+                input#company.form-control(type='text', ng-model='form.company')
+        .form-group
+            label.col-sm-2.control-label(for='Quantity') quantity
+            .col-sm-10
+                input#quantity.form-control(type='text', ng-model='form.quantity')
+        .form-group
+            label.col-sm-2.control-label Property
+            .row.col-sm-offset-2.col-sm-10(ng-repeat='property in form.properties')
+                .col-sm-4
+                    input.form-control(type='text', ng-model='property.name')
+                .col-sm-4
+                    input.form-control(type='text', ng-model='property.value')
+                .col-sm-2
+                    button.btn.btn-default(ng-click='removeByIndex(form.properties, $index)') Remove
+            .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(ng-click='addProperty(form)') Add
+        .form-group
+            label.col-sm-2.control-label Image
+            .row.col-sm-offset-2.col-sm-10(ng-repeat='image in form.images track by $index')
+                .col-sm-2
+                    img.img-responsive(ng-src='{{form.images[$index]}}', height='64', width='64')
+                .col-sm-6
+                    input.form-control(type='text', ng-model='form.images[$index]')
+                .col-sm-2
+                    button.btn.btn-default(ng-click='removeByIndex(form.images, $index)') Remove
+            .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(ng-click='addImage(form)') Add
+        .form-group
+            .col-sm-offset-2.col-sm-10
+                button.btn.btn-default(type='submit', ng-click='submitItem()') Save

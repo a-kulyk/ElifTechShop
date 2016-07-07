@@ -1,0 +1,28 @@
+doctype html
+html(lang="en" ng-app="catalog")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        title Catalog
+        link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        nav.navbar.navbar-default
+            .container-fluid
+                .navbar-header
+                    a.navbar-brand(href='#!/list') Catalog
+            div
+                ul.nav.navbar-nav
+                    li
+                        a(href='#!/list') List
+                    li
+                        a(href='#!/item') New
+        .container
+            #content(ng-view='')
+        script(type='text/javascript', src='bower_components/angular/angular.js')
+        script(type='text/javascript', src='bower_components/angular-route/angular-route.js')
+        script(type='text/javascript', src='bower_components/jquery/dist/jquery.js')
+        script(type='text/javascript', src='app.js')
+        script(type='text/javascript', src='service/errorService.js')
+        script(type='text/javascript', src='error/error.js')
+        script(type='text/javascript', src='list/list.js')
+        script(type='text/javascript', src='item/item.js')
