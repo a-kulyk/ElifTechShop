@@ -6,20 +6,66 @@
   <title>MEAN Auth</title>
   <!-- styles -->
   <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
+<body ng-controller="mainController as main">
+
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid" id="menu-navbar">
+              <div class="container">          
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="navbar-collapse-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="" id="sitelogo" class="navbar-brand"><span>Elif</span>TechShop</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="navbar-collapse-2">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href=""><p>Home</p></a></li>
+                        <li class="dropdown">
+                          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><p>Categories <span class="icon-arrowdown"></span></p></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="">TV</a></li>
+                            <li><a href="">Smartphones</a></li>
+                            <li><a href="">Computers</a></li>
+                            <li><a href="">Audio</a></li>
+                            <li><a href="">Other</a></li>
+                          </ul>
+                        </li>
+                        <li><a href=""><p>Contact</p></a></li>
+                        <!-- <li ng-hide="currentUser"><a href="" ng-click='login()'><p>Login</p></a></li> -->
+                        <li class="dropdown" ng-show="currentUser">
+                          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><p>{{ currentUser.username }} <span class="icon-arrowdown"></span></p></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="">Personal Cabinet</a></li>
+                            <li><a href="" ng-click='logout()'>Logout</a></li>
+                          </ul>
+                        </li>
+
+                    </ul>
+                 </div>
+              </div>
+            </div>
+  </nav>
 
   <div class="container">
     <div ng-view></div>
   </div>
 
   <!-- scripts -->
-  <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.9/angular-route.min.js"></script>
-  <script src="./main.js"></script>
-  <script src="./services.js"></script>
-  <script src="./controllers.js"></script>
+  <script src="./assets/libs/jquery.min.js"></script>
+  <script src="./assets/libs/bootstrap.min.js"></script>
+  <script src="./assets/libs/angular.min.js"></script>
+  <script src="./assets/libs/angular-route.min.js"></script>
+  
+
+  <script src="./app/app.route.js"></script>
+  <script src="./app/components/auth/authServices.js"></script>
+  <script src="./app/components/auth/authControllers.js"></script>
 
 </body>
 </html>
