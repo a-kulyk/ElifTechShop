@@ -3,6 +3,7 @@
  */
 var app = angular.module('delivery', []);
 app.controller('deliveryCtrl', function ($scope, $http) {
+    $scope.showForm = true;
     $scope.submit = function () {
         var requestJSON = {};
         requestJSON.title = $scope.title;
@@ -12,7 +13,7 @@ app.controller('deliveryCtrl', function ($scope, $http) {
         requestJSON.from.username = $scope.fromUsername;
         requestJSON.to.username = $scope.toUsername;
         if (autocompleteFrom.getPlace()) {
-            /*              console.log(autocompleteFrom.getPlace());*/
+            console.log(autocompleteFrom.getPlace());
             var fromPlace = autocompleteFrom.getPlace();
             requestJSON.from.lat = fromPlace.geometry.location.lat();
             requestJSON.from.lng = fromPlace.geometry.location.lng();
@@ -25,6 +26,7 @@ app.controller('deliveryCtrl', function ($scope, $http) {
         }
         $http.post("/order", requestJSON).success(function (data, status, headers, config) {
             console.log(data);
+           // $scope.showForm = false;
             $scope.estimatedTime = data.estimatedTime;
         }).error(function (data, status, header, config) {
 

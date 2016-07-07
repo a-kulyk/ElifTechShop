@@ -3,9 +3,10 @@
  */
 var Order = require('../models/order');
 var googleConnector = require('../lib/distance-determiner');
+var validationSchema = require('../lib/validation-schema');
 
-var orderNotFound = {"status": "false"};
 var orderAccepted = {"status": "true"};
+var failed = {"status": "false"};
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
@@ -15,7 +16,7 @@ module.exports = function (app) {
     app.get('/order/:id', function (req, res) {
         Order.findById(req.params.id, function (err, doc) {
             if (err) {
-                res.json(orderNotFound);
+                res.json(failed);
             } else {
                 res.json(doc);
             }
@@ -23,28 +24,35 @@ module.exports = function (app) {
     })
 
     app.post('/order', function (req, res) {
-        new Order(req.body).save(function (err, doc) {
-            if (err) {
-                res.sendStatus(400);
-            } else {
-                var distanceEmitter = googleConnector({lat: doc.from.lat, lng: doc.from.lng}, {
-                    lat: doc.to.lat,
-                    lng: doc.to.lng
+        req.checkBody(validationSchema);
+
+        var errors = req.validationErrors();
+        console.log(errors);
+        if (errors) {
+            res.sendStatus(400);
+        } else {
+            var distanceEmitter = googleConnector({lat: req.body.from.lat, lng: req.body.from.lng}, {
+                lat: req.body.to.lat,
+                lng: req.body.to.lng
+            });
+
+            function resFormer(resultJSON) {
+                var estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.text;
+                orderAccepted.estimatedTime = estimatedTime;
+                console.log(orderAccepted);
+                new Order(req.body).save(function (err, doc) {
+                    if (err) {
+                        res.json(failed);
+                    } else {
+                        res.json(orderAccepted);
+                    }
                 });
-
-                function resFormer(resultJSON) {
-                    var estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.text;
-                    orderAccepted.estimatedTime = estimatedTime;
-                    console.log(orderAccepted);
-                    //res.end(JSON.stringify(orderAccepted));
-                    res.json(orderAccepted);
-                    distanceEmitter.removeListener('resultIsReady', resFormer);
-                }
-
-                distanceEmitter.on('resultIsReady', resFormer);
+                distanceEmitter.removeListener('resultIsReady', resFormer);
             }
-        });
-    });
 
+            distanceEmitter.on('resultIsReady', resFormer);
+
+        }
+    });
 }
 
