@@ -62,13 +62,15 @@
                             <br>
                             <input type="submit" value="Submit" class="form-control btn btn-success">
                         </form>
-                        <div><p>Estimated delivery time: {{estimatedTime}}</p></div>
+                    </div>
+                    <div ng-show="timeOutput"><p>Delivery time: {{estimatedTime}}</p>
+                        <p>The order will be delivered at :{{deliveryDate}}</p>
+                        <button ng-click="oneMoreOrder()">One more order</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <script src="js/app.js"></script>
 </body>

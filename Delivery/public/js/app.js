@@ -4,6 +4,7 @@
 var app = angular.module('delivery', []);
 app.controller('deliveryCtrl', function ($scope, $http) {
     $scope.showForm = true;
+    $scope.timeOutput = false;
     $scope.submit = function () {
         var requestJSON = {};
         requestJSON.title = $scope.title;
@@ -26,7 +27,6 @@ app.controller('deliveryCtrl', function ($scope, $http) {
         }
         $http.post("/order", requestJSON).success(function (data, status, headers, config) {
             console.log(data);
-            // $scope.showForm = false;
             var options = {
                 year: 'numeric',
                 month: 'long',
@@ -34,12 +34,30 @@ app.controller('deliveryCtrl', function ($scope, $http) {
                 hour: 'numeric',
                 minute: 'numeric',
             };
-            //  $scope.estimatedTime = new Date(data.estimatedTime).toLocaleString("en-US", options);
-            $scope.estimatedTime = data.estimatedTime;
+
+            $scope.estimatedTime = Math.floor(data.estimatedTime / 60) + 'minutes';
+            $scope.deliveryDate = new Date(Date.now() + data.estimatedTime * 1000).toLocaleString("en-US", options);
+            $scope.showForm = false;
+            $scope.timeOutput = true;
         }).error(function (data, status, header, config) {
 
         });
     }
+    $scope.oneMoreOrder = function () {
+        function clearForm() {
+            $scope.title = '';
+            $scope.price = '';
+            $scope.fromUsername = '';
+            $scope.toUsername = '';
+            document.getElementById('fromAddress').value = '';
+            document.getElementById('toAddress').value = '';
+        }
+
+        clearForm();
+        $scope.showForm = true;
+        $scope.timeOutput = false;
+    }
+
 });
 
 var options = {types: ["address"]};
