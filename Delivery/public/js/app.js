@@ -26,7 +26,15 @@ app.controller('deliveryCtrl', function ($scope, $http) {
         }
         $http.post("/order", requestJSON).success(function (data, status, headers, config) {
             console.log(data);
-           // $scope.showForm = false;
+            // $scope.showForm = false;
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            };
+            //  $scope.estimatedTime = new Date(data.estimatedTime).toLocaleString("en-US", options);
             $scope.estimatedTime = data.estimatedTime;
         }).error(function (data, status, header, config) {
 

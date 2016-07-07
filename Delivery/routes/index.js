@@ -5,8 +5,8 @@ var Order = require('../models/order');
 var googleConnector = require('../lib/distance-determiner');
 var validationSchema = require('../lib/validation-schema');
 
-var orderAccepted = {"status": "true"};
-var failed = {"status": "false"};
+var successMsg = {"status": "true"};
+var failedMsg = {"status": "false"};
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
@@ -16,7 +16,7 @@ module.exports = function (app) {
     app.get('/order/:id', function (req, res) {
         Order.findById(req.params.id, function (err, doc) {
             if (err) {
-                res.json(failed);
+                res.json(failedMsg);
             } else {
                 res.json(doc);
             }
@@ -27,8 +27,8 @@ module.exports = function (app) {
         req.checkBody(validationSchema);
 
         var errors = req.validationErrors();
-        console.log(errors);
         if (errors) {
+            console.error(errors);
             res.sendStatus(400);
         } else {
             var distanceEmitter = googleConnector({lat: req.body.from.lat, lng: req.body.from.lng}, {
@@ -38,13 +38,18 @@ module.exports = function (app) {
 
             function resFormer(resultJSON) {
                 var estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.text;
-                orderAccepted.estimatedTime = estimatedTime;
-                console.log(orderAccepted);
-                new Order(req.body).save(function (err, doc) {
+                var deliveryDate = new Date(Date.now()
+                    + JSON.parse(resultJSON).rows[0].elements[0].duration.value * 1000);
+                var order = req.body;
+                order.deliveryDate = deliveryDate;
+                successMsg.estimatedTime = estimatedTime;
+                console.log(successMsg);
+                new Order(order).save(function (err, doc) {
                     if (err) {
-                        res.json(failed);
+                        console.error(err);
+                        res.json(failedMsg);
                     } else {
-                        res.json(orderAccepted);
+                        res.json(successMsg);
                     }
                 });
                 distanceEmitter.removeListener('resultIsReady', resFormer);

@@ -40,6 +40,10 @@ var schema = new Schema({
             type: Number,
             required: true
         }
+    },
+    deliveryDate: {
+        type: Date,
+        required: true
     }
 });
 
