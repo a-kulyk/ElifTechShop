@@ -1,6 +1,7 @@
 /**
  * Created by dmytro on 29.06.16.
  */
+"use strict";
 var Order = require('../models/order');
 var googleConnector = require('../lib/distance-determiner');
 var validationSchema = require('../lib/validation-schema');
@@ -31,12 +32,11 @@ module.exports = function (app) {
             console.error(errors);
             res.sendStatus(400);
         } else {
-            var distanceEmitter = googleConnector({lat: req.body.from.lat, lng: req.body.from.lng}, {
+            let p = googleConnector({lat: req.body.from.lat, lng: req.body.from.lng}, {
                 lat: req.body.to.lat,
                 lng: req.body.to.lng
             });
-
-            function resFormer(resultJSON) {
+            p.then(resultJSON=> {
                 console.log(resultJSON);
                 var estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.value;
                 var deliveryDate = new Date(Date.now()
@@ -53,12 +53,7 @@ module.exports = function (app) {
                         res.json(successMsg);
                     }
                 });
-                distanceEmitter.removeListener('resultIsReady', resFormer);
-            }
-
-            distanceEmitter.on('resultIsReady', resFormer);
-
+            })
         }
     });
 }
-
