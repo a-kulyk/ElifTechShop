@@ -4,13 +4,21 @@ let Transaction = require('../models/transaction').Transaction;
 
 let fromUser = User.findOne({_id: '5773c1b809aaa4fd2f7c4f9e'});
 let toUser = User.findOne({_id: '5773d50ef6e5bd063d119d27'});
-Promise.all([fromUser, toUser])
+Transaction.action('5773c1b809aaa4fd2f7c4f9e', '5773d50ef6e5bd063d119d27', 2)
     .then(function (result) {
-        Tr
+        console.log(result);
     })
     .catch(function (error) {
         console.log(error);
     });
+
+// Promise.all([fromUser, toUser])
+//     .then(function (result) {
+//        console.log(result);
+//     })
+//     .catch(function (error) {
+//         console.log(error);
+//     });
 
 
 // let userPromise = new Promise(function (resolve, reject) {
