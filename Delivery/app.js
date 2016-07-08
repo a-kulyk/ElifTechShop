@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 
 app.use(validator());
 
-app.set('views', __dirname + '/templates');
-app.set('view engine', 'ejs');
+//app.set('views', __dirname + '/views');
+//app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 

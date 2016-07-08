@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<base href="/">-->
+    <title>Title</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_JCjSbuYTaArP7GiEwUS2YRlvgKMkcFY&libraries=places">
+    </script>
+</head>
+<body ng-app="delivery">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">Delivery</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li ng-class="makeOrderActiveClass"><a href="#/">Make order</a></li>
+            <li ng-class="trackOrderActiveClass"><a href="#/track">Track order</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">{{panelTitle}}</div>
+                <div class="panel-body">
+                    <div ng-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/app.js"></script>
+<script src="js/controllers/create-order-controller.js"></script>
+<script src="js/controllers/track-order-controller.js"></script>
+</body>
+</html>

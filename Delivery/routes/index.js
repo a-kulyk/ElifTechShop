@@ -11,7 +11,7 @@ var failedMsg = {"status": "false"};
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
-        res.render('index');
+        res.sendFile('index.html');
     });
 
     app.get('/order/:id', function (req, res) {
@@ -25,6 +25,7 @@ module.exports = function (app) {
     })
 
     app.post('/order', function (req, res) {
+        console.log(req.body)
         req.checkBody(validationSchema);
 
         var errors = req.validationErrors();
@@ -57,3 +58,10 @@ module.exports = function (app) {
         }
     });
 }
+
+
+
+
+
+
+
