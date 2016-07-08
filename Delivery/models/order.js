@@ -5,46 +5,52 @@ var mongoose = require('../lib/mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    from: {
-        username: {
+        title: {
             type: String,
             required: true
         },
-        lng: {
+        price: {
             type: Number,
             required: true
         },
-        lat: {
-            type: Number,
+        from: {
+            username: {
+                type: String,
+                required: true
+            },
+            lng: {
+                type: Number,
+                required: true
+            },
+            lat: {
+                type: Number,
+                required: true
+            }
+        },
+        to: {
+            username: {
+                type: String,
+                required: true
+            },
+            lng: {
+                type: Number,
+                required: true
+            },
+            lat: {
+                type: Number,
+                required: true
+            }
+        },
+        deliveryDate: {
+            type: Date,
             required: true
-        }
-    },
-    to: {
-        username: {
+        },
+        trackingCode: {
             type: String,
-            required: true
-        },
-        lng: {
-            type: Number,
-            required: true
-        },
-        lat: {
-            type: Number,
+            unique: true,
             required: true
         }
-    },
-    deliveryDate: {
-        type: Date,
-        required: true
-    }
-});
+    })
+    ;
 
 module.exports = mongoose.model('Order', schema);

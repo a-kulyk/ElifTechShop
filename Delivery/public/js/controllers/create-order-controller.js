@@ -38,6 +38,7 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http) {
 
             $scope.estimatedTime = Math.floor(data.estimatedTime / 60) + 'minutes';
             $scope.deliveryDate = new Date(Date.now() + data.estimatedTime * 1000).toLocaleString("en-US", options);
+            $scope.trackingCode = data.trackingCode;
             $scope.showForm = false;
             $scope.timeOutput = true;
         }).error(function (data, status, header, config) {

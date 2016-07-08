@@ -5,9 +5,9 @@
 var Order = require('../models/order');
 var googleConnector = require('../lib/distance-determiner');
 var validationSchema = require('../lib/validation-schema');
+var uuid = require('uuid');
 
-var successMsg = {"status": "true"};
-var failedMsg = {"status": "false"};
+
 
 module.exports = function (app) {
     app.get('/', function (req, res) {
@@ -15,16 +15,22 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-        Order.findById(req.params.id, function (err, doc) {
+        var successMsg = {"status": "true"};
+        var failedMsg = {"status": "false"};
+        Order.findOne({trackingCode: req.params.id}, function (err, doc) {
             if (err) {
                 res.json(failedMsg);
             } else {
-                res.json(doc);
+                successMsg.deliveryDate = doc.deliveryDate;
+                res.json(successMsg);
             }
         })
     })
 
     app.post('/order', function (req, res) {
+        var successMsg = {"status": "true"};
+        var failedMsg = {"status": "false"};
+        
         console.log(req.body)
         req.checkBody(validationSchema);
 
@@ -44,13 +50,16 @@ module.exports = function (app) {
                     + JSON.parse(resultJSON).rows[0].elements[0].duration.value * 1000);
                 var order = req.body;
                 order.deliveryDate = deliveryDate;
+                var trackingCode = uuid.v4();
+                order.trackingCode = trackingCode;
                 successMsg.estimatedTime = estimatedTime;
-                console.log(successMsg);
                 new Order(order).save(function (err, doc) {
                     if (err) {
                         console.error(err);
                         res.json(failedMsg);
                     } else {
+                        successMsg.trackingCode = doc.trackingCode;
+                        console.log(successMsg);
                         res.json(successMsg);
                     }
                 });

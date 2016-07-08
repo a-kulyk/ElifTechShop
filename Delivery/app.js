@@ -20,4 +20,4 @@ app.listen(config.get('port'), function () {
     console.log('Delivery app listening on port' + ' ' + config.get('port'));
 });
 
-require('routes')(app);
+require('controllers')(app);
