@@ -13,7 +13,7 @@
 <body>
 <header>
     <span>ElifTech Bank</span>
-    <button ng-click="transaction()">Transaction</button>
+    <!--<button ng-click="transaction()">Transaction</button>-->
 </header>
 <div class="content">
 
@@ -62,24 +62,25 @@
     </div>
 
     <div id="cabinet">
+        <div class="buttonBar">
+            <button class="btn btn-primary" ng-click="payModal()">Pay</button>
+            <button class="btn btn-primary" ng-click="transferModal()">Transfer</button>
+            <button class="btn btn-primary" ng-click="logout()">Logout</button>
+        </div>
         <div class="panel panel-default">
-            <div class="buttonBar">
-                <button class="btn btn-primary" ng-click="payModal()">Pay</button>
-                <button class="btn btn-primary" ng-click="transferModal()">Transfer</button>
-                <button class="btn btn-primary" ng-click="logout()">Logout</button>
+            <div class="panel-heading">
+                <div class="item">
+                <span class="title">Username</span>
+                <span>{{ username }}</span>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <h1>Username</h1>
-                <h2>{{ username }}</h2>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <h1>Card number</h1>
-                <h2>{{ id }}</h2>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                <h1>Amount</h1>
-                <h2>{{ amount }}</h2>
-            </div>
+                <div class="item">
+                    <span class="title">Card number</span>
+                    <span>{{ id }}</span>
+                </div>
+                <div class="item">
+                    <span class="title">Amount</span>
+                    <span>{{ amount }}</span>
+                </div></div>
             <table >
                 <tr id="title">
                     <td>ID</td>
