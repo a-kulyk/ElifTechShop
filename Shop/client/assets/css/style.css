@@ -1,0 +1,23 @@
+#sitelogo {
+    color: #F8FFFF;
+    font-weight: 300;
+    font-size: 28px;
+    position: relative;
+    top: 3px;
+}
+
+#sitelogo:hover {
+    -webkit-transform: scale(1.02); 
+    text-shadow: 1px 1px 3px #333; 
+}
+
+#sitelogo span {
+    font-weight: 500;
+    color: #47A5DE;
+}
+.category {
+	background-color: rgb(236,236,236);
+}
+.product {
+	background-color: rgb(210, 215, 211);
+}
