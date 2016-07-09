@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('catalog.list', ['ngRoute', 'service.error'])
+const ngRoute = require('../bower_components/angular-route');
+
+require('../service/errorService');
+
+angular.module('catalog.list', [ngRoute, 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/list', {

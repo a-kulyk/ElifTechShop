@@ -5,6 +5,12 @@ module.exports = {
     entry: "./app.js",
     output: {
         path: __dirname + "/public",
-        filename: "app.js"
+        filename: "bundle.js"
+    },
+    module: {
+        loaders: [
+            { test: /\.js$/, loader: 'babel'},
+            { test: /\.html$/, loader: 'raw'}
+        ]
     }
 };

@@ -1,10 +1,12 @@
 'use strict';
 
-angular.module('error', ['ngRoute', 'service.error'])
+const ngRoute = require('../bower_components/angular-route');
+
+angular.module('error', [ngRoute, 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/error', {
-            templateUrl: 'error/error.html',
+            template: require('./error.html'),
             controller: 'errorCtrl'
         });
     }])

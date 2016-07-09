@@ -1,5 +1,9 @@
 'use strict';
 
+const ngRoute = require('../bower_components/angular-route');
+
+require('../service/errorService');
+
 var addProperty = function(form) {
     if(!form.properties) {
         form.properties = [];
@@ -18,7 +22,7 @@ var removeByIndex = function(array, index) {
     array.splice(index,1);
 };
 
-angular.module('catalog.item', ['ngRoute', 'service.error'])
+angular.module('catalog.item', [ngRoute, 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/item/:id/delete', {
@@ -33,7 +37,7 @@ angular.module('catalog.item', ['ngRoute', 'service.error'])
         });
     }])
 
-    .controller('newItemCtrl', function($scope, $http, $location) {
+    .controller('newItemCtrl', function($scope, $http, $location, errorService) {
         $scope.form = {};
         $scope.submitItem = function() {
             $http.put('/items', $scope.form)

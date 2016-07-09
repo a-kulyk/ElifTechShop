@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');//ToDo: for dev
 const del = require('del');
 const jade = require('gulp-jade');
+const webpack = require('webpack-stream');
 
 var env = process.env.NODE_ENV || 'development';
 
@@ -21,7 +22,8 @@ gulp.task('html', function () {
 });
 
 gulp.task('js', function () {
-    return gulp.src('frontend/**/*.js'/*, {since: gulp.lastRun('js')}*/)
+    return gulp.src('frontend/app.js'/*, {since: gulp.lastRun('js')}*/)
+        .pipe(webpack(require('./webpack.config.js')))
         .pipe(gulp.dest('public'));
 });
 
