@@ -15,8 +15,8 @@ gulp.task('clean', function() {
 });
 
 gulp.task('html', function () {
-    return gulp.src('frontend/**/*.jade'/*, {since: gulp.lastRun('html')}*/)
-        .pipe(jade({locals: {} }))
+    return gulp.src('frontend/**/*.html'/*, {since: gulp.lastRun('html')}*/)
+        //.pipe(jade({locals: {} }))
         .pipe(gulp.dest('public'));
 });
 

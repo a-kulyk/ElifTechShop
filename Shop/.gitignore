@@ -44,5 +44,5 @@ GitHub.sublime-settings
 #other
 .idea
 bower_components
-./public
+/public
 
