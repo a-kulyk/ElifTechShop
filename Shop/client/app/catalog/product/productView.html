@@ -1,0 +1,16 @@
+<div class="col-md-12 col-xs-12">
+Search: <input type="text"  ng-model="search.name">
+</div>
+<div class="col-md-3 col-xs-3 product" ng-repeat="item in catalog.items"> 
+      <a href="#/product/{{item._id}}">{{item.name}}</a>
+      {{item.category}}
+      {{item.description}}
+      <img ng-src="{{item.images[0]}}" width="200px">
+      <div ng-repeat="property in item.properties">
+      {{property.name}} | {{property.value}} 
+      </div>
+</div>
+<div ng-repeat="i in catalog.pages">
+
+	<a href="#/?{{i.url}}">{{i.number}} page</a>
+</div>

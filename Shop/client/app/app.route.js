@@ -1,12 +1,14 @@
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('app', ['ngRoute']);
+
 
 myApp.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
-      access: {restricted: true}
+      templateUrl: '/main.html',
+      access: {restricted: false}
     })
     .when('/login', {
-      templateUrl: './app/components/auth/login.html',
+      templateUrl: './app/auth/login.html',
       controller: 'loginController',
       access: {restricted: false}
     })
@@ -15,9 +17,25 @@ myApp.config(function ($routeProvider) {
       access: {restricted: true}
     })
     .when('/register', {
-      templateUrl: './app/components/auth/register.html',
+      templateUrl: './app/auth/register.html',
       controller: 'registerController',
       access: {restricted: false}
+    })
+    .when('/product/:id', {
+      templateUrl: './app/catalog/product/productShowView.html',
+      controller: 'ProductShowController',
+      controllerAs: 'product',
+      access: {restricted: false}
+    })
+    .when('/category/:name', {
+      templateUrl: './app/catalog/categories/categoryShowView.html',
+      controller: 'CategoryShowController',
+      controllerAs: 'categories'
+    })
+    .when('/filter/', {
+      templateUrl: './app/catalog/filter/filterView.html',
+      controller: 'FilterItemsController',
+      controllerAs: 'product'
     })
     .otherwise({
       redirectTo: '/'

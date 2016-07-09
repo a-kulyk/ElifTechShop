@@ -1,0 +1,9 @@
+
+<li ng-repeat="property in properties.data">{{property.name}} 
+
+<div ng-repeat="value in property.data track by $index">
+	{{property.data[$index]}}
+	
+</div>
+
+</li>
