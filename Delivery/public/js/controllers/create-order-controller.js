@@ -26,7 +26,10 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
             requestJSON.to.lng = toPlace.geometry.location.lng();
         }
         $http.post("/order", requestJSON).success(function (data, status, headers) {
-            $window.location.href = '#/delivery_time/' + data.trackingCode;
+            console.log(data);
+            if (data.status == 'true') {
+                $window.location.href = '#/delivery_time/' + data.trackingCode;
+            }
         }).error(function (data, status, headers) {
             console.log(status);
         });
