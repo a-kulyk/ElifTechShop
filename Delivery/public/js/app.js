@@ -9,6 +9,9 @@ app.config(function ($routeProvider, $locationProvider) {
     }).when('/track', {
         templateUrl: 'templates/track-order.html',
         controller: 'trackOrderCtrl'
+    }).when('/delivery_time/:trackingCode', {
+        templateUrl: 'templates/time-output.html',
+        controller: 'timeOutputCtrl'
     });
 });
 app.run(function ($rootScope) {

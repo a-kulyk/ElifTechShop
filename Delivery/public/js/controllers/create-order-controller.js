@@ -1,11 +1,10 @@
 /**
  * Created by dmytro on 08.07.16.
  */
-app.controller('createOrderCtrl', function ($rootScope, $scope, $http) {
+app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) {
     $rootScope.makeOrderActiveClass = 'active';
     $rootScope.trackOrderActiveClass = '';
     $rootScope.panelTitle = 'New order';
-    $scope.showForm = true;
     $scope.createOrder = function () {
         var requestJSON = {};
         requestJSON.title = $scope.title;
@@ -26,34 +25,11 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http) {
             requestJSON.to.lat = toPlace.geometry.location.lat();
             requestJSON.to.lng = toPlace.geometry.location.lng();
         }
-        $http.post("/order", requestJSON).success(function (data, status, headers, config) {
-            console.log(data);
-            var options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-            };
-
-            $scope.estimatedTime = Math.floor(data.estimatedTime / 60) + 'minutes';
-            $scope.deliveryDate = new Date(Date.now() + data.estimatedTime * 1000).toLocaleString("en-US", options);
-            $scope.trackingCode = data.trackingCode;
-            $scope.showForm = false;
-            $scope.timeOutput = true;
-        }).error(function (data, status, header, config) {
+        $http.post("/order", requestJSON).success(function (data, status, headers) {
+            $window.location.href = '#/delivery_time/' + data.trackingCode;
+        }).error(function (data, status, headers) {
             console.log(status);
         });
-    }
-    $scope.resetForm = function () {
-        $scope.title = '';
-        $scope.price = '';
-        $scope.fromUsername = '';
-        $scope.toUsername = '';
-        document.getElementById('fromAddress').value = '';
-        document.getElementById('toAddress').value = '';
-        $scope.showForm = true;
-        $scope.timeOutput = false;
     }
     var options = {types: ["address"]};
     var fromAddress = document.getElementById('fromAddress');

@@ -1,4 +1,4 @@
-<div ng-show="showForm">
+<div>
     <form ng-submit="createOrder()" role="form">
         <div class="form-group">
             Product title<br>
@@ -30,10 +30,4 @@
         <br>
         <input type="submit" value="Submit" class="form-control btn btn-success">
     </form>
-</div>
-<div ng-show="timeOutput">
-    <p>Delivery time: {{estimatedTime}}</p>
-    <p>The order will be delivered at :{{deliveryDate}}</p>
-    <p>Tracking-code :{{trackingCode}}</p>
-    <button ng-click="resetForm()" class="btn btn-success">One more order</button>
 </div>
