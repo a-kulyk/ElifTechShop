@@ -1,27 +1,28 @@
 var express = require('express');
 var router = express.Router();
-var Products = require('./catalogModel.js');
 var mongoose = require('mongoose');
+var Products = require("./catalogModel.js")
 var Filter = require('./filter.js');
-//let filter = require('../models/modules/filter.js').filter;
 mongoose.Promise = global.Promise;
 
-class Parameters {
-  constructor() {
-    this.params = [];
-  }
 
-  distinct(value) {
-    let own_res = []
-      for (var i=0; i<value.length;i++) {
-        if(!own_res.includes(value[i].properties[0].value)) own_res.push(value[i].properties[0].value);
+Products.findParams =  function(result) {
+     var ourRes = {};
+      for(var i = 0; i< result.length;i++) {
+        if(!ourRes.hasOwnProperty(result[i].name)) {
+          ourRes[result[i].name] = [result[i].value];
+          console.log(ourRes[result[i].name]);
+          for (var j = parseInt(i)+1; j < result.length ; j++) {
+            if(result[j].name == result[i].name) {
+              if(!ourRes[result[i].name].includes(result[j].value)) {
+                ourRes[result[i].name].push(result[j].value);
+              }
+            }
+          }  
+        }
       }
-     return own_res;
+      return ourRes;
   }
-
-
-}
-
 
 
 
@@ -34,25 +35,30 @@ router.get('/product/:id', function(req, res, next) {
     )
 });
 
-router.get('/parameters/:name', function(req,res,next){
-let uniqValue = new Parameters();
-Products.find({"properties.name": req.params.name},"properties.value.$")
-    .then(
-    result => res.json(uniqValue.distinct(result)),
-      error =>  next(error)
-    )  
-})
 
-router.get('/categories', function(req, res, next) {
-  Products.find().distinct('category')
-  .then(
-    result => res.json(result),
-    error =>  next(error)
-    )
- });
 
+router.get('/find/:distinct', function(req, res, next) {
+  if(req.params.distinct == "all") {
+    Products.find().distinct('category')
+        .then(
+          result => res.json(result),
+          error =>  next(error)
+        )
+    return;
+  }
+  if(req.params.distinct) {
+    Products.distinct('properties',{'category': req.params.distinct })
+    .then (result => {
+      res.json(Products.findParams(result));
+    })
+    .catch(error => {
+        console.log(error);
+      });
+    }
+  });
 
 router.get('/filter/', function(req,res,next) {
+  
   let myFilter = new Filter();
   let pagination = myFilter.setPage();
   for (item in req.query) {
@@ -70,7 +76,7 @@ router.get('/filter/', function(req,res,next) {
     } 
     myFilter.setProperties(item,req.query[item]);
   }
-
+  
 Promise.all([
     Products.find(myFilter.creatQuery()).sort({}).skip(pagination.skip()).limit(pagination.per_page()),
     Products.find(myFilter.creatQuery()).count()

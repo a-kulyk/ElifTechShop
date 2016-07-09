@@ -8,6 +8,7 @@ var config = {
     saveUninitialized: false
 },
   dbUrl: 'mongodb://andriikulyk:sicario@ds019654.mlab.com:19654/auth_db'
+  //dbUrl: 'mongodb://localhost/first_app'
 };
 
 module.exports = config;

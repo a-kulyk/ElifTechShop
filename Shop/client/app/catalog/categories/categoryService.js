@@ -1,10 +1,16 @@
-angular.module('app').factory('Categories',['$http', function($http) {
+angular.module('app').factory('Parameters',['$http', function($http) {
       return {
  			all: function() {
-      			return $http({method: 'GET', url: "/catalog/categories"});
-    			},
-    		find: function(name){
-      		return $http({method:'GET', url: '/catalog/category/' + name});
+      			return $http({
+      				method: 'GET', 
+      				url: "/catalog/find/all"
+      			});
+    		},
+    		paramsOfCat: function(cat) {
+    			return $http({
+    				method: 'GET',
+    				url: "/catalog/find/" + cat,
+    			});
     		}
  		}
     }])

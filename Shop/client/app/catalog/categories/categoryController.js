@@ -1,18 +1,23 @@
 
 angular.module('app')
-	.controller('CategoriesController', ['$scope', 'Categories', function ($scope, Categories) {
-      Categories.all().success(function(data){
-        $scope.categories = data;
-        console.log(data);
+	.controller('CategoriesController', ['$scope', 'Parameters','$routeParams', '$httpParamSerializer', function ($scope, Parameters,$routeParams,$httpParamSerializer) {
+      var that = this;
+      Parameters.all().success(function(data){
+        that.data = [];
+        for(i in data) {
+          var url = $routeParams;
+          url.categories = data[i];
+          url.page = null;
+          var categoryInfo = {name : data[i], url : $httpParamSerializer(url)};
+          that.data.push(categoryInfo);
+          console.log(categoryInfo);
+        }
+        
       }).error(function(data, status){
         console.log(data, status);
-        $scope.categories = [];
+        that.categories = [];
       });
      }])
-    .controller('CategoryShowController',['$scope', 'Categories', '$routeParams', function ($scope, Categories, $routeParams) {
-      Categories.find($routeParams.name).success(function(data) {
-     $scope.categories = data;
-  });
-    }]);
+
     
  	

@@ -33,7 +33,13 @@ class Filter {
 
   setCategories(cat) {
     if(cat) {
-      this.categories.push({'category' : cat});
+      if(Array.isArray(cat)) {
+        for(let i in cat) {
+          this.categories.push({"category" : cat[i]});
+        }
+        return
+      }
+      this.categories.push({"category" : cat});
     } 
   }
 
@@ -41,17 +47,16 @@ class Filter {
     let query = {$and: [{}]};
     if (this.searchField) {
       let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]}
-      console.log(searchQuery)
       query.$and.push(searchQuery);
     }
     if(this.properties) {
       let propertiesQuery = {$and : this.properties};
-      console.log(propertiesQuery);
+ 
       query.$and.push(propertiesQuery);
     }
-    if(!this.categories.length < 1) {
+    if(!(this.categories.length < 1)) {
+      console.log(this.categories);
       let categoriesQuery = {$or : this.categories};
-      console.log(categoriesQuery);
       query.$and.push(categoriesQuery);
     }
 
