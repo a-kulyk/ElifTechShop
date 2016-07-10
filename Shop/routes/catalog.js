@@ -1,4 +1,5 @@
-var express = require('express');
+const express = require('express');
+const Product = require("../models/product");
 var router = express.Router();
 
 // router.get('/', function(req, res, next) {
@@ -6,8 +7,8 @@ var router = express.Router();
 // });
 
 router.get('/items', function(req, res, next) {
-    var db = require("../db");
-    db.items.find(function(err, items) {
+
+    Product.find(function(err, items) {
         if(err) {
             console.error(err);
             res.json({ success: false, error: {name: 'database error', message: err}});
@@ -22,10 +23,9 @@ router.get('/items', function(req, res, next) {
 });
 
 router.get('/items/:id', function(req, res, next) {
-    var db = require("../db");
     var id = req.params.id;
-    db.items.findOne({
-        _id: db.ObjectId(id)
+    Product.findOne({
+        _id: id //ToDo: is it safe?
     },function(err, item) {
         if(err) {
             console.error(err);
@@ -41,9 +41,8 @@ router.get('/items/:id', function(req, res, next) {
 });
 
 router.put('/items', function(req, res, next) {
-    var db = require("../db");
     var item = req.body;//ToDo: valid
-    db.items.save(item, function(err, result) {
+    Product.create(item, function(err, result) {
         if(err) {
             console.error(err);
             res.json({ "success": false, error: {name: 'database error', message: err}  });
@@ -54,15 +53,11 @@ router.put('/items', function(req, res, next) {
 });
 
 router.post('/items/:id', function(req, res, next) {
-    var db = require("../db");
-    var id = req.params.id;
-    var item = req.body;//ToDo: valid
+    let id = req.params.id;
+    let item = req.body;//ToDo: valid
     delete item._id;
 
-    db.items.findAndModify({
-        query: { _id: db.ObjectId(id) },
-        update: item
-    }, function(err, doc, lastErrorObject) {
+    Product.findByIdAndUpdate(id, item, function(err, doc) {
         if(err) {
             console.error(err);
             res.json({ "success": false, error: {name: 'database error', message: err} });
@@ -73,12 +68,8 @@ router.post('/items/:id', function(req, res, next) {
 });
 
 router.delete('/items/:id', function(req, res, next) {
-    var db = require("../db");
     var id = req.params.id;
-    db.items.findAndModify({
-        query: { _id: db.ObjectId(id) },
-        remove: true
-    }, function(err, doc, lastErrorObject) {
+    Product.findByIdAndRemove(id, function(err, doc) {
         if(err) {
             console.error(err);
             res.json({ "success": false, error: {name: 'database error', message: err}  });
