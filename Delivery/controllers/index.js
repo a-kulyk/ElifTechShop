@@ -17,6 +17,8 @@ module.exports = function (app) {
         let servicePromise = service.findByTrackingCode(req.params.id);
         servicePromise.then((order)=> {
             successMsg.deliveryDate = order.deliveryDate;
+            successMsg.from=order.from;
+            successMsg.to=order.to;
             res.json(successMsg);
         }).catch((err)=> {
             console.error(err);
