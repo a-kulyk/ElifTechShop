@@ -12,8 +12,8 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-        var successMsg = {"status": "true"};
-        var failedMsg = {"status": "false"};
+        var successMsg = {"success": "true"};
+        var failedMsg = {"success": "false"};
         let servicePromise = service.findByTrackingCode(req.params.id);
         servicePromise.then((order)=> {
             successMsg.deliveryDate = order.deliveryDate;
@@ -27,8 +27,8 @@ module.exports = function (app) {
         });
     });
     app.post('/order', function (req, res) {
-            var successMsg = {"status": "true"};
-            var failedMsg = {"status": "false"};
+            var successMsg = {"success": "true"};
+            var failedMsg = {"success": "false"};
             req.checkBody(validationSchema);
             var errors = req.validationErrors();
             if (errors) {

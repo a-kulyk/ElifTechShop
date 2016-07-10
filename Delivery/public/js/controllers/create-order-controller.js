@@ -27,7 +27,7 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
         }
         $http.post("/order", requestJSON).success(function (data, status, headers) {
             console.log(data);
-            if (data.status == 'true') {
+            if (data.success) {
                 $window.location.href = '#/delivery_time/' + data.trackingCode;
             }
         }).error(function (data, status, headers) {

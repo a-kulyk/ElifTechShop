@@ -6,12 +6,14 @@ app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $ht
     if ($routeParams.trackingCode) {
         $scope.trackingCode = $routeParams.trackingCode;
         $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
-            $scope.deliveryDate = data.deliveryDate;
-            var coordinates = {};
-            coordinates.from = data.from;
-            coordinates.to = data.to;
-            initMap(coordinates);
-            console.log(data)
+            if (data.success) {
+                $scope.deliveryDate = data.deliveryDate;
+                var coordinates = {};
+                coordinates.from = data.from;
+                coordinates.to = data.to;
+                initMap(coordinates);
+            }
+            console.log(data);
         }).error(function (data, status, headers) {
             console.log('error');
         })
