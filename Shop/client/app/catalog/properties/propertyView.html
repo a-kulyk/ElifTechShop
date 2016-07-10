@@ -1,9 +1,11 @@
 
+<form name="myForm" ng-controller="FilterController as filter">
+Search: <input type="text"  ng-model="filter.url.searchField">
 <li ng-repeat="property in properties.data">{{property.name}} 
-
 <div ng-repeat="value in property.data track by $index">
-	{{property.data[$index]}}
-	
-</div>
+	<input type="radio" ng-model="filter.url[property.name]" value="{{property.data[$index]}}">{{property.data[$index]}}
 
+</div>
 </li>
+<a href="#/?{{filter.url | setUrl}}">Send</a>
+</form>

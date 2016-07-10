@@ -2,14 +2,12 @@
 angular.module('app')
     .controller('CatalogController', ['Items', '$routeParams' ,'$location','$httpParamSerializer' ,function (Items, $routeParams, $location,$httpParamSerializer) {  
         var that = this; 
-       
         Items.all($routeParams)
         .success(function(data){
 
        	  if(angular.equals([], data)) {
        		 $location.path("/");
        	  }
-        //$scope.pageData = data;
       
         that.items = data.items;
         var pages = data.pages || 1;
@@ -22,9 +20,9 @@ angular.module('app')
         };
         for(property in that.items.properties) {
           property.url = $httpParamSerializer(property);
-          console.log(property.url);
+         
         }
-        console.log(that.items.properties);
+       
 
       }).error(function(data, status){
         console.log(data, status);
