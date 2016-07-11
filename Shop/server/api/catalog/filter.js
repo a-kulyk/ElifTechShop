@@ -4,7 +4,7 @@ class Filter {
     this.searchField = "";
     this.categories = [];
     this.page = 1;
-    this.perPage = 4;
+    this.perPage = 9;
   }
 
   setProperties(name,value) {

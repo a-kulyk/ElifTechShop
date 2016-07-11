@@ -1,7 +1,7 @@
 
  	angular.module('app').factory('Items', ['$http', function ProductFactory($http){
  		return {
- 			  all: function(object) {
+ 			    all: function(object) {
               return $http({
               withCredentials: false,
               method: 'GET',

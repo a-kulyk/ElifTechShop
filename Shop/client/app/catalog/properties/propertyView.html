@@ -1,11 +1,12 @@
 
 <form name="myForm" ng-controller="FilterController as filter">
-Search: <input type="text"  ng-model="filter.url.searchField">
-<li ng-repeat="property in properties.data">{{property.name}} 
+Search: <input type="text" class="searchField"  ng-model="filter.url.searchField">
+<div ng-show="filter.isCat" class="sidebar-category" category-items></div>
+<div ng-repeat="property in properties.data" class="property_name">{{property.name}} 
 <div ng-repeat="value in property.data track by $index">
-	<input type="radio" ng-model="filter.url[property.name]" value="{{property.data[$index]}}">{{property.data[$index]}}
+	<input type="radio" ng-model="filter.url[property.name]" value="{{property.data[$index]}}"><span class="propert_value">{{property.data[$index]}}</span>
 
 </div>
-</li>
-<a href="#/?{{filter.url | setUrl}}">Send</a>
+</div>
+<a class="send_form" ng-href="#/?{{filter.url | setUrl}}">Send</a>
 </form>

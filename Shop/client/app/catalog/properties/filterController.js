@@ -1,16 +1,12 @@
 
 angular.module('app')
-    .controller('FilterController', ['$scope', 'Items','$routeParams','$httpParamSerializer',function ($scope,Items,$routeParams,$httpParamSerializer) {  
-        var that = this; 
-        this.filter = {
-          input : ""
-        }
+    .controller('FilterController', ['$route',function ($route) {  
         this.url = {};
-        this.url.categories = $routeParams.categories;
-        console.log($routeParams.categories);
+        this.url.categories = $route.current.params.categories;
+        this.isCat = (typeof this.url.categories == "undefined");
     }])
     .filter("setUrl", ['$httpParamSerializer',function($httpParamSerializer){
-   return function(input){
+    return function(input){
       output = $httpParamSerializer(input)
       return output; 
    }

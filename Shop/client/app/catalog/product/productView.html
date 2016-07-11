@@ -1,17 +1,18 @@
-<property-items></property-items>
-<div class="col-md-12 col-xs-12">
 
-</div>
-<div class="col-md-3 col-xs-3 product" ng-repeat="item in catalog.items"> 
-      <a href="#/product/{{item._id}}">{{item.name}}</a>
-      {{item.category}}
-      {{item.description}}
-      <img ng-src="{{item.images[0]}}" width="200px">
-      <div ng-repeat="property in item.properties">
-      {{property.name}} | {{property.value}} 
-      </div>
-</div>
-<div ng-repeat="i in catalog.pages">
+<div id="product" class="product col-md-4 col-xs-12" ng-repeat="item in catalog.items">
+ 	<div class="image">
+ 		<img ng-src="{{item.images[0]}}" width="100%" />
+ 	</div>       	
+ 	<div class="product-info">
+ 		<a ng-href="#/product/{{item._id}}" class="title col-md-10 col-xs-10">{{item.name}}</a>
+ 		<div class="price col-md-2 col-xs-2">{{item.price}}$</div>
+ 	</div>
+ 	<div style="clear:both"></div>
+ 	<p>{{item.smallDescription}}</p>
 
-	<a href="#/?{{i.url}}">{{i.number}} page</a>
+
+ </div>
+    <div style="clear:both"></div>
+<div ng-repeat="i in catalog.pages" class="pages">
+	<a ng-href="#/?{{i.url}}" class="page">{{i.number}}</a>
 </div>

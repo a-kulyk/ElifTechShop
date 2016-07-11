@@ -7,6 +7,10 @@ myApp.config(function ($routeProvider) {
       templateUrl: '/main.html',
       access: {restricted: false}
     })
+    .when('/home', {
+      templateUrl: '/main.html',
+      access: {restricted: false}
+    })
     .when('/login', {
       templateUrl: './app/auth/login.html',
       controller: 'loginController',
