@@ -2,6 +2,8 @@
  * Created by dmytro on 28.06.16.
  */
 var mongoose = require('../lib/mongoose');
+var orderStates = require('../enums/order-states').orderStates;
+
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -41,13 +43,18 @@ var schema = new Schema({
                 required: true
             }
         },
-        deliveryDate: {
-            type: Date,
+        estimatedTime: {
+            type: Number,
             required: true
         },
         trackingCode: {
             type: String,
             unique: true,
+            required: true
+        },
+        orderState: {
+            type: Number,
+            default: orderStates.LOADING,
             required: true
         }
     })

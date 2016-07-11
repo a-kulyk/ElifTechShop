@@ -27,8 +27,10 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
         }
         $http.post("/order", requestJSON).success(function (data, status, headers) {
             console.log(data);
-            if (data.success) {
+            if (data.success == "true") {
                 $window.location.href = '#/delivery_time/' + data.trackingCode;
+            } else {
+                console.log('fields cannot be empty')
             }
         }).error(function (data, status, headers) {
             console.log(status);

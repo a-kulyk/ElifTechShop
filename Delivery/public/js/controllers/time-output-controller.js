@@ -7,7 +7,7 @@ app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $ht
         $scope.trackingCode = $routeParams.trackingCode;
         $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
             if (data.success) {
-                $scope.deliveryDate = data.deliveryDate;
+                $scope.estimatedTime = data.estimatedTime;
                 var coordinates = {};
                 coordinates.from = data.from;
                 coordinates.to = data.to;

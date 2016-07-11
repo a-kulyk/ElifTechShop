@@ -16,7 +16,7 @@ module.exports = function (app) {
         var failedMsg = {"success": "false"};
         let servicePromise = service.findByTrackingCode(req.params.id);
         servicePromise.then((order)=> {
-            successMsg.deliveryDate = order.deliveryDate;
+            successMsg.estimatedTime = order.estimatedTime;
             successMsg.from=order.from;
             successMsg.to=order.to;
             res.json(successMsg);
@@ -33,11 +33,11 @@ module.exports = function (app) {
             var errors = req.validationErrors();
             if (errors) {
                 console.error(errors);
-                res.sendStatus(400);
+                res.json(failedMsg);
             } else {
                 let servicePromise = service.createOrder(req.body);
                 servicePromise.then((order)=> {
-                    successMsg.deliveryDate = order.deliveryDate;
+                    successMsg.estimatedTime = order.estimatedTime;
                     successMsg.trackingCode = order.trackingCode;
                     res.json(successMsg)
                 }).catch((err)=> {
