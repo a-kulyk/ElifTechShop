@@ -23,7 +23,7 @@ angular.module('catalog.list', [ngRoute, 'service.error'])
                     errorService.error(data.error);
                 }
             }).error(function (data, status, headers, config) {
-                errorService.error({//ToDO:
+                errorService.error({
                     name: "Request failed",
                     message: "Request failed"
                 });

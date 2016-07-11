@@ -1,5 +1,8 @@
+"use strict";
+
 const express = require('express');
-const Product = require("../models/product");
+const Product = require('../models/product');
+const productService = require('../models/productService');
 var router = express.Router();
 
 // router.get('/', function(req, res, next) {
@@ -7,76 +10,118 @@ var router = express.Router();
 // });
 
 router.get('/items', function(req, res, next) {
-
-    Product.find(function(err, items) {
-        if(err) {
-            console.error(err);
-            res.json({ success: false, error: {name: 'database error', message: err}});
-        } else {
-            res.json({
-                "success": true,
-                "items": items
-            });
-        }
+    productService.getProducts()
+    .then(function(items){
+        res.json({
+            success: true,
+            items: items
+        });
+    })
+    .catch(function(err){
+        console.error(err);
+        res.json({
+            success: false,
+            error: {name: 'database error', message: 'database error'}
+        });
     });
-
 });
 
 router.get('/items/:id', function(req, res, next) {
-    var id = req.params.id;
-    Product.findOne({
-        _id: id //ToDo: is it safe?
-    },function(err, item) {
-        if(err) {
-            console.error(err);
-            res.json({ "success": false, error: {name: 'database error', message: err} });
-        } else {
-            res.json({
-                "success": true,
-                "item": item
-            });
-        }
-    });
+    var id = req.params.id;//ToDO: valid?
 
+    productService.getProductById(id)
+    .then(function(item) {
+        res.json({
+            success: true,
+            item: item
+        });
+    })
+    .catch(function(err){
+        console.error(err);
+        res.json({
+            success: false,
+            error: {name: 'database error', message: 'database error'}
+        });
+    });
 });
 
 router.put('/items', function(req, res, next) {
-    var item = req.body;//ToDo: valid
-    Product.create(item, function(err, result) {
-        if(err) {
-            console.error(err);
-            res.json({ "success": false, error: {name: 'database error', message: err}  });
-        } else {
-            res.json({"success": true});
+    var item = req.body;
+
+    productService.createProduct(item)
+    .then(function(result) {
+        res.json({ success: true});
+    })
+    .catch(function(err) {
+        if(err.name !== 'ValidationError') {
+            throw err;//ToDO: is it ok?
         }
+
+        res.json({
+            success: false,
+            error: {
+                name: 'validation error',
+                message: 'validation error',
+                type: 'ValidationError',
+                errors: err.errors
+            }
+        });
+    })
+    .catch(function(err) {
+        res.json({
+            success: false,
+            error: {name: 'database error', message: 'database error'}
+        });
     });
 });
 
 router.post('/items/:id', function(req, res, next) {
     let id = req.params.id;
-    let item = req.body;//ToDo: valid
-    delete item._id;
+    let product = req.body;//ToDo: valid
+    delete product._id;
 
-    Product.findByIdAndUpdate(id, item, function(err, doc) {
-        if(err) {
-            console.error(err);
-            res.json({ "success": false, error: {name: 'database error', message: err} });
-        } else {
-            res.json({"success": true});
+    productService.updateById(id, product)
+    .then(function(doc) {
+        res.json({success: true});
+    })
+    .catch(function(err) {
+        if(err.name !== 'ValidationError') {
+            throw err;//ToDO: is it ok?
         }
+
+        res.json({
+            success: false,
+            error: {
+                name: 'validation error',
+                message: 'validation error',
+                type: 'ValidationError',
+                errors: err.errors
+            }
+        });
+    })
+    .catch(function(err) {
+        res.json({
+            success: false,
+            error: {name: 'database error', message: 'database error'}
+        });
     });
 });
 
 router.delete('/items/:id', function(req, res, next) {
-    var id = req.params.id;
-    Product.findByIdAndRemove(id, function(err, doc) {
-        if(err) {
-            console.error(err);
-            res.json({ "success": false, error: {name: 'database error', message: err}  });
-        } else {
-            res.json({"success": true});
-        }
+    var id = req.params.id;//ToDo: valid?
+
+    productService.removeProduct(id)
+    .then(function(doc) {
+        res.json({success: true});
+    })
+    .catch(function(err) {
+        console.error(err);
+        res.json({
+            success: false,
+            error: {name: 'database error', message: 'database error'}
+        });
     });
+    
 });
 
 

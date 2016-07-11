@@ -2,37 +2,52 @@
     <form class="form-horizontal">
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="name" ng-model="form.name" />
             </div>
+            <label ng-if="errors['name']" for="name" class="col-sm-5 text-danger">
+                {{errors['name'].message}}
+            </label>
         </div>
 
         <div class="form-group">
             <label for="category" class="col-sm-2 control-label">Category</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="category" ng-model="form.category" />
             </div>
+            <label ng-if="errors['category']" for="category" class="col-sm-5 text-danger">
+                {{errors['category'].message}}
+            </label>
         </div>
 
         <div class="form-group">
             <label for="price" class="col-sm-2 control-label">Price</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="price" ng-model="form.price" />
             </div>
+            <label ng-if="errors['price']" for="price" class="col-sm-5 text-danger">
+                {{errors['price'].message}}
+            </label>
         </div>
 
         <div class="form-group">
             <label for="company" class="col-sm-2 control-label">Company</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="company" ng-model="form.company" />
             </div>
+            <label ng-if="errors['company']" for="company" class="col-sm-5 text-danger">
+                {{errors['company'].message}}
+            </label>
         </div>
 
         <div class="form-group">
             <label for="quantity" class="col-sm-2 control-label">Quantity</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" id="quantity" ng-model="form.quantity" />
             </div>
+            <label ng-if="errors['quantity']" for="quantity" class="col-sm-5 text-danger">
+                {{errors['quantity'].message}}
+            </label>
         </div>
 
         <div class="form-group">
@@ -40,6 +55,9 @@
             <div class="col-sm-10">
                 <textarea  class="form-control" id="description" ng-model="form.description" ></textarea>
             </div>
+            <label ng-if="errors['description']" for="category" class="col-sm-10 col-sm-offset-2 text-danger">
+                {{errors['description'].message}}
+            </label>
         </div>
 
         <div class="form-group">
@@ -54,10 +72,18 @@
                 <div class="col-sm-2">
                     <button class="btn btn-default" ng-click="removeByIndex(form.properties, $index)">Remove</button>
                 </div>
+
+                <label ng-if="errors['properties.'+$index+'.name']"  class="col-sm-4 col-sm-offset-2 text-danger">
+                    {{errors['properties.'+$index+'.name'].message}}
+                </label>
+                <label ng-if="errors['properties.'+$index+'.value']"  class="col-sm-4 col-sm-offset-6 text-danger">
+                    {{errors['properties.'+$index+'.value'].message}}
+                </label>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
                 <button  class="btn btn-default" ng-click="addProperty(form)">Add</button>
             </div>
+
         </div>
 
         <div class="form-group">
@@ -72,6 +98,10 @@
                 <div class="col-sm-2">
                     <button class="btn btn-default" ng-click="removeByIndex(form.images, $index)">Remove</button>
                 </div>
+
+                <label ng-if="errors['category']" for="category" class="col-sm-4 col-sm-offset-6 text-danger">
+                    {{errors['category'].message}}
+                </label>
             </div>
             <div class="col-sm-offset-2 col-sm-10">
                 <button  class="btn btn-default" ng-click="addImage(form)">Add</button>

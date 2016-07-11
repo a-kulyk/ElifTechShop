@@ -12,5 +12,6 @@ module.exports = {
             { test: /\.js$/, loader: 'babel'},
             { test: /\.html$/, loader: 'raw'}
         ]
-    }
+    },
+    devtool: 'source-map'
 };

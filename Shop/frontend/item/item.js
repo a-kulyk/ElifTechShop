@@ -39,16 +39,25 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
 
     .controller('newItemCtrl', function($scope, $http, $location, errorService) {
         $scope.form = {};
+        $scope.errors = {};
         $scope.submitItem = function() {
             $http.put('/items', $scope.form)
                 .success(function (data) {
                     if(data.success) {
                         $location.path('/list');
                     } else {
+                        if(data.error.type === 'ValidationError') {
+                            $scope.errors = data.error.errors;//ToDo: too deep
+                            return;
+                        }
                         errorService.error(data.error);
                     }
                 }).error(function (data) {
                     console.log(data);
+                    errorService.error({
+                        name: "Request failed",
+                        message: "Request failed"
+                    });
                 });
         };
 
@@ -57,7 +66,7 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
         $scope.removeByIndex = removeByIndex;
     })
 
-    .controller('editItemCtrl', function($scope, $http, $routeParams, $location) {
+    .controller('editItemCtrl', function($scope, $http, $routeParams, $location, errorService) {
         $scope.form = {};
         $http.get('/items/' + $routeParams.id)
             .success(function (data) {
@@ -67,7 +76,11 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                     errorService.error(data.error);
                 }
             }).error(function (data) {
-                console.log(data);//ToDo: if fail
+                console.log(data);
+                errorService.error({
+                    name: "Request failed",
+                    message: "Request failed"
+                });
             });
 
         $scope.submitItem = function() {
@@ -76,10 +89,18 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                     if(data.success) {
                         $location.path('/list');
                     } else {
+                        if(data.error.type === 'ValidationError') {
+                            $scope.errors = data.error.errors;//ToDo: too deep
+                            return;
+                        }
                         errorService.error(data.error);
                     }
                 }).error(function (data) {
                     console.log(data);
+                    errorService.error({
+                        name: "Request failed",
+                        message: "Request failed"
+                    });
                 });
         };
 
@@ -88,7 +109,7 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
         $scope.removeByIndex = removeByIndex;
     })
 
-    .controller('deleteItemCtrl', function($scope, $http, $routeParams, $location) {
+    .controller('deleteItemCtrl', function($scope, $http, $routeParams, $location, errorService) {
         $http.get('/items/' + $routeParams.id)
             .success(function (data) {
                 if(data.success) {
@@ -108,7 +129,11 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                         errorService.error(data.error);
                     }
                 }).error(function (data) {
-                    console.log(data);//ToDo: if fail
+                    console.log(data);
+                    errorService.error({
+                        name: "Request failed",
+                        message: "Request failed"
+                    });
                 });
         }
     });
