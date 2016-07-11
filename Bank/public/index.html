@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="bank" ng-controller="loginController">
+<html lang="en" ng-app="bank" ng-controller="main">
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
@@ -8,125 +8,26 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="stylesheets/style.css">
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="javascripts/core.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+    <script src="core.js"></script>
+    <script src="home/login.js"></script>
+    <script src="home/auth.js"></script>
+    <script src="home/signup.js"></script>
+    <script src="cabinet/cabinet.js"></script>
+    <script src="modals/modal.js"></script>
 </head>
-<body>
+<body id="main" class="norm">
 <header>
     <span>ElifTech Bank</span>
     <!--<button ng-click="transaction()">Transaction</button>-->
 </header>
+
 <div class="content">
 
-    <div id="auth">
-
-        <div class="panel panel-default col-lg-5 col-md-5 col-sm-12 col-xs-12">
-            <div class="panel-heading">Sign in</div>
-            <div class="panel-body">
-                <form id="login">
-                    <input class="form-control" placeholder="Username" name="username" type="text"
-                           ng-model="formData.username"
-                           required>
-
-                    <input class="form-control" placeholder="Password" name="password" type="password"
-                           ng-model="formData.password"
-                           required>
-
-                    <button class="btn btn-success" ng-click="login()">Submit</button>
-
-                </form>
-                <span> {{ loginError }}</span>
-            </div>
-        </div>
-        <div class="panel panel-default col-lg-5 col-md-5 col-sm-12 col-xs-12">
-            <div class="panel-heading">Sign up</div>
-            <div class="panel-body">
-                <form id="signup">
-                    <input class="form-control" placeholder="Username" name="username" type="text"
-                           ng-model="formData.username"
-                           required>
-
-                    <input class="form-control" placeholder="Password" name="password" type="password"
-                           ng-model="formData.password"
-                           required>
-
-                    <input class="form-control" placeholder="Repeat" name="repeat" type="password"
-                           ng-model="formData.repeat"
-                           required>
-
-                    <button class="btn btn-success" ng-click="signup()">Submit</button>
-
-                </form>
-                <span>{{ signupError }}</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="cabinet">
-        <div class="buttonBar">
-            <button class="btn btn-primary" ng-click="payModal()">Pay</button>
-            <button class="btn btn-primary" ng-click="transferModal()">Transfer</button>
-            <button class="btn btn-primary" ng-click="logout()">Logout</button>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="item">
-                <span class="title">Username</span>
-                <span>{{ username }}</span>
-            </div>
-                <div class="item">
-                    <span class="title">Card number</span>
-                    <span>{{ id }}</span>
-                </div>
-                <div class="item">
-                    <span class="title">Amount</span>
-                    <span>{{ amount }}</span>
-                </div></div>
-            <table >
-                <tr id="title">
-                    <td>ID</td>
-                    <td>Amount</td>
-                    <td>Destination</td>
-                    <td>Date</td>
-                </tr>
-                <tr ng-repeat="record in history" id="{{ record.event }}">
-                    <td>{{ record._id }}</td>
-                    <td>{{ record.amount }}</td>
-                    <td>{{ record.destination }}</td>
-                    <td>{{ record.date }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    <div ng-view></div>
 
 </div>
-<div id="modal">
-    <div class="panel panel-default">
-        <div class="panel-heading">Pay <button id="close" class="glyphicon glyphicon-remove" ng-click="closeModal()"></button></div>
-        <div class="panel-body">
-            <form>
-                <input class="form-control" placeholder="Amount" name="amount" type="number"
-                       ng-model="formData.amount" min="0"
-                       required>
-                <button class="btn btn-success" ng-click="pay()">Pay</button>
-            </form>
-        </div>
-    </div>
-</div>
-<div id="modalTransfer">
-    <div class="panel panel-default">
-        <div class="panel-heading">Transfer <button id="closeWindow" class="glyphicon glyphicon-remove" ng-click="closeModalTransfer()"></button></div>
-        <div class="panel-body">
-            <form>
-                <input class="form-control" placeholder="Amount" name="amount" type="number"
-                       ng-model="formData.amount" min="0" max="{{ amount }}"
-                       required>
-                <input class="form-control" placeholder="Receiver" name="receiver" type="text"
-                                       ng-model="formData.receiver"
-                                       required>
-                <button class="btn btn-success" ng-click="transfer()">Pay</button>
-            </form>
-        </div>
-    </div>
-</div>
+<div ng-include="'modals/pay.html'"></div>
+<div ng-include="'modals/transfer.html'"></div>
 </body>
 </html>
