@@ -46,6 +46,15 @@ schema.statics.action = function (from, to, amount) {
         amount: amount
     });
 
-    return Promise.all([usersAmount, transaction.save()]);
+    return Promise.all([usersAmount, transaction.save()])
+        .then(function (data) {
+            let result = {
+                
+            };
+                result.from = data[0][0];
+                result.to = data[0][1];
+                result.transactionId = data[1]._id;
+            return Promise.resolve(result);
+        });
 };
 exports.Transaction = mongoose.model('Transaction', schema);

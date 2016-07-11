@@ -17,4 +17,8 @@ module.exports = function(app){
     app.get("/get_transaction", require("./get_transaction").get);
 
     app.get("/history", require("./history").get);
+    
+    app.get("/islogin", require("./islogin").get);
+
+    app.get("/user", require("./user").get);
 };

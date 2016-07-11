@@ -1,0 +1,37 @@
+<div id="cabinet" ng-controller="cabinet">
+    <div class="buttonBar">
+        <button class="btn btn-primary" ng-click="payModal()">Pay</button>
+        <button class="btn btn-primary" ng-click="transferModal()">Transfer</button>
+        <button class="btn btn-primary" ng-click="logout()">Logout</button>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="item">
+                <span class="title">Username</span>
+                <span>{{ username }}</span>
+            </div>
+            <div class="item">
+                <span class="title">Card number</span>
+                <span>{{ id }}</span>
+            </div>
+            <div class="item">
+                <span class="title">Amount</span>
+                <span>{{ amount }}</span>
+            </div>
+        </div>
+        <table>
+            <tr id="title">
+                <td>ID</td>
+                <td>Amount</td>
+                <td>Destination</td>
+                <td>Date</td>
+            </tr>
+            <tr ng-repeat="record in history" id="{{ record.event }}">
+                <td>{{ record._id }}</td>
+                <td>{{ record.amount }}</td>
+                <td>{{ record.destination }}</td>
+                <td>{{ record.date }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

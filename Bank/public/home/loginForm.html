@@ -1,0 +1,16 @@
+<div ng-controller="login">
+    <form id="login">
+        <input class="form-control" placeholder="Username" name="username" type="text"
+               ng-model="username"
+               required>
+
+        <input class="form-control" placeholder="Password" name="password" type="password"
+               ng-model="password"
+               required>
+
+        <span> {{ loginError }}</span>
+
+        <button class="btn btn-success" ng-click="login()">Submit</button>
+
+    </form>
+</div>
