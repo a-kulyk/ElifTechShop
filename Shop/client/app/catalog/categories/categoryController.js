@@ -5,12 +5,11 @@ angular.module('app')
       Parameters.all().success(function(data){
         that.data = [];
         for(i in data) {
-          var url = $routeParams;
+          var url = {};
           url.categories = data[i];
-          url.page = null;
           var categoryInfo = {name : data[i], url : $httpParamSerializer(url)};
           that.data.push(categoryInfo);
-         
+          
         }
         
       }).error(function(data, status){

@@ -1,7 +1,10 @@
 
+<div ng-show="catalog.items.notMatch">There is not nothing ot find</div>
+<div ng-show="catalog.items.error">Something went wrong.</div>
+
 <div id="product" class="product col-md-4 col-xs-12" ng-repeat="item in catalog.items">
  	<div class="image">
- 		<img ng-src="{{item.images[0]}}" width="100%" />
+ 		<a ng-href="#/product/{{item._id}}"><img ng-src="{{item.images[0]}}" width="100%" /></a>
  	</div>       	
  	<div class="product-info">
  		<a ng-href="#/product/{{item._id}}" class="title col-md-10 col-xs-10">{{item.name}}</a>

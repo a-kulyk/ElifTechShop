@@ -1,3 +1,30 @@
-<div ng-repeat="item in product">
-{{item}}
-</div>
+
+<div class="col-md-3 col-xs-12" id="sidebar">
+      <property-items></property-items>
+    </div>
+    <div class="col-md-9 col-xs-12">
+    <div id="product" class="product col-md-12 col-xs-12" >
+ 	<div class="image">
+ 		<div  ng-repeat="image in product.images">
+ 			<img style="float:left" ng-src="{{image}}" width="200px" /></a>
+ 		</div>
+ 	</div>       	
+ 	<div class="product-info">
+ 		<div class="title col-md-10 col-xs-10">{{product.name}}</div>
+ 		<div class="price col-md-2 col-xs-2">{{product.price}}$</div>
+ 	</div>
+ 	<div style="clear:both"></div>
+ 	PROPERTIES
+ 	<div ng-repeat="property in product.properties">
+ 		{{property.name}} : {{property.value}}
+ 	</div>
+ 	<p>{{product.description}}</p>
+
+
+ </div>
+    <div style="clear:both"></div>
+
+    </div>
+
+
+
