@@ -17,6 +17,7 @@ module.exports = function (app) {
         let servicePromise = orderService.findByTrackingCode(req.params.id);
         servicePromise.then((order)=> {
             successMsg.estimatedTime = order.estimatedTime;
+            successMsg.state = order.state;
             successMsg.from = order.from;
             successMsg.to = order.to;
             res.json(successMsg);
