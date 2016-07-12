@@ -52,7 +52,7 @@ var schema = new Schema({
             unique: true,
             required: true
         },
-        orderState: {
+        state: {
             type: Number,
             default: orderStates.LOADING,
             required: true

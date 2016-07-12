@@ -17,6 +17,10 @@ var schema = new Schema({
                 ref: 'Order',
                 default: null
             }
+        },
+        arrivalTime: {
+            type: Date,
+            default: null
         }
     })
     ;

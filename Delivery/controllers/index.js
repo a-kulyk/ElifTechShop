@@ -3,10 +3,10 @@
  */
 "use strict";
 var validationSchema = require('../lib/validation-schema');
-var service = require('../services/orders-service');
+var orderService = require('../services/order-service');
 
 module.exports = function (app) {
-    
+
     app.get('/', function (req, res) {
         res.sendFile('index.html');
     });
@@ -14,11 +14,11 @@ module.exports = function (app) {
     app.get('/order/:id', function (req, res) {
         var successMsg = {"success": "true"};
         var failedMsg = {"success": "false"};
-        let servicePromise = service.findByTrackingCode(req.params.id);
+        let servicePromise = orderService.findByTrackingCode(req.params.id);
         servicePromise.then((order)=> {
             successMsg.estimatedTime = order.estimatedTime;
-            successMsg.from=order.from;
-            successMsg.to=order.to;
+            successMsg.from = order.from;
+            successMsg.to = order.to;
             res.json(successMsg);
         }).catch((err)=> {
             console.error(err);
@@ -35,7 +35,7 @@ module.exports = function (app) {
                 console.error(errors);
                 res.json(failedMsg);
             } else {
-                let servicePromise = service.createOrder(req.body);
+                let servicePromise = orderService.createOrder(req.body);
                 servicePromise.then((order)=> {
                     successMsg.estimatedTime = order.estimatedTime;
                     successMsg.trackingCode = order.trackingCode;
