@@ -1,30 +1,3 @@
-angular.module('app').controller('mainController',
-  ['$scope', '$rootScope', '$location', 'AuthService',
-  function ($scope, $rootScope, $location, AuthService) {
-    var main = this;
-
-    AuthService.getUser()
-      .then(function(data) {
-        // console.log(data);
-        $rootScope.currentUser = data;
-      });
-
-    $scope.login = function() {
-      $location.path('/login');
-    }  
-    $scope.logout = function () {
-
-      // call logout from service
-      AuthService.logout()
-        .then(function () {
-          $rootScope.currentUser = null;
-          $location.path('/login');
-          
-        });
-    };
-}]);
-
-
 angular.module('app').controller('loginController',
   ['$scope', '$rootScope', '$location', 'AuthService',
   function ($scope, $rootScope, $location, AuthService) {
@@ -57,11 +30,7 @@ angular.module('app').controller('loginController',
           $scope.disabled = false;
           $scope.loginForm = {};
         });
-    };
-
-    $scope.register = function() {
-      $location.path('/register');
-    };
+    };    
 
 }]);
 
@@ -91,7 +60,7 @@ angular.module('app').controller('registerController',
       $scope.error = false;
       $scope.disabled = true;
 
-      console.log($scope.registerForm)
+      console.log($scope.registerForm);
 
       // call register from service
       AuthService.register($scope.registerForm)

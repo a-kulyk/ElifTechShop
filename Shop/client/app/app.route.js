@@ -5,7 +5,7 @@ myApp.config(function ($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: '/main.html',
-      access: {restricted: false}
+      access: {restricted: true}
     })
     .when('/login', {
       templateUrl: './app/auth/login.html',
@@ -25,7 +25,7 @@ myApp.config(function ($routeProvider) {
       templateUrl: './app/catalog/product/productShowView.html',
       controller: 'ProductShowController',
       controllerAs: 'product',
-      access: {restricted: false}
+      access: {restricted: true}
     })
     .when('/category/:name', {
       templateUrl: './app/catalog/categories/categoryShowView.html',
@@ -36,6 +36,12 @@ myApp.config(function ($routeProvider) {
       templateUrl: './app/catalog/filter/filterView.html',
       controller: 'FilterItemsController',
       controllerAs: 'product'
+    })
+    .when('/order/:id', {
+      templateUrl: './app/order/shoppingCart.html',
+      controller: 'orderController',
+      controllerAs: 'order',
+      access: {restricted: true}
     })
     .otherwise({
       redirectTo: '/'

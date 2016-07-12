@@ -27,6 +27,7 @@ app.use(function(req, res, next) {
 
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
+  console.log({message: err.message});
   res.end(JSON.stringify({
     message: err.message,
     error: {}
