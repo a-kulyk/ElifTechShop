@@ -11,7 +11,7 @@ Products.findParams =  function(result) {
       for(var i = 0; i< result.length;i++) {
         if(!ourRes.hasOwnProperty(result[i].name)) {
           ourRes[result[i].name] = [result[i].value];
-          console.log(ourRes[result[i].name]);
+          
           for (var j = parseInt(i)+1; j < result.length ; j++) {
             if(result[j].name == result[i].name) {
               if(!ourRes[result[i].name].includes(result[j].value)) {
@@ -23,6 +23,9 @@ Products.findParams =  function(result) {
       }
       return ourRes;
   }
+
+
+
 
 
 
@@ -49,6 +52,7 @@ router.get('/find/:distinct', function(req, res, next) {
   if(req.params.distinct) {
     Products.distinct('properties',{'category': req.params.distinct })
     .then (result => {
+      
       res.json(Products.findParams(result));
     })
     .catch(error => {
