@@ -11,12 +11,14 @@ require('./bower_components/jquery/dist/jquery');
 require('./list/list');
 require('./error/error');
 require('./item/item');
+require('./login/login');
 
 
 angular.module('catalog', [
     ngRoute,
     'catalog.list',
     'catalog.item',
+    'catalog.login',
     'error'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

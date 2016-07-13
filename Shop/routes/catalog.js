@@ -1,7 +1,6 @@
 "use strict";
 
 const express = require('express');
-const Product = require('../models/product');
 const productService = require('../models/productService');
 var router = express.Router();
 
@@ -9,7 +8,7 @@ var router = express.Router();
 //     res.render('admin/index', {title: 'Catalog'});
 // });
 
-router.get('/items', function(req, res, next) {
+router.get('/', function(req, res, next) {
     productService.getProducts()
     .then(function(items){
         res.json({
@@ -26,8 +25,8 @@ router.get('/items', function(req, res, next) {
     });
 });
 
-router.get('/items/:id', function(req, res, next) {
-    var id = req.params.id;//ToDO: valid?
+router.get('/:id', function(req, res, next) {
+    let id = req.params.id;//ToDO: valid?
 
     productService.getProductById(id)
     .then(function(item) {
@@ -45,8 +44,8 @@ router.get('/items/:id', function(req, res, next) {
     });
 });
 
-router.put('/items', function(req, res, next) {
-    var item = req.body;
+router.put('/', function(req, res, next) {
+    let item = req.body;
 
     productService.createProduct(item)
     .then(function(result) {
@@ -75,7 +74,7 @@ router.put('/items', function(req, res, next) {
     });
 });
 
-router.post('/items/:id', function(req, res, next) {
+router.post('/:id', function(req, res, next) {
     let id = req.params.id;
     let product = req.body;//ToDo: valid
     delete product._id;
@@ -107,8 +106,8 @@ router.post('/items/:id', function(req, res, next) {
     });
 });
 
-router.delete('/items/:id', function(req, res, next) {
-    var id = req.params.id;//ToDo: valid?
+router.delete('/:id', function(req, res, next) {
+    let id = req.params.id;//ToDo: valid?
 
     productService.removeProduct(id)
     .then(function(doc) {

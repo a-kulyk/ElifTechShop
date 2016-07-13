@@ -14,7 +14,6 @@ angular.module('catalog.list', [ngRoute, 'service.error'])
     }])
 
     .controller('listCtrl', function($scope, $http, errorService, $location) {
-        //errorService.error({name: 'ssssss', message: '111111'});
         $http.get('/items')
             .success(function (data) {
                 if(data.success) {

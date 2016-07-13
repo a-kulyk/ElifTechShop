@@ -7,7 +7,29 @@ var bodyParser = require('body-parser');
 //var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
 var catalog = require('./routes/catalog');
-var users = require('./routes/users');
+var login = require('./routes/login');
+
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var authData = require('./config/auth_dev');
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        if(authData.name !== username || authData.password !== password) {
+            return done(null, false);
+        }
+
+        return done(null, {username: authData.name, password: authData.password});
+    }
+));
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
 var app = express();
 
@@ -21,11 +43,33 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'ToDO:',    //ToDO:
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(methodOverride());
 
-app.use('/', catalog);
-app.use('/users', users);
+var auth = function(req, res, next) {
+    if (!req.isAuthenticated()) {
+        res.json({
+            success: false,
+            error: {
+                name: 'authentication error',
+                message: 'authentication error',
+                type: 'AuthError'
+            }
+        });
+    } else {
+        next();
+    }
+};
+app.use('/items', auth, catalog);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
