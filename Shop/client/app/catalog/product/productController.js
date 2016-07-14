@@ -22,12 +22,12 @@ angular.module('app')
         };
         for(property in that.items.properties) {
           property.url = $httpParamSerializer(property);
-          console.log(property.url);
+          // console.log(property.url);
         }
-        console.log(that.items.properties);
+        // console.log(that.items.properties);
 
       }).error(function(data, status){
-        console.log(data, status);
+        // console.log(data, status);
         that.items  = [];
       });
     }])

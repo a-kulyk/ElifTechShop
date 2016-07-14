@@ -8,10 +8,10 @@ angular.module('app').factory('orderService', ['$q', '$http',
                     data: item
                 });
             },
-            updateCart: function(id, item) {
+            addToCart: function(id, item) {
                 return $http({
                     method: 'PUT',
-                    url: '/order/update',
+                    url: '/order/addToCart',
                     data: {
                         cartId: id,
                         itemSet: {
@@ -19,6 +19,22 @@ angular.module('app').factory('orderService', ['$q', '$http',
                             quantity: 1
                         }
                     }
+                });
+            },
+            updateCart: function(id, itemSet) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/update',
+                    data: {
+                        cartId: id,
+                        itemSet: itemSet
+                    }
+                });
+            },
+            getCart: function() {
+                return $http({
+                    method: 'GET',
+                    url: "/order/cart"
                 });
             },
             all: function(object) {
@@ -32,6 +48,12 @@ angular.module('app').factory('orderService', ['$q', '$http',
             order: function(id) {
                 return $http({
                     method: 'GET',
+                    url: "/order/" + id
+                });
+            },
+            delete: function(id) {
+                return $http({
+                    method: 'delete',
                     url: "/order/" + id
                 });
             }

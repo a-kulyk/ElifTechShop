@@ -4,6 +4,7 @@ angular.module('app')
 		restrict:"E",
 		controller: 'mainController',
 		controllerAs: 'main',
-		templateUrl: "./app/main/navbar.html"
+		templateUrl: "./app/main/navbar.html",
+		replace: true
 	};
 }]);

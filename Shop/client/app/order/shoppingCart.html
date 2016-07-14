@@ -9,6 +9,7 @@
         <th>Category</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -17,13 +18,17 @@
         <td>{{item.productId.category}}</td>
         <td>{{item.quantity}}</td>
         <td>{{item.productId.price}}</td>
+        <td><button class="btn btn-danger btn-xs" ng-click="order.removeItem(item._id)">x</button></td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td>Total :</td>
-        <td>{{ order.getTotal() }}</td>
+        <td>{{ order.total }}</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+  <button type="button" class="btn btn-primary" ng-click="order.proceed()">Proceed to Checkout</button>
+
 </div>

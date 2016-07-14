@@ -6,6 +6,17 @@ angular.module('app').controller('mainController',
     AuthService.getUser()
       .then(function(data) {
         $rootScope.currentUser = data;
+        }
+      )
+      .then(function() {
+        if ($rootScope.currentUser) {
+          return orderService.getCart();
+        }  
+      })
+      .then(function(response) {
+        if ($rootScope.currentUser) {
+          main.shoppingCart = response.data[0];
+        }
       });
 
     main.logout = function () {
@@ -21,16 +32,15 @@ angular.module('app').controller('mainController',
       if (!main.shoppingCart) {
         orderService.createCart(item)
           .then(function(response) {
-            
             main.shoppingCart = response.data;
-            console.log('main.shoppingCart = ', main.shoppingCart);
           });
       } else {
-        orderService.updateCart(main.shoppingCart._id, item)
+        orderService.addToCart(main.shoppingCart._id, item)
           .then(function(response) {
             main.shoppingCart = response.data;
-            console.log('main.shoppingCart = ', main.shoppingCart);
           });
       }
     };
+
+    
 }]);

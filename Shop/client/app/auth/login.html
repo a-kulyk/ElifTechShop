@@ -1,6 +1,14 @@
 <div class="col-md-4">
   <h2>Login</h2>
-  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+  <!-- <div ng-show="error" class="alert alert-dismissible alert-danger">{{errorMessage}}</div> -->
+  <div ng-show="error" class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Warning</h3>
+    </div>
+    <div class="panel-body">
+      {{errorMessage}}
+    </div>
+  </div>
   <form class="form" ng-submit="login()">
     <div class="form-group">
       <label>Username</label>

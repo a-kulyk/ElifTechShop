@@ -11,11 +11,12 @@ var Order = new Schema({
             ref: 'Product',
             required: true
         },
+        price: Number,
     	quantity: Number
     }],
     email: String,
     status: String,
-    // total: Number,
+    total: Number,
     date: {
     	created: Date,
     	paid: Date,
@@ -23,19 +24,15 @@ var Order = new Schema({
     }
 });
 
-// // Order.virtual('total').get(function() {   //Order.methods.total
-// Order.methods.total = function total () {
-//     return this.itemSet
-//             .map(function(item) {
-//                 Product.findById(item.productId)
-//                     .then(function(product) {
-//                         return product.price * item.quantity;
-//                     })
-//                  })
-//             .reduce(function(prev, curr) {
-//                 return prev + curr;
-//             });
-// };
+Order.methods.findTotal = function total () {
+    return this.itemSet
+        .map(function(item) {
+                return item.productId.price * item.quantity;
+             })
+        .reduce(function(prev, curr) {
+            return prev + curr;
+        });
+};
 
 
 module.exports = mongoose.model('orders', Order);

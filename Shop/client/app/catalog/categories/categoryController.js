@@ -10,11 +10,11 @@ angular.module('app')
           url.page = null;
           var categoryInfo = {name : data[i], url : $httpParamSerializer(url)};
           that.data.push(categoryInfo);
-          console.log(categoryInfo);
+          // console.log(categoryInfo);
         }
         
       }).error(function(data, status){
-        console.log(data, status);
+        // console.log(data, status);
         that.categories = [];
       });
      }])

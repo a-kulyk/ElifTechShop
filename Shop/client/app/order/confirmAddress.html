@@ -1,0 +1,26 @@
+<div class="well bs-component">
+    <form class="form-horizontal" ng-submit="">
+        <fieldset>
+            <legend>Confirm Your shipping address</legend>
+            <div class="form-group">
+                <label for="inputCountry" class="col-lg-2 control-label">Country</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputCountry" name="country" ng-model="confirmAddress.country" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputCity" class="col-lg-2 control-label">City</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputCity" name="city" ng-model="confirmAddress.city" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputStreet" class="col-lg-2 control-label">Street</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="inputStreet" name="street" ng-model="confirmAddress.street" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg pull-right" ng-disabled="disabled">Next</button>
+        </fieldset>
+    </form>
+</div>
