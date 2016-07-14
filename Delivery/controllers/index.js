@@ -12,21 +12,27 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-        var successMsg = {"success": "true"};
-        var failedMsg = {"success": "false"};
-        let servicePromise = orderService.findByTrackingCode(req.params.id);
-        servicePromise.then((order)=> {
-            successMsg.estimatedTime = order.estimatedTime;
-            successMsg.state = order.state;
-            successMsg.from = order.from;
-            successMsg.to = order.to;
-            res.json(successMsg);
-        }).catch((err)=> {
-            console.error(err);
-            failedMsg.message = err.message;
-            res.json(failedMsg);
-        });
-    });
+            var successMsg = {"success": "true"};
+            var failedMsg = {"success": "false"};
+            let servicePromise = orderService.findByTrackingCode(req.params.id);
+            servicePromise.then((order)=> {
+                if (order != null) {
+                    successMsg.estimatedTime = order.estimatedTime;
+                    successMsg.state = order.state;
+                    successMsg.from = order.from;
+                    successMsg.to = order.to;
+                    res.json(successMsg);
+                } else {
+                    res.json(failedMsg);
+                }
+            }).catch((err)=> {
+                console.error(err);
+                failedMsg.message = err.message;
+                res.json(failedMsg);
+            });
+        }
+    )
+    ;
     app.post('/order', function (req, res) {
             var successMsg = {"success": "true"};
             var failedMsg = {"success": "false"};

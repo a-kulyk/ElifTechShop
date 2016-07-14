@@ -4,7 +4,7 @@
 var Car = require('../models/car');
 var Order = require('../models/order');
 var orderStates = require('../enums/order-states').orderStates;
-var deliveryTimer = require('./timer-service');
+//var deliveryTimer = require('./timer-service');
 
 exports.loadOrderOnCar = function (order) {
     Car.findOne({isAvailable: true}, function (err, car) {
@@ -16,12 +16,12 @@ exports.loadOrderOnCar = function (order) {
                 if (err) {
                     console.log(err);
                 } else {
-                    order.state = orderStates.TRANS;
+                    // order.state = orderStates.TRANS;
                     order.save(function (err) {
-                        console.log(err);
-                    })
-                    deliveryTimer(order.estimatedTime * 1000, car.arrivalTime);
-                    console.log('car sent');
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
                 }
             });
         } else {
