@@ -1,6 +1,7 @@
 'use strict';
 
-const ngRoute = require('../bower_components/angular-route');
+//const ngRoute = require('../bower_components/angular-route');
+const angular = require('../bower_components/angular/angular');
 
 require('../service/errorService');
 
@@ -22,7 +23,7 @@ var removeByIndex = function(array, index) {
     array.splice(index,1);
 };
 
-angular.module('catalog.item', [ngRoute, 'service.error'])
+angular.module('catalog.item', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/item/:id/delete', {
@@ -52,11 +53,10 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                         }
                         errorService.error(data.error);
                     }
-                }).error(function (data) {
-                    console.log(data);
+                }).error(function () {
                     errorService.error({
-                        name: "Request failed",
-                        message: "Request failed"
+                        name: 'Request failed',
+                        message: 'Request failed'
                     });
                 });
         };
@@ -75,11 +75,10 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                 } else {
                     errorService.error(data.error);
                 }
-            }).error(function (data) {
-                console.log(data);
+            }).error(function () {
                 errorService.error({
-                    name: "Request failed",
-                    message: "Request failed"
+                    name: 'Request failed',
+                    message: 'Request failed'
                 });
             });
 
@@ -95,11 +94,10 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                         }
                         errorService.error(data.error);
                     }
-                }).error(function (data) {
-                    console.log(data);
+                }).error(function () {
                     errorService.error({
-                        name: "Request failed",
-                        message: "Request failed"
+                        name: 'Request failed',
+                        message: 'Request failed'
                     });
                 });
         };
@@ -117,8 +115,11 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                 } else {
                     errorService.error(data.error);
                 }
-            }).error(function (data) {
-                console.log(data);//ToDo: if fail
+            }).error(function () {
+                errorService.error({
+                    name: 'Request failed',
+                    message: 'Request failed'
+                });
             });
         $scope.deleteItem = function() {
             $http.delete('/items/' + $routeParams.id)
@@ -128,12 +129,11 @@ angular.module('catalog.item', [ngRoute, 'service.error'])
                     } else {
                         errorService.error(data.error);
                     }
-                }).error(function (data) {
-                    console.log(data);
+                }).error(function () {
                     errorService.error({
-                        name: "Request failed",
-                        message: "Request failed"
+                        name: 'Request failed',
+                        message: 'Request failed'
                     });
                 });
-        }
+        };
     });

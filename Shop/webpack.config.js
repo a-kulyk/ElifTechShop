@@ -1,6 +1,9 @@
 'use strict';
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
 module.exports = {
+    //watch: NODE_ENV == 'development',
     context: __dirname + "/frontend",
     entry: "./app.js",
     output: {
@@ -13,5 +16,10 @@ module.exports = {
             { test: /\.html$/, loader: 'raw'}
         ]
     },
-    devtool: 'source-map'
+    externals: {
+        "./bower_components/angular/angular": "angular",
+        "../bower_components/angular/angular": "angular"
+        //"angular-route": "ngRoute"
+    },
+    devtool: NODE_ENV == 'development' ? 'source-map' : null
 };

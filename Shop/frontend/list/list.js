@@ -1,10 +1,11 @@
 'use strict';
 
-const ngRoute = require('../bower_components/angular-route');
+// const ngRoute = require('../bower_components/angular-route');
+const angular = require('../bower_components/angular/angular');
 
 require('../service/errorService');
 
-angular.module('catalog.list', [ngRoute, 'service.error'])
+angular.module('catalog.list', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/list', {
@@ -13,7 +14,7 @@ angular.module('catalog.list', [ngRoute, 'service.error'])
         });
     }])
 
-    .controller('listCtrl', function($scope, $http, errorService, $location) {
+    .controller('listCtrl', function($scope, $http, errorService) {
         $http.get('/items')
             .success(function (data) {
                 if(data.success) {
@@ -21,10 +22,10 @@ angular.module('catalog.list', [ngRoute, 'service.error'])
                 } else {
                     errorService.error(data.error);
                 }
-            }).error(function (data, status, headers, config) {
+            }).error(function () {
                 errorService.error({
-                    name: "Request failed",
-                    message: "Request failed"
+                    name: 'Request failed',
+                    message: 'Request failed'
                 });
             });
     });

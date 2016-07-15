@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const express = require('express');
 const productService = require('../models/productService');
@@ -8,7 +8,7 @@ var router = express.Router();
 //     res.render('admin/index', {title: 'Catalog'});
 // });
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res/*, next*/) {
     productService.getProducts()
     .then(function(items){
         res.json({
@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function(req, res/*, next*/) {
     let id = req.params.id;//ToDO: valid?
 
     productService.getProductById(id)
@@ -44,11 +44,11 @@ router.get('/:id', function(req, res, next) {
     });
 });
 
-router.put('/', function(req, res, next) {
+router.put('/', function(req, res/*, next*/) {
     let item = req.body;
 
     productService.createProduct(item)
-    .then(function(result) {
+    .then(function() {
         res.json({ success: true});
     })
     .catch(function(err) {
@@ -66,7 +66,7 @@ router.put('/', function(req, res, next) {
             }
         });
     })
-    .catch(function(err) {
+    .catch(function() {
         res.json({
             success: false,
             error: {name: 'database error', message: 'database error'}
@@ -74,13 +74,13 @@ router.put('/', function(req, res, next) {
     });
 });
 
-router.post('/:id', function(req, res, next) {
+router.post('/:id', function(req, res/*, next*/) {
     let id = req.params.id;
     let product = req.body;//ToDo: valid
     delete product._id;
 
     productService.updateById(id, product)
-    .then(function(doc) {
+    .then(function() {
         res.json({success: true});
     })
     .catch(function(err) {
@@ -98,7 +98,7 @@ router.post('/:id', function(req, res, next) {
             }
         });
     })
-    .catch(function(err) {
+    .catch(function() {
         res.json({
             success: false,
             error: {name: 'database error', message: 'database error'}
@@ -106,11 +106,11 @@ router.post('/:id', function(req, res, next) {
     });
 });
 
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', function(req, res/*, next*/) {
     let id = req.params.id;//ToDo: valid?
 
     productService.removeProduct(id)
-    .then(function(doc) {
+    .then(function() {
         res.json({success: true});
     })
     .catch(function(err) {

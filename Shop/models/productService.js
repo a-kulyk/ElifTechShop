@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const Product = require("./product");
+const Product = require('./product');
 
 var productService = {
-    getProducts: function(start, amount) {//ToDO:start, amount
+    getProducts: function(/*start, amount*/) {//ToDO:start, amount
         return new Promise(function(resolve, reject){
             Product.find(function(err, items) {
                 if(err) {
@@ -11,7 +11,7 @@ var productService = {
                 } else {
                     resolve(items);
                 }
-            })
+            });
         });
     },
 
@@ -37,7 +37,7 @@ var productService = {
                 } else {
                     resolve(result);
                 }
-            })
+            });
         });
     },
 
@@ -67,4 +67,4 @@ var productService = {
     }
 };
 
-module.exports = productService
+module.exports = productService;

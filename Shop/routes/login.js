@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
 router.post('/', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
+    passport.authenticate('local', function(err, user/*, info*/) {
         if (err) {
             return next(err);
         }
@@ -17,8 +17,8 @@ router.post('/', function(req, res, next) {
                     name: 'authentication error',
                     message: 'authentication error',
                     type: 'AuthError'
-                                }
-                });
+                }
+            });
             return;
         }
 

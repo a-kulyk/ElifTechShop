@@ -1,8 +1,9 @@
 'use strict';
 
-const ngRoute = require('../bower_components/angular-route');
+// const ngRoute = require('../bower_components/angular-route');
+const angular = require('../bower_components/angular/angular');
 
-angular.module('error', [ngRoute, 'service.error'])
+angular.module('error', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/error', {

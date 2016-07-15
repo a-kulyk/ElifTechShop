@@ -1,8 +1,9 @@
 'use strict';
 
-const ngRoute = require('../bower_components/angular-route');
+const angular = require('../bower_components/angular/angular');
+// const ngRoute = require('../bower_components/angular-route');
 
-angular.module('catalog.login', [ngRoute, 'service.error'])
+angular.module('catalog.login', ['ngRoute', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {
@@ -25,12 +26,12 @@ angular.module('catalog.login', [ngRoute, 'service.error'])
                         }
                         errorService.error(data.error);
                     }
-                }).error(function (data) {
-                console.log(data);
-                errorService.error({
-                    name: "Request failed",
-                    message: "Request failed"
+                })
+                .error(function () {
+                    errorService.error({
+                        name: 'Request failed',
+                        message: 'Request failed'
+                    });
                 });
-            });
         };
     });
