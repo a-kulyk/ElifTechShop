@@ -4,7 +4,7 @@
 var Order = require('./order');
 var Car = require('./car');
 
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 2; i++) {
     var car = {}
     new Car(car).save(function (err, doc) {
         if (err) {
