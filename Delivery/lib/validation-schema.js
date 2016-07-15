@@ -5,14 +5,15 @@ module.exports = {
     'title': {
         notEmpty: true,
         isLength: {
-            options: [{min: 3, max: 16}],
-            errorMessage: 'Must be between 3 and 16 chars long'
+            options: [{min:3, max: 16}],
+            errorMessage: 'Must be between 2 and 16 chars long'
         },
         errorMessage: 'Invalid title'
     }, 'price': {
         notEmpty: true,
         isFloat: {
-            errorMessage: 'Price must be numeric'
+            errorMessage: 'Price must be numeric between 1 and 1000000',
+            options:[{min: 1, max: 1000000}]
         }
     }, 'from.username': {
         notEmpty: true,
