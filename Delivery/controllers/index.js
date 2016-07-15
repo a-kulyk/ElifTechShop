@@ -3,29 +3,36 @@
  */
 "use strict";
 var validationSchema = require('../lib/validation-schema');
-var service = require('../services/orders-service');
+var orderService = require('../services/order-service');
 
 module.exports = function (app) {
-    
+
     app.get('/', function (req, res) {
         res.sendFile('index.html');
     });
 
     app.get('/order/:id', function (req, res) {
-        var successMsg = {"success": "true"};
-        var failedMsg = {"success": "false"};
-        let servicePromise = service.findByTrackingCode(req.params.id);
-        servicePromise.then((order)=> {
-            successMsg.estimatedTime = order.estimatedTime;
-            successMsg.from=order.from;
-            successMsg.to=order.to;
-            res.json(successMsg);
-        }).catch((err)=> {
-            console.error(err);
-            failedMsg.message = err.message;
-            res.json(failedMsg);
-        });
-    });
+            var successMsg = {"success": "true"};
+            var failedMsg = {"success": "false"};
+            let servicePromise = orderService.findByTrackingCode(req.params.id);
+            servicePromise.then((order)=> {
+                if (order != null) {
+                    successMsg.estimatedTime = order.estimatedTime;
+                    successMsg.state = order.state;
+                    successMsg.from = order.from;
+                    successMsg.to = order.to;
+                    res.json(successMsg);
+                } else {
+                    res.json(failedMsg);
+                }
+            }).catch((err)=> {
+                console.error(err);
+                failedMsg.message = err.message;
+                res.json(failedMsg);
+            });
+        }
+    )
+    ;
     app.post('/order', function (req, res) {
             var successMsg = {"success": "true"};
             var failedMsg = {"success": "false"};
@@ -35,7 +42,7 @@ module.exports = function (app) {
                 console.error(errors);
                 res.json(failedMsg);
             } else {
-                let servicePromise = service.createOrder(req.body);
+                let servicePromise = orderService.createOrder(req.body);
                 servicePromise.then((order)=> {
                     successMsg.estimatedTime = order.estimatedTime;
                     successMsg.trackingCode = order.trackingCode;
