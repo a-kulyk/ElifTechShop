@@ -10,11 +10,12 @@ var schema = new Schema({
             required: true,
             default: true
         },
-        order: {
+        _order: {
             type: mongoose.Schema.Types.ObjectId,
             ref: {
                 type: Schema.Types.ObjectId,
                 ref: 'Order',
+                required: true,
                 default: null
             }
         },

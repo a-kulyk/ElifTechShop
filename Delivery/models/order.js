@@ -56,6 +56,10 @@ var schema = new Schema({
             type: Number,
             default: orderStates.LOADING,
             required: true
+        },
+        created: {
+            type: Date,
+            required: true
         }
     })
     ;

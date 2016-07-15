@@ -21,6 +21,7 @@ exports.createOrder = function (order) {
             order.estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.value;
             var trackingCode = uuid.v4();
             order.trackingCode = trackingCode;
+            order.created = new Date();
             new Order(order).save(function (err, doc) {
                 if (!err) {
                     carService.loadOrderOnCar(doc);
