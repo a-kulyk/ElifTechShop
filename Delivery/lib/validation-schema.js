@@ -5,8 +5,8 @@ module.exports = {
     'title': {
         notEmpty: true,
         isLength: {
-            options: [{min: 2, max: 16}],
-            errorMessage: 'Must be between 2 and 16 chars long'
+            options: [{min: 3, max: 16}],
+            errorMessage: 'Must be between 3 and 16 chars long'
         },
         errorMessage: 'Invalid title'
     }, 'price': {
@@ -17,7 +17,7 @@ module.exports = {
     }, 'from.username': {
         notEmpty: true,
         isLength: {
-            options: [{min: 2, max: 16}],
+            options: [{min: 3, max: 16}],
             errorMessage: 'Must be between 2 and 16 chars long'
         }
     }, 'from.lng': {
@@ -35,7 +35,7 @@ module.exports = {
     'to.username': {
         notEmpty: true,
         isLength: {
-            options: [{min: 2, max: 16}],
+            options: [{min: 3, max: 16}],
             errorMessage: 'Must be between 2 and 16 chars long'
         }
     },

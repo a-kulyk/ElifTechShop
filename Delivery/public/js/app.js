@@ -1,8 +1,8 @@
 /**
  * Created by dmytro on 02.07.16.
  */
-var app = angular.module('delivery', ['ngRoute']);
-app.config(function ($routeProvider, $locationProvider) {
+var app = angular.module('delivery', ['ngRoute', 'ngMessages']);
+app.config(function ($routeProvider) {
     $routeProvider.when('/', {
         templateUrl: 'templates/create-order.html',
         controller: 'createOrderCtrl'
