@@ -9,7 +9,8 @@ var router = express.Router();
 // });
 
 router.get('/', function(req, res/*, next*/) {
-    productService.getProducts()
+    var filter = req.query.filter;
+    productService.getProducts(filter)
     .then(function(items){
         res.json({
             success: true,

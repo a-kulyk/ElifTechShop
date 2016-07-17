@@ -3,9 +3,51 @@
 const Product = require('./product');
 
 var productService = {};
-productService.getProducts = function(/*start, amount*/) {//ToDO:start, amount
+
+productService.createQueryFilter = function(filterString) {
+    let result = {};
+
+    if(!filterString) {
+        return result;
+    }
+
+    let filter = JSON.parse(filterString);
+    if(!filter.category) {
+        return result;
+    }
+
+    result.$and = [];
+
+    result.$and.push({category: filter.category});
+
+    if(!filter.properties || filter.properties.length === 0) {
+        return result;
+    }
+
+    let propertiesResult = {};
+    propertiesResult.$and = [];
+    for(var propertyId in filter.properties) {
+        if( !filter.properties.hasOwnProperty(propertyId) ) {
+            continue;
+        }
+        let property = filter.properties[propertyId];
+
+        propertiesResult.$and.push({
+            "properties.name": property.name,
+            "properties.value": {$in: property.value}
+        });
+    }
+
+    result.$and.push(propertiesResult);
+
+    return result;
+};
+
+productService.getProducts = function(filter/*, start, amount*/) {//ToDO:start, amount
+
+
     return new Promise(function(resolve, reject){
-        Product.find(function(err, items) {
+        Product.find(productService.createQueryFilter(filter), function(err, items) {
             if(err) {
                 reject(err);
             } else {
@@ -94,7 +136,7 @@ productService.updateFilter = function() {
                 "_id": "$_id.category",
                 properties: {"$push": {name: "$_id.name", value: "$value"}}
             }},
-            { "$out": "filter"}
+            { "$out": "filters"}
         ],
         function(err){
             if(err) {

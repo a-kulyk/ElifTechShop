@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 //var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
 var catalog = require('./routes/catalog');
+var filter = require('./routes/filter');
 var login = require('./routes/login');
 
 var passport = require('passport');
@@ -70,6 +71,7 @@ var auth = function(req, res, next) {
 };
 app.use('/items', auth, catalog);
 app.use('/login', login);
+app.use('/filter', auth, filter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

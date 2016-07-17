@@ -1,5 +1,30 @@
 <div id="item-list">
-    <table class="table table-hover">
+    <form class="col-sm-3">
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" class="form-control" ng-model="selectedFilter.category" ng-change="changeCategory()">
+                <option value=""></option>
+                <option ng-repeat="category in filter.categories" ng-value="category" >
+                    {{category}}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-repeat="property in filter.properties" ng-init="propertyIndex = $index">
+            <label for="category">{{property.name}}  </label>
+            <div>
+                <label class="checkbox-inline" ng-repeat="value in property.value">
+                    <input
+                        type="checkbox"
+                        value="{{value}}"
+                        ng-model="selectedFilter.properties[propertyIndex].value[$index]"
+                    > {{value}}
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="doFilter()">Filter</button>
+    </form>
+    <table class="table table-hover col-sm-offset-3">
         <thead>
             <tr>
                 <th>image</th>
