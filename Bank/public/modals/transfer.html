@@ -1,18 +1,25 @@
-<div ng-controller="modal">
-    <div id="modalTransfer">
-        <div class="panel panel-default">
-            <div class="panel-heading">Transfer
-                <button id="closeWindow" class="glyphicon glyphicon-remove" ng-click="closeModalTransfer()"></button>
-            </div>
-            <div class="panel-body">
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="close()" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
                 <form>
+                    <select class="form-control" name="account" ng-model="formData.from" required>
+                        <option value="">Account</option>
+                        <option ng-repeat="account in accounts" value="{{ account._id }}">
+                            {{ account._id }}
+                        </option>
+                    </select>
                     <input class="form-control" placeholder="Amount" name="amount" type="number"
                            ng-model="formData.amount" min="0" max="{{ amount }}"
                            required>
                     <input class="form-control" placeholder="Receiver" name="receiver" type="text"
                            ng-model="formData.receiver"
                            required>
-                    <button class="btn btn-success" ng-click="transfer()">Pay</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" ng-click="transfer()">Pay</button>
+                    </div>
                 </form>
             </div>
         </div>

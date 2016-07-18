@@ -1,37 +1,71 @@
 <div id="cabinet" ng-controller="cabinet">
     <div class="buttonBar">
-        <button class="btn btn-primary" ng-click="payModal()">Pay</button>
-        <button class="btn btn-primary" ng-click="transferModal()">Transfer</button>
-        <button class="btn btn-primary" ng-click="logout()">Logout</button>
+        <!--<button class="button" ng-click="payModal()">Pay</button>-->
+        <button class="button" ng-click="transferModal()">Transfer</button>
+        <button class="button" ng-click="newAccount()">New account</button>
+        <button class="button" ng-click="logout()">Logout</button>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="item">
-                <span class="title">Username</span>
-                <span>{{ username }}</span>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="panel panel-default col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel-heading">
+                Profile
             </div>
-            <div class="item">
-                <span class="title">Card number</span>
-                <span>{{ id }}</span>
-            </div>
-            <div class="item">
-                <span class="title">Amount</span>
-                <span>{{ amount }}</span>
+            <div class="panel-body">
+
+                    Username: <span>{{ username }}</span>
+
             </div>
         </div>
-        <table>
-            <tr id="title">
-                <td>ID</td>
-                <td>Amount</td>
-                <td>Destination</td>
-                <td>Date</td>
-            </tr>
-            <tr ng-repeat="record in history" id="{{ record.event }}">
-                <td>{{ record._id }}</td>
-                <td>{{ record.amount }}</td>
-                <td>{{ record.destination }}</td>
-                <td>{{ record.date }}</td>
-            </tr>
-        </table>
+        <div class="panel panel-default col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="panel-heading">
+            Accounts
+        </div>
+        <div class="panel-body">
+            <div ng-repeat="account in accounts" class="account">
+                <div class="text-center">
+                    <strong>{{account._id}}</strong>
+                </div>
+                <div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
+                        Amount
+                        <div ><strong>{{ account.amount }}</strong></div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center border-left">
+                        Pay
+                        <div><button ng-click="payModal(account._id)" class="glyphicon glyphicon-plus"></button></div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center border-left">
+                        Delete
+                        <div><button ng-click="deleteAccount(account._id)" class="glyphicon glyphicon-remove"></button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="panel panel-default col-lg-9 col-md-9 col-sm-12 col-xs-12">
+        <div class="panel-heading">
+            History
+        </div>
+        <div class="panel-body">
+            <table>
+                <tr id="title">
+                    <td>ID</td>
+                    <td>Amount</td>
+                    <td>Sender</td>
+                    <td>Receiver</td>
+                    <td>Event</td>
+                    <td>Date</td>
+                </tr>
+                <tr ng-repeat="record in history" id="{{ record.event }}">
+                    <td>{{ record.id }}</td>
+                    <td>{{ record.amount }}</td>
+                    <td>{{ record.sender }}</td>
+                    <td>{{ record.receiver }}</td>
+                    <td>{{ record.event }}</td>
+                    <td>{{ record.date }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

@@ -1,3 +1,5 @@
+var bank = require("../app");
+
 bank.controller('signup', function ($scope, $http, $location) {
     $scope.signup = function () {
         if ($scope.password != $scope.repeat) {
