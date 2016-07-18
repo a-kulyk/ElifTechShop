@@ -1,4 +1,4 @@
-let User = require("./user").User;
+let Account = require("./account").Account;
 var mongoose = require('../libs/mongoose'),
     Schema = mongoose.Schema;
 var schema = new Schema({
@@ -21,12 +21,12 @@ var schema = new Schema({
 });
 
 schema.statics.action = function (from, to, amount) {
-    Transaction = this;
-    let fromUser = User.findOne({_id: from});
-    let toUser = User.findOne({_id: to});
+    let Transaction = this;
+    let fromUser = Account.findOne({_id: from});
+    let toUser = Account.findOne({_id: to});
     let usersAmount = Promise.all([fromUser, toUser])
         .then(function (result) {
-            if(result[0]._id != result[1]._id){
+            if(from != to){
                 if(result[0].amount < amount){
                     throw new Error("Insufficient funds");
                 }
@@ -48,12 +48,11 @@ schema.statics.action = function (from, to, amount) {
 
     return Promise.all([usersAmount, transaction.save()])
         .then(function (data) {
-            let result = {
-                
-            };
+            let result = {};
                 result.from = data[0][0];
                 result.to = data[0][1];
                 result.transactionId = data[1]._id;
+                result.amount = data[1].amount;
             return Promise.resolve(result);
         });
 };

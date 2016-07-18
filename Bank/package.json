@@ -7,7 +7,12 @@
   },
   "dependencies": {
     "angular": "^1.5.7",
+    "angular-modal": "^0.5.0",
+    "angular-modal-service": "^0.10.1",
+    "angular-route": "^1.5.7",
     "body-parser": "~1.15.1",
+    "bootstrap": "^3.3.6",
+    "bootstrap-webpack": "0.0.5",
     "connect-mongo": "^1.2.1",
     "cookie-parser": "~1.4.3",
     "crypto": "0.0.3",
@@ -22,5 +27,9 @@
     "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0",
     "util": "^0.10.3"
+  },
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1"
   }
 }

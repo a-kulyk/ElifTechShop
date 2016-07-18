@@ -14,11 +14,17 @@ module.exports = function(app){
     
     app.post("/transaction", require("./transaction").post);
 
-    app.get("/get_transaction", require("./get_transaction").get);
+    app.get("/transaction", require("./transaction").get);
 
     app.get("/history", require("./history").get);
     
     app.get("/islogin", require("./islogin").get);
 
     app.get("/user", require("./user").get);
+    
+    app.post("/account", require('./account').post);
+    
+    app.get("/account", require('./account').get);
+
+    app.delete("/account/:id", require('./account').delete);
 };

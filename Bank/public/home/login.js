@@ -1,3 +1,5 @@
+var bank = require("../app");
+
 bank.controller('login', function ($scope, $location, $http) {
     $scope.login = function () {
         $http.post("/login",{

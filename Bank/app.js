@@ -61,7 +61,6 @@ var http = require('http');
 var config = require('./config');
 var mongoose = require('./libs/mongoose');
  var session = require('express-session');
-//var Hello = require("./models/hello").Hello;
 var bodyParser = require('body-parser');
 
 var app = express();

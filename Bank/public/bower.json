@@ -1,0 +1,20 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/gameiro9k/ElifTechShop",
+  "authors": [
+    "Kevin <yurakuzemko@gmail.com>"
+  ],
+  "description": "frontend",
+  "main": "index.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

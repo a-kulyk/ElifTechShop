@@ -16,10 +16,6 @@ var schema = new Schema({
     salt: {
         type: String,
         required: true
-    },
-    amount: {
-        type: Number,
-        default: 0
     }
 });
 
