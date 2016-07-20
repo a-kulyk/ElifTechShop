@@ -1,56 +1,60 @@
-<div id="item-list">
-    <form class="col-sm-3">
-        <div class="form-group">
-            <label for="category">Category</label>
-            <select id="category" class="form-control" ng-model="selectedFilter.category" ng-change="changeCategory()">
-                <option value=""></option>
-                <option ng-repeat="category in filter.categories" ng-value="category" >
-                    {{category}}
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group" ng-repeat="property in filter.properties" ng-init="propertyIndex = $index">
-            <label for="category">{{property.name}}  </label>
-            <div>
-                <label class="checkbox-inline" ng-repeat="value in property.value">
-                    <input
-                        type="checkbox"
-                        value="{{value}}"
-                        ng-model="selectedFilter.properties[propertyIndex].value[$index]"
-                    > {{value}}
-                </label>
+<div id="item-list" class="row">
+    <div class="col-sm-3">
+        <form>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" class="form-control" ng-model="selectedFilter.category" ng-change="changeCategory()">
+                    <option value=""></option>
+                    <option ng-repeat="category in filter.categories" ng-value="category" >
+                        {{category}}
+                    </option>
+                </select>
             </div>
-        </div>
-        <button type="submit" class="btn btn-default" ng-click="doFilter()">Filter</button>
-    </form>
-    <table class="table table-hover col-sm-offset-3">
-        <thead>
-            <tr>
-                <th>image</th>
-                <th>name</th>
-                <th>category</th>
-                <th>property</th>
-                <th>price</th>
-                <th>company</th>
-                <th>quantity</th>
-                <th>command</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="item in items">
-                <td></td>
-                <td>{{item.name}}</td>
-                <td>{{item.category}}</td>
-                <td></td>
-                <td>{{item.price}}</td>
-                <td>{{item.company}}</td>
-                <td>{{item.quantity}}</td>
-                <td>
-                    <a class="btn btn-default btn-xs" href="#!/item/{{item._id}}">Edit</a>
-                    <a class="btn btn-default btn-xs" href="#!/item/{{item._id}}/delete">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+            <div class="form-group" ng-repeat="property in filter.properties" ng-init="propertyIndex = $index">
+                <label for="category">{{property.name}}  </label>
+                <div>
+                    <label class="checkbox-inline" ng-repeat="value in property.value">
+                        <input
+                            type="checkbox"
+                            value="{{value}}"
+                            ng-model="selectedFilter.properties[propertyIndex].value[$index]"
+                        > {{value}}
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="doFilter()">Filter</button>
+        </form>
+    </div>
+    <div class="col-sm-offset-3">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>image</th>
+                    <th>name</th>
+                    <th>category</th>
+                    <!--<th>property</th>-->
+                    <th>price</th>
+                    <th>company</th>
+                    <th>quantity</th>
+                    <th>command</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in items">
+                    <td><img ng-src="{{item.images[0]}}" height="64" width="64" class="img-responsive"></td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.category}}</td>
+                    <!--<td></td>-->
+                    <td>{{item.price}}</td>
+                    <td>{{item.company}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="#!/item/{{item._id}}">Edit</a>
+                        <a class="btn btn-danger btn-xs" href="#!/item/{{item._id}}/delete">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -6,7 +6,7 @@ let errorMessage = {
     minlength: 'too short',
     maxlength: 'too long',
     match: 'you can use only alphabet symbol, numbers and one space symbol between word',
-    min: 'must be > 0'
+    min: 'can not be negative'
 };
 var productSchema = new mongoose.Schema({
     name: {
@@ -55,13 +55,16 @@ var productSchema = new mongoose.Schema({
         required: [true, errorMessage.required],
         min: [0, errorMessage.min]
     },
-    company:  {
+    company: {
         type: String,
         required: [true, errorMessage.required],
         minlength: [1, errorMessage.minlength],
         maxlength: [100, errorMessage.maxlength],
         match: [nameReg, errorMessage.match]
     },
-    images: [String]
+    images: [{
+        type:String,
+        required: [true, errorMessage.required]
+    }]
 });
 module.exports = mongoose.model('Product', productSchema);

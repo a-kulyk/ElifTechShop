@@ -1,84 +1,214 @@
 <div id="newItem">
-    <form class="form-horizontal">
+    <form class="form-horizontal" name="itemForm">
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="name" ng-model="form.name" />
+            <div class="col-sm-offset-2">
+                <input type="text" class="form-control" id="name" name="name"
+                    ng-model="form.name"
+                    required
+                    ng-minlength="1"
+                    ng-maxlength="100"
+                    ng-pattern="/^[\w]+(\s?\w+)*$/i"
+                />
+                <span ng-if="errors['name']" class="text-danger">
+                    {{errors['name'].message}}
+                </span>
+                <div
+                    ng-messages="itemForm.name.$error"
+                    ng-if="itemForm.name.$touched"
+                    class="text-danger"
+                >
+                    <span ng-message="minlength">Name is too short.</span>
+                    <span ng-message="maxlength">Name is too long.</span>
+                    <span ng-message="required">Name is required.</span>
+                    <span ng-message="pattern">You can use only alphabet symbol, numbers and one space symbol between word.</span>
+                </div>
             </div>
-            <label ng-if="errors['name']" for="name" class="col-sm-5 text-danger">
-                {{errors['name'].message}}
-            </label>
+
         </div>
 
-        <div class="form-group">
+        <div class="form-group ">
             <label for="category" class="col-sm-2 control-label">Category</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="category" ng-model="form.category" />
+            <div class="col-sm-offset-2">
+                <input type="text" class="form-control" id="category" name="category"
+                    ng-model="form.category"
+                    required
+                    ng-minlength="2"
+                    ng-maxlength="100"
+                    ng-pattern="/^[\w]+(\s?\w+)*$/i"
+                />
+                <span ng-if="errors['category']" for="category" class="text-danger">
+                    {{errors['category'].message}}
+                </span>
+                <div
+                        ng-messages="itemForm.category.$error"
+                        ng-if="itemForm.category.$touched"
+                        class="text-danger"
+                >
+                    <span ng-message="minlength">Category is too short.</span>
+                    <span ng-message="maxlength">Category is too long.</span>
+                    <span ng-message="required">Category is required.</span>
+                    <span ng-message="pattern">You can use only alphabet symbol, numbers and one space symbol between word.</span>
+                </div>
             </div>
-            <label ng-if="errors['category']" for="category" class="col-sm-5 text-danger">
-                {{errors['category'].message}}
-            </label>
+
         </div>
 
         <div class="form-group">
             <label for="price" class="col-sm-2 control-label">Price</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="price" ng-model="form.price" />
+            <div class="col-sm-offset-2">
+                <input type="number" class="form-control" id="price"
+                    name="price"
+                    ng-model="form.price"
+                    required
+                    min="0"
+                />
+                <span ng-if="errors['price']" for="price" class="text-danger">
+                    {{errors['price'].message}}
+                </span>
+                <div
+                        ng-messages="itemForm.price.$error"
+                        ng-if="itemForm.price.$touched"
+                        class="text-danger"
+                >
+                    <span ng-message="min">Price can not be negative.</span>
+                    <span ng-message="required">Name is required.</span>
+                </div>
             </div>
-            <label ng-if="errors['price']" for="price" class="col-sm-5 text-danger">
-                {{errors['price'].message}}
-            </label>
+
         </div>
 
         <div class="form-group">
             <label for="company" class="col-sm-2 control-label">Company</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="company" ng-model="form.company" />
+            <div class="col-sm-offset-2">
+                <input type="text" class="form-control" id="company"
+                    name="company"
+                    ng-model="form.company"
+                    required
+                    ng-minlength="1"
+                    ng-maxlength="100"
+                    ng-pattern="/^[\w]+(\s?\w+)*$/i"
+                />
+                <span ng-if="errors['company']" for="company" class="text-danger">
+                    {{errors['company'].message}}
+                </span>
+                <div
+                        ng-messages="itemForm.company.$error"
+                        ng-if="itemForm.company.$touched"
+                        class="text-danger"
+                >
+                    <span ng-message="minlength">Company name is too short.</span>
+                    <span ng-message="maxlength">Company name is too long.</span>
+                    <span ng-message="required">Company name is required.</span>
+                    <span ng-message="pattern">You can use only alphabet symbol, numbers and one space symbol between word.</span>
+                </div>
             </div>
-            <label ng-if="errors['company']" for="company" class="col-sm-5 text-danger">
-                {{errors['company'].message}}
-            </label>
+
         </div>
 
         <div class="form-group">
             <label for="quantity" class="col-sm-2 control-label">Quantity</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="quantity" ng-model="form.quantity" />
+            <div class="col-sm-offset-2">
+                <input type="number" class="form-control" id="quantity"
+                    name="quantity"
+                    ng-model="form.quantity"
+                    required
+                    min="0"
+                />
+                <span ng-if="errors['quantity']" for="quantity" class="text-danger">
+                    {{errors['quantity'].message}}
+                </span>
+                <div
+                        ng-messages="itemForm.quantity.$error"
+                        ng-if="itemForm.quantity.$touched"
+                        class="text-danger"
+                >
+                    <span ng-message="min">Quantity can not be negative.</span>
+                    <span ng-message="required">Name is required.</span>
+                </div>
             </div>
-            <label ng-if="errors['quantity']" for="quantity" class="col-sm-5 text-danger">
-                {{errors['quantity'].message}}
-            </label>
         </div>
 
         <div class="form-group">
             <label for="description" class="col-sm-2 control-label">Description</label>
-            <div class="col-sm-10">
-                <textarea  class="form-control" id="description" ng-model="form.description" ></textarea>
+            <div class="col-sm-offset-2">
+                <textarea  class="form-control" id="description"
+                    name="description"
+                    ng-model="form.description"
+                    required
+                    ng-minlength="1"
+                    ng-maxlength="10000"
+                ></textarea>
+                <span ng-if="errors['description']" for="category" class="text-danger">
+                    {{errors['description'].message}}
+                </span>
+                <div
+                        ng-messages="itemForm.description.$error"
+                        ng-if="itemForm.description.$touched"
+                        class="text-danger"
+                >
+                    <span ng-message="minlength">Description is too short.</span>
+                    <span ng-message="maxlength">Description is too long.</span>
+                    <span ng-message="required">Description is required.</span>
+                </div>
             </div>
-            <label ng-if="errors['description']" for="category" class="col-sm-10 col-sm-offset-2 text-danger">
-                {{errors['description'].message}}
-            </label>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Property</label>
             <div class="row col-sm-offset-2 col-sm-10" ng-repeat="property in form.properties">
                 <div class="col-sm-4" >
-                    <input type="text" class="form-control"  ng-model="property.name" />
+                    <input type="text" class="form-control" placeholder="name"
+                        name="properties[{{$index}}].name"
+                        ng-model="property.name"
+                        required
+                        ng-minlength="1"
+                        ng-maxlength="100"
+                        ng-pattern="/^[\w]+(\s?\w+)*$/i"
+                    />
+                    <span ng-if="errors['properties.'+$index+'.name']"  class="text-danger">
+                        {{errors['properties.'+$index+'.name'].message}}
+                    </span>
+                    <div
+                            ng-messages="itemForm['properties.'+$index+'.name'].$error"
+                            ng-if="itemForm['properties.'+$index+'.name'].$touched"
+                            class="text-danger"
+                    >
+                        <span ng-message="minlength">Name is too short.</span>
+                        <span ng-message="maxlength">Name is too long.</span>
+                        <span ng-message="required">Name is required.</span>
+                        <span ng-message="pattern">You can use only alphabet symbol, numbers and one space symbol between word.</span>
+                    </div>
                 </div>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control"   ng-model="property.value" />
+                    <input type="text" class="form-control" placeholder="value"
+                        name="properties[{{$index}}].value"
+                        ng-model="property.value"
+                        required
+                        ng-minlength="1"
+                        ng-maxlength="100"
+                        ng-pattern="/^[\w]+(\s?\w+)*$/i"
+                    />
+                    <span ng-if="errors['properties.'+$index+'.value']"  class="text-danger">
+                        {{errors['properties.'+$index+'.value'].message}}
+                    </span>
+                    <div
+                            ng-messages="itemForm['properties.'+$index+'.value'].$error"
+                            ng-if="itemForm['properties.'+$index+'.value'].$touched"
+                            class="text-danger"
+                    >
+                        <span ng-message="minlength">Value is too short.</span>
+                        <span ng-message="maxlength">Value is too long.</span>
+                        <span ng-message="required">Value is required.</span>
+                        <span ng-message="pattern">You can use only alphabet symbol, numbers and one space symbol between word.</span>
+                    </div>
                 </div>
                 <div class="col-sm-2">
                     <button class="btn btn-default" ng-click="removeByIndex(form.properties, $index)">Remove</button>
                 </div>
 
-                <label ng-if="errors['properties.'+$index+'.name']"  class="col-sm-4 col-sm-offset-2 text-danger">
-                    {{errors['properties.'+$index+'.name'].message}}
-                </label>
-                <label ng-if="errors['properties.'+$index+'.value']"  class="col-sm-4 col-sm-offset-6 text-danger">
-                    {{errors['properties.'+$index+'.value'].message}}
-                </label>
+
+
             </div>
             <div class="col-sm-offset-2 col-sm-10">
                 <button  class="btn btn-default" ng-click="addProperty(form)">Add</button>
@@ -93,15 +223,27 @@
                     <img ng-src="{{form.images[$index]}}" height="64" width="64" class="img-responsive">
                 </div>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" ng-model="form.images[$index]" />
+                    <input type="text" class="form-control"
+                        name="images[$index]"
+                        ng-model="form.images[$index]"
+                        required
+                    />
+                    <span ng-if="errors['images.' + $index]" class="text-danger">
+                        {{errors['images.' + $index].message}}
+                    </span>
+                    <div
+                            ng-messages="itemForm['images.' + $index].$error"
+                            ng-if="itemForm['images.' + $index].$touched"
+                            class="text-danger"
+                    >
+                        <span ng-message="required">Name is required.</span>
+                    </div>
                 </div>
                 <div class="col-sm-2">
                     <button class="btn btn-default" ng-click="removeByIndex(form.images, $index)">Remove</button>
                 </div>
 
-                <label ng-if="errors['category']" for="category" class="col-sm-4 col-sm-offset-6 text-danger">
-                    {{errors['category'].message}}
-                </label>
+
             </div>
             <div class="col-sm-offset-2 col-sm-10">
                 <button  class="btn btn-default" ng-click="addImage(form)">Add</button>

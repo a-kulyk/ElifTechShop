@@ -23,7 +23,7 @@ var removeByIndex = function(array, index) {
     array.splice(index,1);
 };
 
-angular.module('catalog.item', ['ngRoute', 'service.error'])
+angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/item/:id/delete', {
@@ -42,6 +42,9 @@ angular.module('catalog.item', ['ngRoute', 'service.error'])
         $scope.form = {};
         $scope.errors = {};
         $scope.submitItem = function() {
+            if($scope.itemForm.$invalid) {
+                return;
+            }
             $http.put('/items', $scope.form)
                 .success(function (data) {
                     if(data.success) {
