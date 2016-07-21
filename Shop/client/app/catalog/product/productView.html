@@ -1,17 +1,18 @@
-<div class="col-md-12 col-xs-12">
-Search: <input type="text"  ng-model="search.name">
+<div ng-show="catalog.items.notMatch">There is not nothing ot find</div>
+<div ng-show="catalog.items.error">Something went wrong.</div>
+<div id="product" class="product col-md-4 col-xs-12" ng-repeat="item in catalog.items">
+    <div class="image">
+        <a ng-href="#/product/{{item._id}}"><img ng-src="{{item.images[0]}}" width="100%" /></a>
+    </div>
+    <div class="product-info">
+        <a ng-href="#/product/{{item._id}}" class="title col-md-10 col-xs-10">{{item.name}}</a>
+        <div class="price col-md-2 col-xs-2">{{item.price}}$</div>
+    </div>
+    <div style="clear:both"></div>
+    <p>{{item.smallDescription}}</p>
+    <button type="button" class="btn btn-primary" ng-click="main.addToCart(item._id)">Add to Cart</button>
 </div>
-<div class="col-md-3 col-xs-3 product" ng-repeat="item in catalog.items"> 
-      <a href="#/product/{{item._id}}">{{item.name}}</a>
-      {{item.category}}
-      {{item.description}}
-      <img ng-src="{{item.images[0]}}" width="200px">
-      <div ng-repeat="property in item.properties">
-      {{property.name}} | {{property.value}} 
-      </div>
-      <button type="button" class="btn btn-primary" ng-click="main.addToCart(item)">Add to Cart</button>
-</div>
-<div ng-repeat="i in catalog.pages">
-
-	<a href="#/?{{i.url}}">{{i.number}} page</a>
+<div style="clear:both"></div>
+<div ng-repeat="i in catalog.pages" class="pages">
+    <a ng-href="#/?{{i.url}}" class="page">{{i.number}}</a>
 </div>

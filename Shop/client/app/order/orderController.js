@@ -1,62 +1,31 @@
-angular.module('app').controller('orderController', ['$scope', '$location', '$routeParams', 'orderService',
-    function($scope, $location, $routeParams, orderService) {
+angular.module('app').controller('orderController', ['$scope', '$rootScope', '$location', 'orderService',
+    function($scope, $rootScope, $location, orderService) {
         var order = this;
+        var user = $rootScope.currentUser;
 
-        orderService.order($routeParams.id)
-            .success(function(data) {
-                order.current = data.order;
-                order.total = data.total;
-                console.log(order.current);
-            });
+        if (user) {
+            orderService.getCart()
+                .then(function(response) {
+                    $rootScope.shoppingCart = response.data;
+
+                });
+        }
 
         order.removeItem = function(id) {
-            var index = -1;
-            var itemArr = order.current.itemSet;
-            for (var i = 0; i < itemArr.length; i++) {
-                if (itemArr[i]._id === id) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index === -1) {
-                alert("Something gone wrong");
-            }
-            order.current.itemSet.splice(index, 1);
-            console.log(order.current.itemSet);
-
-
-
-            var updItemSet = order.current.itemSet.map(function(obj) {
-                var newObj = {};
-                newObj.productId = obj.productId._id;
-                newObj.quantity = obj.quantity;
-                return newObj;
-            });
-            console.log(updItemSet);
-            console.log(order.current);
-
-            orderService.updateCart(order.current._id, updItemSet)
-                .success(function(data) {
-                	console.log(data);
-                    order.current = data.order;
-                    order.total = data.total;
-                    console.log(order.current);
+            orderService.updateCart(id)
+                .then(function(response) {
+                    $rootScope.shoppingCart = response.data;
+                    if ($rootScope.shoppingCart.order.itemSet.length === 0) {
+                        orderService.delete();
+                        $rootScope.shoppingCart = null;
+                        $location.path("/");
+                    }
                 });
-
-            if (order.current.itemSet.length === 0) {
-                orderService.delete(order.current._id);
-                order.current = null;
-                $location.path("/");
-            }
         };
 
-
-
-        // order.proceed = function() {
-        // 	$location.path('/order/confirmAddress');
-        // };
-
-
+        order.confirm = function() {
+            $location.path('/confirmAddress');
+        };
 
     }
 ]);

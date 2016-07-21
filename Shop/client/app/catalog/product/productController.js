@@ -1,42 +1,43 @@
-
 angular.module('app')
-    .controller('CatalogController', ['Items', '$routeParams' ,'$location','$httpParamSerializer' ,function (Items, $routeParams, $location,$httpParamSerializer) {  
+    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer' ,function (Items, $route,$routeParams,$httpParamSerializer) {  
         var that = this; 
-       
-        Items.all($routeParams)
-        .success(function(data){
 
-       	  if(angular.equals([], data)) {
-       		 $location.path("/");
-       	  }
-        //$scope.pageData = data;
-      
+        Items.all($route.current.params)
+        .success(function(data){
+          
         that.items = data.items;
-        var pages = data.pages || 1;
+        if(that.items.length === 0) {
+          that.items.notMatch = true;
+        }
+        for (var product in that.items) {
+          that.items[product].smallDescription = that.items[product].description.slice(0,130) + "...";
+        }
+        var pages = data.pages || 0;
         that.pages = [];
         for (var i = 1; i <= pages;i++){
-          var params = $routeParams;
-          params.page = i
-          var page = {number: i, url: $httpParamSerializer(params)}
-          that.pages.push(page);
-        };
-        for(property in that.items.properties) {
-          property.url = $httpParamSerializer(property);
-          // console.log(property.url);
-        }
-        // console.log(that.items.properties);
+          var params = $route.current.params;
 
+          params.page = i;
+          var page = {number: i, url: $httpParamSerializer(params)};
+          that.pages.push(page);
+        }
+        for(var property in that.items.properties) {
+          property.url = $httpParamSerializer(property);
+         
+        }
       }).error(function(data, status){
-        // console.log(data, status);
+        console.log(data, status);
         that.items  = [];
+        that.items.error = true;
       });
     }])
-    
-    .controller('ProductShowController',['$scope', 'Items', '$routeParams', function ($scope, Items, $routeParams) {
-      Items.item($routeParams.id).success(function(data) {
+    .controller('ProductShowController',['$scope', 'Items', '$route', function ($scope, Items, $route) {
+      Items.item($route.current.params.id).success(function(data) {
      $scope.product = data;
-  });
+
+      });
     }]);
+    
     
     
     

@@ -21,6 +21,11 @@ var Order = new Schema({
     	created: Date,
     	paid: Date,
     	completed: Date
+    },
+    shipAddress: {
+        country: String,
+        city: String,
+        street: String
     }
 });
 

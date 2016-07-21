@@ -4,12 +4,29 @@ class Filter {
     this.searchField = "";
     this.categories = [];
     this.page = 1;
-    this.perPage = 4;
+    this.perPage = 9;
   }
 
   setProperties(name,value) {
-    let property= {'properties.name' : name, 'properties.value': value};
+    if(name && value) {
+      let property = new Object();
+      console.log("ues")
+      if(Array.isArray(value)) {
+        let propertyArray = []
+        for (item in value) {
+          if (!(value[item] == "")) {
+            let valueObject = {'properties.value' : value[item]}
+            propertyArray.push(valueObject);
+          }
+        } 
+        property= {'properties.name' : name, $or : propertyArray};
+        console.log(property);
+      } else {
+        property= {'properties.name' : name, 'properties.value': value};
+        console.log(property);
+      }
     this.properties.push(property);
+    }
   }
 
   setPage (number) {
@@ -55,7 +72,7 @@ class Filter {
       query.$and.push(propertiesQuery);
     }
     if(!(this.categories.length < 1)) {
-      console.log(this.categories);
+      
       let categoriesQuery = {$or : this.categories};
       query.$and.push(categoriesQuery);
     }

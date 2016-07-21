@@ -12,14 +12,8 @@ angular.module('app').controller('loginController',
       // call login from service
       AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
-        .then(function () {
-          
+        .then(function (data) {
           $scope.disabled = false;
-          AuthService.getUser()
-            .then(function(data) {
-              // console.log(data);
-              $rootScope.currentUser = data;
-            });
           $scope.loginForm = {};
           $location.path('/');
         })

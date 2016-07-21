@@ -30,23 +30,32 @@ myApp.config(function($routeProvider) {
         .when('/category/:name', {
             templateUrl: './app/catalog/categories/categoryShowView.html',
             controller: 'CategoryShowController',
-            controllerAs: 'categories'
+            controllerAs: 'categories',
+            access: {restricted: true}
         })
         .when('/filter/', {
             templateUrl: './app/catalog/filter/filterView.html',
             controller: 'FilterItemsController',
-            controllerAs: 'product'
+            controllerAs: 'product',
+            access: {restricted: true}
         })
-        .when('/order/:id', {
+        .when('/order/cart', {
             templateUrl: './app/order/shoppingCart.html',
             controller: 'orderController',
             controllerAs: 'order',
             access: { restricted: true }
         })
-        // .when('/order/confirmAddress', {
-        //   templateUrl: '<confirmAddress></confirmAddress>',
-        //   access: {restricted: true}
-        // })
+        .when('/confirmAddress', {
+            templateUrl: './app/order/confirmAddress.html',
+            controller: 'confirmController',
+            controllerAs: 'confirm',
+            access: {restricted: true}
+        })
+        .when('/order/all', {
+            templateUrl: './app/order/history.html',
+            controller: 'mainController',
+            access: { restricted: true }
+        })
         .otherwise({
             redirectTo: '/'
         });

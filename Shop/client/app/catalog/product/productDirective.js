@@ -5,6 +5,6 @@ angular.module('app')
 		controller: 'CatalogController',
 		controllerAs: 'catalog',
 		templateUrl: "./app/catalog/product/productView.html"
-	}
-}])
+	};
+}]);
 
