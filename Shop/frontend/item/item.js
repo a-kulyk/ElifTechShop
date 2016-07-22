@@ -86,6 +86,9 @@ angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
             });
 
         $scope.submitItem = function() {
+            if($scope.itemForm.$invalid) {
+                return;
+            }
             $http.post('/items/' + $routeParams.id, $scope.form)
                 .success(function (data) {
                     if(data.success) {

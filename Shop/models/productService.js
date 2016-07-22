@@ -11,7 +11,7 @@ productService.createQueryFilter = function(filterString) {
         return result;
     }
 
-    let filter = JSON.parse(filterString);
+    let filter = JSON.parse(filterString);//ToDO: move to middleware?
     if(!filter.category) {
         return result;
     }
@@ -33,8 +33,8 @@ productService.createQueryFilter = function(filterString) {
         let property = filter.properties[propertyId];
 
         propertiesResult.$and.push({
-            "properties.name": property.name,
-            "properties.value": {$in: property.value}
+            'properties.name': property.name,
+            'properties.value': {$in: property.value}
         });
     }
 
@@ -44,31 +44,13 @@ productService.createQueryFilter = function(filterString) {
 };
 
 productService.getProducts = function(filter/*, start, amount*/) {//ToDO:start, amount
-
-
-    return new Promise(function(resolve, reject){
-        Product.find(productService.createQueryFilter(filter), function(err, items) {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(items);
-            }
-        });
-    });
+    return Product.find(productService.createQueryFilter(filter)).exec();
 };
 
 productService.getProductById = function(id) {
-    return new Promise(function(resolve, reject) {
-        Product.findOne({
-            _id: id //ToDo: is it safe?
-        },function(err, item) {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(item);
-            }
-        });
-    });
+    return Product.findOne({
+        _id: id //ToDo: is it safe?
+    }).exec();
 };
 
 productService.createProduct = function(item) {
@@ -116,44 +98,41 @@ productService.updateById = function(id, product) {
 
 productService.updateFilter = function() {
     Product.aggregate([
-            { "$project": { _id: 0, category: 1, properties: 1  } },
-            { "$unwind": "$properties" },
-            { "$group": {
-                "_id": {
-                    category: "$category",
-                    name: "$properties.name",
-                    value: "$properties.value"
+            { '$project': { _id: 0, category: 1, properties: 1  } },
+            { '$unwind': '$properties' },
+            { '$group': {
+                '_id': {
+                    category: '$category',
+                    name: '$properties.name',
+                    value: '$properties.value'
                 }
             }},
-            { "$group": {
-                "_id": {
-                    category: "$_id.category",
-                    name:"$_id.name"
+            { '$group': {
+                '_id': {
+                    category: '$_id.category',
+                    name:'$_id.name'
                 },
-                value: {"$push": "$_id.value"}
+                value: {'$push': '$_id.value'}
             }},
-            { "$group": {
-                "_id": "$_id.category",
-                properties: {"$push": {name: "$_id.name", value: "$value"}}
+            { '$group': {
+                '_id': '$_id.category',
+                properties: {'$push': {name: '$_id.name', value: '$value'}}
             }},
-            { "$out": "filters"}
-        ],
-        function(err){
-            if(err) {
-                console.error(err);//ToDo; what to do? Product.aggregate?
-            }
+            { '$out': 'filters'}
+    ], function(err){
+        if(err) {
+            console.error(err);//ToDo; what to do? Product.aggregate?
         }
-
-    );
+    });
 
     /*
      db.products.aggregate([
-     {"$project": { _id: 0, category: 1, properties: 1  } },
-     {"$unwind": "$properties" },
-     {"$group": {"_id": {category:"$category", name:"$properties.name", value:"$properties.value"}}},
-     {"$group": {"_id": {category:"$_id.category", name:"$_id.name"}, value:{"$push": "$_id.value"}}},
-     {"$group": {"_id": "$_id.category", properties:{"$push": {name:"$_id.name", value:"$value"}}}},
-     {"$out": "filter"}
+     {'$project': { _id: 0, category: 1, properties: 1  } },
+     {'$unwind': '$properties' },
+     {'$group': {'_id': {category:'$category', name:'$properties.name', value:'$properties.value'}}},
+     {'$group': {'_id': {category:'$_id.category', name:'$_id.name'}, value:{'$push': '$_id.value'}}},
+     {'$group': {'_id': '$_id.category', properties:{'$push': {name:'$_id.name', value:'$value'}}}},
+     {'$out': 'filter'}
      ])
     */
 };

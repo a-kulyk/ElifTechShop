@@ -60,11 +60,11 @@ angular.module('catalog.list', ['ngRoute', 'service.error'])
                         errorService.error(data.error);
                     }
                 }).error(function () {
-                errorService.error({
-                    name: 'Request failed',
-                    message: 'Request failed'
+                    errorService.error({
+                        name: 'Request failed',
+                        message: 'Request failed'
+                    });
                 });
-            });
 
             if(!$scope.selectedFilter.category) {
                 return;

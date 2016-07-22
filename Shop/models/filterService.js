@@ -22,15 +22,7 @@ filterService.getPropertiesByCategory = function(category) {
 };
 
 filterService.getAllCategories = function() {
-    return new Promise(function(resolve, reject) {
-        Product.distinct('category', function (err, categories) {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(categories);
-            }
-        });
-    });
+    return Product.distinct('category').exec();
 };
 
 module.exports = filterService;

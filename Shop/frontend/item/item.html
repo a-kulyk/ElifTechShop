@@ -1,5 +1,5 @@
 <div id="newItem">
-    <form class="form-horizontal" name="itemForm">
+    <form class="form-horizontal" name="itemForm" novalidate>
         <div class="form-group">
             <label for="name" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-offset-2">
@@ -72,7 +72,7 @@
                         class="text-danger"
                 >
                     <span ng-message="min">Price can not be negative.</span>
-                    <span ng-message="required">Name is required.</span>
+                    <span ng-message="required">Price is required.</span>
                 </div>
             </div>
 
@@ -170,8 +170,8 @@
                         {{errors['properties.'+$index+'.name'].message}}
                     </span>
                     <div
-                            ng-messages="itemForm['properties.'+$index+'.name'].$error"
-                            ng-if="itemForm['properties.'+$index+'.name'].$touched"
+                            ng-messages="itemForm['properties[' + $index + '].name'].$error"
+                            ng-if="itemForm['properties[' + $index + '].name'].$touched"
                             class="text-danger"
                     >
                         <span ng-message="minlength">Name is too short.</span>
@@ -193,8 +193,8 @@
                         {{errors['properties.'+$index+'.value'].message}}
                     </span>
                     <div
-                            ng-messages="itemForm['properties.'+$index+'.value'].$error"
-                            ng-if="itemForm['properties.'+$index+'.value'].$touched"
+                            ng-messages="itemForm['properties[' + $index + '].value'].$error"
+                            ng-if="itemForm['properties[' + $index + '].value'].$touched"
                             class="text-danger"
                     >
                         <span ng-message="minlength">Value is too short.</span>
