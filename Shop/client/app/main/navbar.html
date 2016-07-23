@@ -15,8 +15,7 @@
                     <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <p>Categories <span class="caret"></span></p>
                     </a>
-                    <ul class="dropdown-menu">
-                        <category-items></category-items>
+                    <ul category-items class="dropdown-menu">
                     </ul>
                 </li>
                 <li>
@@ -24,9 +23,9 @@
                         <p>Contact</p>
                     </a>
                 </li>
-                <li ng-show="main.shoppingCart">
-                    <a href="#/order/{{ main.shoppingCart._id }}">
-                        <p>ShoppingCart</p>
+                <li ng-show="shoppingCart">
+                    <a href="#/order/cart">
+                        <p> Your Cart <span class="glyphicon glyphicon-shopping-cart"></span></p>
                     </a>
                 </li>
                 <li class="dropdown" ng-show="currentUser">
@@ -34,7 +33,7 @@
                         <p>{{ currentUser.username }} <span class="caret"></span></p>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="">Personal Cabinet</a></li>
+                        <li><a href="" ng-click='main.openCabinet()'>Personal Cabinet</a></li>
                         <li><a href="" ng-click='main.logout()'>Logout</a></li>
                     </ul>
                 </li>

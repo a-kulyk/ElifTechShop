@@ -72,12 +72,13 @@ router.get('/status', function(req, res) {
     });
   }
   res.status(200).json({
-    status: true
+    status: true,
+    user: req.user
   });
 });
 
-router.get('/getUser', function(req, res) {
-  return res.send(req.user);
-});
+// router.get('/getUser', function(req, res) {
+//   return res.send(req.user);
+// });
 
 module.exports = router;

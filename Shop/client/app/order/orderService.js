@@ -1,60 +1,50 @@
-angular.module('app').factory('orderService', ['$q', '$http',
-    function($q, $http) {
+angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
+    function($q, $http, $rootScope) {
         return {
-            createCart: function(item) {
-                return $http({
-                    method: 'POST',
-                    url: '/order/create',
-                    data: item
-                });
-            },
-            addToCart: function(id, item) {
-                return $http({
-                    method: 'PUT',
-                    url: '/order/addToCart',
-                    data: {
-                        cartId: id,
-                        itemSet: {
-                            productId: item._id,
-                            quantity: 1
-                        }
-                    }
-                });
-            },
-            updateCart: function(id, itemSet) {
-                return $http({
-                    method: 'PUT',
-                    url: '/order/update',
-                    data: {
-                        cartId: id,
-                        itemSet: itemSet
-                    }
-                });
-            },
             getCart: function() {
                 return $http({
                     method: 'GET',
                     url: "/order/cart"
                 });
             },
+            createCart: function(itemId) {
+                return $http({
+                    method: 'POST',
+                    url: '/order/create',
+                    data: { itemId: itemId }
+                });
+            },
+            addToCart: function(itemId) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/addToCart',
+                    data: { itemId: itemId }
+                });
+            },
+            updateCart: function(itemId) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/update',
+                    data: { itemId: itemId }
+                });
+            },
+            setAddress: function(addr) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/setAddress',
+                    data: addr
+                });
+            },
             all: function(object) {
                 return $http({
                     method: 'GET',
-                    url: "/order/all/",
-                    params: object,
-                    headers: { 'Content-Type': 'application/json' }
+                    url: "/order/all/"
                 });
             },
-            order: function(id) {
+            delete: function() {
                 return $http({
-                    method: 'GET',
-                    url: "/order/" + id
-                });
-            },
-            delete: function(id) {
-                return $http({
-                    method: 'delete',
-                    url: "/order/" + id
+                    method: 'DELETE',
+                    url: "/order/remove"
                 });
             }
         };

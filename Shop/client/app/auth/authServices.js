@@ -1,6 +1,6 @@
 angular.module('app').factory('AuthService',
-  ['$q', '$timeout', '$http',
-  function ($q, $timeout, $http) {
+  ['$rootScope', '$q', '$http', 'orderService',
+  function ($rootScope, $q, $http, orderService) {
 
     // create user variable
     var user = null;
@@ -8,7 +8,6 @@ angular.module('app').factory('AuthService',
     // return available functions for use in the controllers
     return ({
       isLoggedIn: isLoggedIn,
-      getUser: getUser,
       getUserStatus: getUserStatus,
       login: login,
       logout: logout,
@@ -23,17 +22,17 @@ angular.module('app').factory('AuthService',
       }
     }
 
-    function getUser() {
-      return $http.get('/user/getUser')
-      .then(function(res){ return res.data;});
-    }
-
     function getUserStatus() {
       return $http.get('/user/status')
       // handle success
       .success(function (data) {
         if(data.status){
           user = true;
+          $rootScope.currentUser = data.user;
+          orderService.getCart()
+            .then(function(resp) {
+              $rootScope.shoppingCart = resp.data;
+            });
         } else {
           user = false;
         }

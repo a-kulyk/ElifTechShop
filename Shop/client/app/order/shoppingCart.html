@@ -1,7 +1,6 @@
 <div class="container">
   <h2>My Shopping Cart</h2>
-  <p>Created {{order.current.date.created}}</p>
-  <!-- <p>{{order.current}}</p> -->
+  <p>Created {{shoppingCart.order.date.created}}</p>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -13,22 +12,26 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat='item in order.current.itemSet'>
-        <td>{{item.productId.name}}</td>
+      <tr ng-repeat='item in shoppingCart.order.itemSet'>
+        <td>
+          <a ng-href="#/product/{{item.productId._id}}">{{item.productId.name}}</a>
+        </td>
         <td>{{item.productId.category}}</td>
         <td>{{item.quantity}}</td>
         <td>{{item.productId.price}}</td>
-        <td><button class="btn btn-danger btn-xs" ng-click="order.removeItem(item._id)">x</button></td>
+        <td>
+          <button class="btn btn-default btn-xs" ng-click="order.removeItem(item.productId._id)" data-toggle="tooltip" title="Remove this product from cart">&nbsp x &nbsp</button>
+        </td>
       </tr>
       <tr>
         <td></td>
         <td></td>
         <td>Total :</td>
-        <td>{{ order.total }}</td>
+        <td>{{ shoppingCart.total }}</td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <button type="button" class="btn btn-primary" ng-click="order.proceed()">Proceed to Checkout</button>
+  <button type="button" class="btn btn-primary" ng-click="order.confirm()">Confirm Address</button>
 
 </div>

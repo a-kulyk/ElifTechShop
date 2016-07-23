@@ -5,5 +5,5 @@ angular.module('app')
 		controller: 'PropertyController',
 		controllerAs: 'properties',
 		templateUrl: "./app/catalog/properties/propertyView.html"
-	}
-}])
+	};
+}]);

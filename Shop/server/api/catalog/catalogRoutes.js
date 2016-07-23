@@ -11,7 +11,6 @@ Products.findParams =  function(result) {
       for(var i = 0; i< result.length;i++) {
         if(!ourRes.hasOwnProperty(result[i].name)) {
           ourRes[result[i].name] = [result[i].value];
-          console.log(ourRes[result[i].name]);
           for (var j = parseInt(i)+1; j < result.length ; j++) {
             if(result[j].name == result[i].name) {
               if(!ourRes[result[i].name].includes(result[j].value)) {
@@ -22,7 +21,7 @@ Products.findParams =  function(result) {
         }
       }
       return ourRes;
-  }
+  };
 
 
 
@@ -85,12 +84,18 @@ Promise.all([
     result => {
       let promiseResult = new Object();
       promiseResult.items = result[0];
+      if(promiseResult.items.length == 0) {
+        res.json(promiseResult);
+        return;
+      }
       let count = result[1];
       let countPage = count/pagination.per_page();
       promiseResult.pages = countPage < 1 ? 1 : ((Math.floor(countPage) == countPage) ? countPage : (Math.floor(countPage)+1));
       res.json(promiseResult);
     },
-    error =>  next(error)
+    error =>  {
+      return next(error)
+    }
     )
  });
 
