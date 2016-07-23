@@ -45,3 +45,15 @@ exports.findByTrackingCode = function (trackingCode) {
         });
     });
 }
+
+exports.findById = function (id) {
+    return new Promise((resolve, reject)=> {
+        Order.findById(id, function (err, doc) {
+            if (!err) {
+                resolve(doc);
+            } else {
+                reject(err);
+            }
+        });
+    });
+}

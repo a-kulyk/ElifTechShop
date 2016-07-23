@@ -30,7 +30,7 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
             if (data.success == "true") {
                 $window.location.href = '#/delivery_time/' + data.trackingCode;
             } else {
-                console.log('fields cannot be empty')
+                console.log('fields don`t match the requirements')
             }
         }).error(function (data, status, headers) {
             console.log(status);

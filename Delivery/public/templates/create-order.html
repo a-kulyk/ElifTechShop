@@ -23,9 +23,7 @@
              && orderForm.fromUsername.$invalid }">
             <h4>From:</h4>
             Username<br>
-            <input type="text" name="fromUsername" ng-model="fromUsername" class="form-control" required
-                   ng-minlength="3"
-                   ng-maxlength="16">
+            <input type="email" name="fromUsername" ng-model="fromUsername" class="form-control" required >
             <div class="help-block" ng-messages="orderForm.fromUsername.$error" ng-if="orderForm.fromUsername.$touched">
                 <div ng-messages-include="templates/validation-messages.html"></div>
             </div>
@@ -39,9 +37,7 @@
             <h4>To:</h4>
             Username
             <br>
-            <input type="text" name="toUsername" ng-model="toUsername" class="form-control" required
-                   ng-minlength="3"
-                   ng-maxlength="16">
+            <input type="email" name="toUsername" ng-model="toUsername" class="form-control" required>
             <div class="help-block" ng-messages="orderForm.toUsername.$error" ng-if="orderForm.toUsername.$touched">
                 <div ng-messages-include="templates/validation-messages.html"></div>
             </div>

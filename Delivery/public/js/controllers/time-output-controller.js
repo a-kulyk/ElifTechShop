@@ -2,6 +2,8 @@
  * Created by dmytro on 09.07.16.
  */
 app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http) {
+    $rootScope.makeOrderActiveClass = '';
+    $rootScope.trackOrderActiveClass = '';
     $rootScope.panelTitle = 'Order info';
     if ($routeParams.trackingCode) {
         $scope.trackingCode = $routeParams.trackingCode;

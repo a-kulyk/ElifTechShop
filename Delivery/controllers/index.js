@@ -2,7 +2,7 @@
  * Created by dmytro on 29.06.16.
  */
 "use strict";
-var validationSchema = require('../lib/validation-schema');
+var validationSchema = require('../common/validation-schema');
 var orderService = require('../services/order-service');
 
 module.exports = function (app) {
@@ -55,6 +55,23 @@ module.exports = function (app) {
             }
         }
     );
+    app.post('/delivered',function (req,res) {
+        var successMsg = {"success": "true"};
+        var failedMsg = {"success": "false"};
+        var ordersArray=req.body;
+        for(var i=0;i<ordersArray.length;i++){
+            let servicePromise = orderService.findById(ordersArray[i]);
+            servicePromise.then((order)=>{
+                console.log(order.to.username);
+            }).catch((err)=> {
+                console.error(err);
+                failedMsg.message = err.message;
+                res.json(failedMsg);
+            });
+        }
+
+        res.json(successMsg);
+    })
 }
 
 

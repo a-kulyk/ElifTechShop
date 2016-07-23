@@ -17,9 +17,8 @@ module.exports = {
         }
     }, 'from.username': {
         notEmpty: true,
-        isLength: {
-            options: [{min: 3, max: 16}],
-            errorMessage: 'Must be between 2 and 16 chars long'
+        isEmail: {
+            errorMessage: 'Invalid Email'
         }
     }, 'from.lng': {
         notEmpty: true,
@@ -35,9 +34,8 @@ module.exports = {
     },
     'to.username': {
         notEmpty: true,
-        isLength: {
-            options: [{min: 3, max: 16}],
-            errorMessage: 'Must be between 2 and 16 chars long'
+        isEmail: {
+            errorMessage: 'Invalid Email'
         }
     },
     'to.lng': {
