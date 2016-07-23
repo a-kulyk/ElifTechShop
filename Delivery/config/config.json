@@ -7,5 +7,10 @@
     "host": "maps.googleapis.com",
     "path": "/maps/api/distancematrix/json?",
     "key": "AIzaSyB-pvukBToutoo1Bi6ewOfGcazF5YMB7gc"
+  },
+  "email-sender":{
+    "service":"Gmail",
+    "user": "super.delivery.service@gmail.com",
+    "password":"genius1111"
   }
 }

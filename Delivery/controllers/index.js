@@ -2,8 +2,9 @@
  * Created by dmytro on 29.06.16.
  */
 "use strict";
-var validationSchema = require('../common/validation-schema');
-var orderService = require('../services/order-service');
+let validationSchema = require('../common/validation-schema');
+let orderService = require('../services/order-service');
+let emailSender=require('../lib/email-sender');
 
 module.exports = function (app) {
 
@@ -12,8 +13,8 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-            var successMsg = {"success": "true"};
-            var failedMsg = {"success": "false"};
+            let successMsg = {"success": "true"};
+            let failedMsg = {"success": "false"};
             let servicePromise = orderService.findByTrackingCode(req.params.id);
             servicePromise.then((order)=> {
                 if (order != null) {
@@ -34,10 +35,10 @@ module.exports = function (app) {
     )
     ;
     app.post('/order', function (req, res) {
-            var successMsg = {"success": "true"};
-            var failedMsg = {"success": "false"};
+            let successMsg = {"success": "true"};
+            let failedMsg = {"success": "false"};
             req.checkBody(validationSchema);
-            var errors = req.validationErrors();
+            let errors = req.validationErrors();
             if (errors) {
                 console.error(errors);
                 res.json(failedMsg);
@@ -56,17 +57,16 @@ module.exports = function (app) {
         }
     );
     app.post('/delivered',function (req,res) {
-        var successMsg = {"success": "true"};
-        var failedMsg = {"success": "false"};
-        var ordersArray=req.body;
-        for(var i=0;i<ordersArray.length;i++){
+        let successMsg = {"success": "true"};
+        let failedMsg = {"success": "false"};
+        let ordersArray=req.body;
+        for(let i=0;i<ordersArray.length;i++){
             let servicePromise = orderService.findById(ordersArray[i]);
             servicePromise.then((order)=>{
+                emailSender.notifyAboutDelivery(order.to.username);
                 console.log(order.to.username);
             }).catch((err)=> {
                 console.error(err);
-                failedMsg.message = err.message;
-                res.json(failedMsg);
             });
         }
 
