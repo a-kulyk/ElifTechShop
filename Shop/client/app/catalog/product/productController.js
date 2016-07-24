@@ -1,14 +1,17 @@
 angular.module('app')
-    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer' ,function (Items, $route,$routeParams,$httpParamSerializer) {  
+    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope) {  
         var that = this; 
 
         Items.all($route.current.params)
         .success(function(data){
-          
-        that.items = data.items;
+          that.items = data.items;
         if(that.items.length === 0) {
           that.items.notMatch = true;
+          return;
         }
+        
+        
+        
         for (var product in that.items) {
           that.items[product].smallDescription = that.items[product].description.slice(0,130) + "...";
         }
@@ -23,7 +26,6 @@ angular.module('app')
         }
         for(var property in that.items.properties) {
           property.url = $httpParamSerializer(property);
-         
         }
       }).error(function(data, status){
         console.log(data, status);

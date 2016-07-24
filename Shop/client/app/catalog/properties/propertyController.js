@@ -2,7 +2,6 @@
 angular.module('app')
   .controller('PropertyController', ['Parameters','$route','$scope','$rootScope', function (Parameters,$route,$scope,$rootScope) {
       var that = this;
-      console.log($rootScope.category);
       that.isCat = typeof $route.current.params.categories == "undefined";
       //console.log(typeof $route.current.params.categories !== "undefined")
 /*
@@ -28,16 +27,20 @@ angular.module('app')
           }
        */
       if($rootScope.category != $route.current.params.categories) {
-      Parameters.paramsOfCat($route.current.params.categories).success(function(data){
+      Parameters.paramsOfCat($route.current.params.categories).success(function(result){
         $rootScope.category = $route.current.params.categories;
         $rootScope.data = [];
-        for(item in data) {
+        $rootScope.prices = {
+          minprice : parseInt(result.price.min),
+          maxprice : parseInt(result.price.max)
+        }
+        for(item in result.data) {
           values = new Object();
           values[item] = [];
-          for(value in data[item]) {
+          for(value in result.data[item]) {
             var object = {}
             var object = {
-              value : data[item][value],
+              value : result.data[item][value],
               state : false,
               count : null
             }
@@ -56,14 +59,17 @@ angular.module('app')
       });
     };
 }])
-.filter("setUrl", ['Parameters','$httpParamSerializer','$route',function(Parameters,$httpParamSerializer,$route){
+.filter("setUrl", ['Parameters','$httpParamSerializer','$route','$rootScope',function(Parameters,$httpParamSerializer,$route,$rootScope){
     debugger;
     return function(input){
       debugger;
-      console.log('adasd')
+      
       if( typeof input !== 'undefined') {
         var propertyObject = new Object();
         propertyObject.categories = $route.current.params.categories;
+        console.log($rootScope.prices);
+        propertyObject.minprice = parseInt($rootScope.prices.minprice);
+        propertyObject.maxprice = parseInt($rootScope.prices.maxprice);
         for (item in input) {
           valuesArray = [];
           for(i in input[item].data) {

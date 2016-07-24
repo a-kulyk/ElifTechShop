@@ -3,6 +3,8 @@ class Filter {
     this.properties = [{}];
     this.searchField = "";
     this.categories = [];
+    this.min_price = 0,
+    this.max_price = Math.pow(10,6);
     this.page = 1;
     this.perPage = 9;
   }
@@ -48,6 +50,22 @@ class Filter {
 
   }
 
+   setMinPrice(price) {
+    if(typeof price !== 'undefined') {
+      var price = Math.abs(parseInt(price));
+    } 
+    this.min_price = price || 0;
+  }
+
+  setMaxPrice(price) {
+    if(typeof price !== 'undefined') {
+      var price = Math.abs(parseInt(price));
+    } 
+    this.max_price = price || Math.pow(10,6);
+  }
+
+  
+
   setCategories(cat) {
     if(cat) {
       if(Array.isArray(cat)) {
@@ -66,16 +84,19 @@ class Filter {
       let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]}
       query.$and.push(searchQuery);
     }
+    if((typeof this.min_price !== 'undefined') && (typeof this.max_price !== 'undefined')) {
+      let priceQuery = {'price': { $gt: (this.min_price - 1), $lt: (this.max_price+1) } };
+      query.$and.push(priceQuery);
+    } 
     if(this.properties) {
       let propertiesQuery = {$and : this.properties};
- 
       query.$and.push(propertiesQuery);
     }
-    if(!(this.categories.length < 1)) {
-      
+    if(!(this.categories.length < 1)) {  
       let categoriesQuery = {$or : this.categories};
       query.$and.push(categoriesQuery);
     }
+    
 
 
     return query;

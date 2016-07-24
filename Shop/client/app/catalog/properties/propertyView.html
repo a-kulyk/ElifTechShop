@@ -2,11 +2,15 @@
 <form name="myForm" >
 Search: <input type="text" class="searchField"  ng-model="data.searchField">
 <div ng-show="properties.isCat" class="sidebar-category" category-items></div>
-<div ng-repeat="property in data" class="property_name">{{property.name}} 
-<div ng-repeat="value in property.data track by $index">
-	<input type="checkbox"  ng-model="property.data[$index].state"><span class="propert_value">{{property.data[$index].value}}{{property.data[$index].count}}  </span>
+<div ng-hide="properties.isCat">
+	<div ng-repeat="property in data" class="property_name">{{property.name}} 
+		<div ng-repeat="value in property.data track by $index">
+			<input type="checkbox"  ng-model="property.data[$index].state"><span class="propert_value">{{property.data[$index].value}}{{property.data[$index].count}}  </span>
 
-</div>
+		</div>
+	</div>
+	<div range-slider min="0" max="1000" model-min="prices.minprice" model-max="prices.maxprice" show-values="true"></div>
 </div>
 </form>
+
 <a class="send_form"  ng-href="#/?{{data | setUrl}}">Send</a>

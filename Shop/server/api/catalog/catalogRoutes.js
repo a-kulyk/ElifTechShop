@@ -78,12 +78,19 @@ router.get('/find/:distinct', function(req, res, next) {
       });
     }
     */
-
-    
-    Products.distinct('properties',{'category': req.params.distinct })
+Promise.all([
+    Products.distinct('properties',{'category': req.params.distinct }),
+    Products.findOne().sort({'price': 1}),
+    Products.findOne().sort({'price': -1})
+    ])
     .then (result => {
-      
-      res.json(Products.findParams(result));
+      var promiseResult = {}
+      promiseResult.data = Products.findParams(result[0]);
+      promiseResult.price = {
+        "min" : result[1].price ,
+        "max" : result[2].price 
+      }
+      res.json(promiseResult);
     })
     .catch(error => {
         console.log(error);
@@ -114,6 +121,9 @@ router.get('/filter/count/', function(req,res,next) {
    
 })
 
+
+
+
 router.get('/filter/', function(req,res,next) {
   
   let myFilter = new Filter();
@@ -127,6 +137,14 @@ router.get('/filter/', function(req,res,next) {
       myFilter.setCategories(req.query[item]);
       continue;
     }
+    if (item == "minprice") {
+      myFilter.setMinPrice(req.query[item]);
+      continue;
+    }
+    if (item == "maxprice") {
+      myFilter.setMaxPrice(req.query[item]);
+      continue;
+    }
     if(item == "page"){
       pagination = myFilter.setPage(req.query[item]);
       continue;
@@ -135,8 +153,9 @@ router.get('/filter/', function(req,res,next) {
   }
   
 Promise.all([
-    Products.find(myFilter.creatQuery()).sort({}).skip(pagination.skip()).limit(pagination.per_page()),
-    Products.find(myFilter.creatQuery()).count()
+    Products.find(myFilter.creatQuery()).skip(pagination.skip()).limit(pagination.per_page()),
+    Products.find(myFilter.creatQuery()).count(),
+    
   ])
   .then(
     result => {
@@ -149,6 +168,8 @@ Promise.all([
       let count = result[1];
       let countPage = count/pagination.per_page();
       promiseResult.pages = countPage < 1 ? 1 : ((Math.floor(countPage) == countPage) ? countPage : (Math.floor(countPage)+1));
+     
+  
       res.json(promiseResult);
     },
     error =>  {
