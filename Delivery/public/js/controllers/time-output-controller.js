@@ -4,11 +4,11 @@
 app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http) {
     $rootScope.makeOrderActiveClass = '';
     $rootScope.trackOrderActiveClass = '';
-    $rootScope.panelTitle = 'Order info';
+    $rootScope.historyActiveClass = '';
     if ($routeParams.trackingCode) {
         $scope.trackingCode = $routeParams.trackingCode;
         $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
-            if (data.success == 'true') {
+            if (data.success) {
                 $scope.estimatedTime = data.estimatedTime;
                 $scope.state = data.state;
                 var coordinates = {};

@@ -4,7 +4,7 @@
 app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) {
     $rootScope.makeOrderActiveClass = 'active';
     $rootScope.trackOrderActiveClass = '';
-    $rootScope.panelTitle = 'New order';
+    $rootScope.historyActiveClass = '';
     $scope.createOrder = function () {
         var requestJSON = {};
         requestJSON.title = $scope.title;
@@ -27,7 +27,7 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
         }
         $http.post("/order", requestJSON).success(function (data, status, headers) {
             console.log(data);
-            if (data.success == "true") {
+            if (data.success) {
                 $window.location.href = '#/delivery_time/' + data.trackingCode;
             } else {
                 console.log('fields don`t match the requirements')

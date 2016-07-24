@@ -3,9 +3,9 @@
  */
 app.controller('trackOrderCtrl', function ($rootScope, $scope, $http, $window) {
     $rootScope.makeOrderActiveClass = '';
+    $rootScope.historyActiveClass = '';
     $rootScope.trackOrderActiveClass = 'active';
-    $rootScope.panelTitle = 'Track';
-
+    
     $scope.trackOrder = function () {
         $window.location.href = '#/delivery_time/' + $scope.trackingCode;
     }

@@ -13,8 +13,8 @@ module.exports = function (app) {
     });
 
     app.get('/order/:id', function (req, res) {
-            let successMsg = {"success": "true"};
-            let failedMsg = {"success": "false"};
+            let successMsg = {"success": true};
+            let failedMsg = {"success": false};
             let servicePromise = orderService.findByTrackingCode(req.params.id);
             servicePromise.then((order)=> {
                 if (order != null) {
@@ -35,8 +35,8 @@ module.exports = function (app) {
     )
     ;
     app.post('/order', function (req, res) {
-            let successMsg = {"success": "true"};
-            let failedMsg = {"success": "false"};
+            let successMsg = {"success": true};
+            let failedMsg = {"success": false};
             req.checkBody(validationSchema);
             let errors = req.validationErrors();
             if (errors) {
@@ -57,8 +57,8 @@ module.exports = function (app) {
         }
     );
     app.post('/delivered',function (req,res) {
-        let successMsg = {"success": "true"};
-        let failedMsg = {"success": "false"};
+        let successMsg = {"success": true};
+        let failedMsg = {"success": false};
         let ordersArray=req.body;
         for(let i=0;i<ordersArray.length;i++){
             let servicePromise = orderService.findById(ordersArray[i]);
