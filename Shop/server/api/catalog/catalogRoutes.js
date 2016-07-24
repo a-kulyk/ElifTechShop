@@ -14,6 +14,19 @@ Products.findParams =  function(result) {
           for (var j = parseInt(i)+1; j < result.length ; j++) {
             if(result[j].name == result[i].name) {
               if(!ourRes[result[i].name].includes(result[j].value)) {
+                var object = {}
+                object.value = result[j].value;
+                console.log(result[i].name,result[j].value);
+                object.count = Products.find({$and :[{"properties.name": result[i].name},{"properties.value": result[j].value}]}).count()
+                 .then (
+                  result => { 
+                    console.log(result);
+                      return result;
+                    },
+                  error =>  {
+                    return next(error)
+                  }
+                 )
                 ourRes[result[i].name].push(result[j].value);
               }
             }
@@ -21,7 +34,10 @@ Products.findParams =  function(result) {
         }
       }
       return ourRes;
-  };
+  }
+
+
+
 
 
 
@@ -46,15 +62,57 @@ router.get('/find/:distinct', function(req, res, next) {
     return;
   }
   if(req.params.distinct) {
+    /*
+    Products.distinct('properties.name',{'category': req.params.distinct })
+    .then (result => {
+      for(var i = 0 ; i<result.length;i++) {
+        console.log(result[i])
+        Products.distinct('properties.value',{$and: [{'category': req.params.distinct},{'properties.name':"bluetooth"}]}).then(
+          res => console.log(res))
+      }
+      
+      //res.json(Products.findParams(result));
+    })
+    .catch(error => {
+        console.log(error);
+      });
+    }
+    */
+
+    
     Products.distinct('properties',{'category': req.params.distinct })
     .then (result => {
+      
       res.json(Products.findParams(result));
     })
     .catch(error => {
         console.log(error);
       });
     }
+    
   });
+
+router.get('/filter/count/', function(req,res,next) {
+  console.log(req.query);
+
+  for (item in req.query) {
+    if(item == 'categories') {
+      console.log(req.query[item])
+      continue;
+    }
+    Products.find({$and :[{"properties.name": item},{"properties.value": req.query[item]},{'category' : req.query.categories}]}).count()
+   .then (
+    result => { 
+      console.log({count : result})
+        return res.json({count : result});
+      },
+    error =>  {
+        return console.log(error);
+    }
+   )
+  }
+   
+})
 
 router.get('/filter/', function(req,res,next) {
   

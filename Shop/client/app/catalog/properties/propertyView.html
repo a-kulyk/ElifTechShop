@@ -1,11 +1,12 @@
-<form name="myForm" ng-controller="FilterController as filter">
-    Search:
-    <input type="text" class="searchField" ng-model="properties.url.searchField">
-    <div ng-show="properties.isCat" class="sidebar-category" category-items></div>
-    <div ng-repeat="property in properties.data" class="property_name">{{property.name}}
-        <div ng-repeat="value in property.data track by $index">
-            <input type="checkbox" ng-model="properties.url[property.name][$index]" ng-true-value="'{{property.data[$index]}}'" ng-false-value="''"><span class="propert_value">{{property.data[$index]}} </span>
-        </div>
-    </div>
-    <a class="send_form" ng-href="#/?{{properties.url | setUrl}}">Send</a>
+
+<form name="myForm" >
+Search: <input type="text" class="searchField"  ng-model="data.searchField">
+<div ng-show="properties.isCat" class="sidebar-category" category-items></div>
+<div ng-repeat="property in data" class="property_name">{{property.name}} 
+<div ng-repeat="value in property.data track by $index">
+	<input type="checkbox"  ng-model="property.data[$index].state"><span class="propert_value">{{property.data[$index].value}}{{property.data[$index].count}}  </span>
+
+</div>
+</div>
 </form>
+<a class="send_form"  ng-href="#/?{{data | setUrl}}">Send</a>
