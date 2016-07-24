@@ -14,6 +14,19 @@ Products.findParams =  function(result) {
           for (var j = parseInt(i)+1; j < result.length ; j++) {
             if(result[j].name == result[i].name) {
               if(!ourRes[result[i].name].includes(result[j].value)) {
+                var object = {}
+                object.value = result[j].value;
+                console.log(result[i].name,result[j].value);
+                object.count = Products.find({$and :[{"properties.name": result[i].name},{"properties.value": result[j].value}]}).count()
+                 .then (
+                  result => { 
+                    console.log(result);
+                      return result;
+                    },
+                  error =>  {
+                    return next(error)
+                  }
+                 )
                 ourRes[result[i].name].push(result[j].value);
               }
             }
@@ -21,7 +34,10 @@ Products.findParams =  function(result) {
         }
       }
       return ourRes;
-  };
+  }
+
+
+
 
 
 
@@ -46,15 +62,67 @@ router.get('/find/:distinct', function(req, res, next) {
     return;
   }
   if(req.params.distinct) {
-    Products.distinct('properties',{'category': req.params.distinct })
+    /*
+    Products.distinct('properties.name',{'category': req.params.distinct })
     .then (result => {
-      res.json(Products.findParams(result));
+      for(var i = 0 ; i<result.length;i++) {
+        console.log(result[i])
+        Products.distinct('properties.value',{$and: [{'category': req.params.distinct},{'properties.name':"bluetooth"}]}).then(
+          res => console.log(res))
+      }
+      
+      //res.json(Products.findParams(result));
     })
     .catch(error => {
         console.log(error);
       });
     }
+    */
+Promise.all([
+    Products.distinct('properties',{'category': req.params.distinct }),
+    Products.findOne().sort({'price': 1}),
+    Products.findOne().sort({'price': -1})
+    ])
+    .then (result => {
+      var promiseResult = {}
+      promiseResult.data = Products.findParams(result[0]);
+      promiseResult.price = {
+        "min" : result[1].price ,
+        "max" : result[2].price 
+      }
+      res.json(promiseResult);
+    })
+    .catch(error => {
+        console.log(error);
+      });
+    }
+    
   });
+
+router.get('/filter/count/', function(req,res,next) {
+  console.log(req.query);
+
+  for (item in req.query) {
+    if(item == 'categories') {
+      console.log(req.query[item])
+      continue;
+    }
+    Products.find({$and :[{"properties.name": item},{"properties.value": req.query[item]},{'category' : req.query.categories}]}).count()
+   .then (
+    result => { 
+      console.log({count : result})
+        return res.json({count : result});
+      },
+    error =>  {
+        return console.log(error);
+    }
+   )
+  }
+   
+})
+
+
+
 
 router.get('/filter/', function(req,res,next) {
   
@@ -69,6 +137,14 @@ router.get('/filter/', function(req,res,next) {
       myFilter.setCategories(req.query[item]);
       continue;
     }
+    if (item == "minprice") {
+      myFilter.setMinPrice(req.query[item]);
+      continue;
+    }
+    if (item == "maxprice") {
+      myFilter.setMaxPrice(req.query[item]);
+      continue;
+    }
     if(item == "page"){
       pagination = myFilter.setPage(req.query[item]);
       continue;
@@ -77,8 +153,9 @@ router.get('/filter/', function(req,res,next) {
   }
   
 Promise.all([
-    Products.find(myFilter.creatQuery()).sort({}).skip(pagination.skip()).limit(pagination.per_page()),
-    Products.find(myFilter.creatQuery()).count()
+    Products.find(myFilter.creatQuery()).skip(pagination.skip()).limit(pagination.per_page()),
+    Products.find(myFilter.creatQuery()).count(),
+    
   ])
   .then(
     result => {
@@ -91,6 +168,8 @@ Promise.all([
       let count = result[1];
       let countPage = count/pagination.per_page();
       promiseResult.pages = countPage < 1 ? 1 : ((Math.floor(countPage) == countPage) ? countPage : (Math.floor(countPage)+1));
+     
+  
       res.json(promiseResult);
     },
     error =>  {
