@@ -57,3 +57,14 @@ exports.findById = function (id) {
         });
     });
 }
+exports.findByCriteria = function (queryOb) {
+    return new Promise((resolve, reject)=> {
+        Order.find(queryOb, function (err, docs) {
+            if (!err) {
+                resolve(docs);
+            } else {
+                reject(err);
+            }
+        })
+    });
+}

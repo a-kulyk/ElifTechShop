@@ -4,7 +4,8 @@
 "use strict";
 let validationSchema = require('../common/validation-schema');
 let orderService = require('../services/order-service');
-let emailSender=require('../lib/email-sender');
+let emailSender = require('../lib/email-sender');
+let historyService = require('../services/history-service');
 
 module.exports = function (app) {
 
@@ -56,22 +57,34 @@ module.exports = function (app) {
             }
         }
     );
-    app.post('/delivered',function (req,res) {
+    app.post('/delivered', function (req, res) {
         let successMsg = {"success": true};
         let failedMsg = {"success": false};
-        let ordersArray=req.body;
-        for(let i=0;i<ordersArray.length;i++){
+        let ordersArray = req.body;
+        for (let i = 0; i < ordersArray.length; i++) {
             let servicePromise = orderService.findById(ordersArray[i]);
-            servicePromise.then((order)=>{
+            servicePromise.then((order)=> {
                 emailSender.notifyAboutDelivery(order.to.username);
                 console.log(order.to.username);
             }).catch((err)=> {
                 console.error(err);
             });
         }
-
         res.json(successMsg);
-    })
+    });
+    app.get('/history/:fromUsername/:toUsername', function (req, res) {
+        let successMsg = {"success": true};
+        let failedMsg = {"success": false};
+        let servicePromise = historyService.fetchHistoryByReqParams(req.params);
+        servicePromise.then((orders)=> {
+            successMsg.orders = orders;
+            res.json(successMsg);
+        }).catch((err)=> {
+            console.error(err);
+            failedMsg.message = err.message;
+            res.json(failedMsg);
+        });
+    });
 }
 
 

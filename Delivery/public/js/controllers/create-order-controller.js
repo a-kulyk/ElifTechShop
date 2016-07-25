@@ -28,7 +28,7 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
         $http.post("/order", requestJSON).success(function (data, status, headers) {
             console.log(data);
             if (data.success) {
-                $window.location.href = '#/delivery_time/' + data.trackingCode;
+                $window.location.href = '#/order_info/' + data.trackingCode;
             } else {
                 console.log('fields don`t match the requirements')
             }

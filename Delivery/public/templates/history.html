@@ -1,26 +1,59 @@
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-    </tr>
-    <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-    </tr>
-    <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-    </tr>
-    </tbody>
-</table>
+<form class="form-inline" role="form" ng-submit="showHistory()" novalidate>
+    <div class="form-group">
+        <label for="fromUsername">From</label>
+        <input type="text" class="form-control" id="fromUsername" placeholder="Username"
+               ng-model="fromUsername">
+    </div>
+    <div class="form-group">
+        <label for="toUsername">To</label>
+        <input type="text" class="form-control" id="toUsername" placeholder="Username"
+               ng-model="toUsername">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<form class="form-inline">
+    <div class="form-group">
+        <label>Search</label>
+        <input type="text" ng-model="search" class="form-control" placeholder="Search">
+    </div>
+</form>
+<div>
+    <table class="table table-striped table-hover" style="background-color: white">
+        <thead>
+        <tr>
+            <th ng-click="sort('title')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='title'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>
+                Title
+            </th>
+            <th ng-click="sort('price')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='price'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>
+                Approximate cost
+            </th>
+            <th ng-click="sort('from.username')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='from.username'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>
+                From
+            </th>
+            <th ng-click="sort('to.username')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='to.username'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>
+                To
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="order in orders|orderBy:sortKey:reverse|filter:search">
+            <td>{{order.title}}</td>
+            <td>{{order.price}}</td>
+            <td>{{order.from.username}}</td>
+            <td>{{order.to.username}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

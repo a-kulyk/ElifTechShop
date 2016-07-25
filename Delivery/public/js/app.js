@@ -9,11 +9,14 @@ app.config(function ($routeProvider) {
     }).when('/', {
         templateUrl: 'templates/track-order.html',
         controller: 'trackOrderCtrl'
-    }).when('/delivery_time/:trackingCode', {
-        templateUrl: 'templates/time-output.html',
+    }).when('/order_info/:trackingCode', {
+        templateUrl: 'templates/order-info.html',
         controller: 'timeOutputCtrl'
-    }).when('/history',{
+    }).when('/history', {
         templateUrl: 'templates/history.html',
         controller: 'historyCtrl'
-    });
+    }).when('/history/:fromUsername/:toUsername', {
+        templateUrl: 'templates/history.html',
+        controller: 'historyCtrl'
+    })
 });
