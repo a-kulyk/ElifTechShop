@@ -98,25 +98,36 @@ productService.updateById = function(id, product) {
 
 productService.updateFilter = function() {
     Product.aggregate([
-            { '$project': { _id: 0, category: 1, properties: 1  } },
+            { '$project': { _id: 0, category: 1, properties: 1, price: 1  } },
             { '$unwind': '$properties' },
+            {'$group': {
+                '_id': {category:'$category'},
+                properties:{'$push': '$properties'  },
+                minPrice: { $min: "$price" },
+                maxPrice: { $max: "$price" }
+            }},
+            {'$unwind': '$properties' },
+            { '$project': { _id: 1, properties: 1, price: { min: '$minPrice', max: '$maxPrice'}  } },
             { '$group': {
                 '_id': {
-                    category: '$category',
+                    category: '$_id.category',
                     name: '$properties.name',
                     value: '$properties.value'
-                }
+                },
+                price: {$first: '$price'}
             }},
             { '$group': {
                 '_id': {
                     category: '$_id.category',
                     name:'$_id.name'
                 },
-                value: {'$push': '$_id.value'}
+                value: {'$push': '$_id.value'},
+                price: {$first: '$price'}
             }},
             { '$group': {
                 '_id': '$_id.category',
-                properties: {'$push': {name: '$_id.name', value: '$value'}}
+                properties: {'$push': {name: '$_id.name', value: '$value'}},
+                price: {$first: '$price'}
             }},
             { '$out': 'filters'}
     ], function(err){
@@ -125,16 +136,12 @@ productService.updateFilter = function() {
         }
     });
 
-    /*
-     db.products.aggregate([
-     {'$project': { _id: 0, category: 1, properties: 1  } },
-     {'$unwind': '$properties' },
-     {'$group': {'_id': {category:'$category', name:'$properties.name', value:'$properties.value'}}},
-     {'$group': {'_id': {category:'$_id.category', name:'$_id.name'}, value:{'$push': '$_id.value'}}},
-     {'$group': {'_id': '$_id.category', properties:{'$push': {name:'$_id.name', value:'$value'}}}},
-     {'$out': 'filter'}
-     ])
-    */
+    // db.products.aggregate([
+    //
+    // ]).pretty()
+
+
+
 };
 
 
