@@ -1,7 +1,7 @@
 /**
  * Created by dmytro on 02.07.16.
  */
-var app = angular.module('delivery', ['ngRoute', 'ngMessages']);
+var app = angular.module('delivery', ['ngRoute', 'ngMessages', 'angularUtils.directives.dirPagination']);
 app.config(function ($routeProvider) {
     $routeProvider.when('/create_order', {
         templateUrl: 'templates/create-order.html',

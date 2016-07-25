@@ -48,7 +48,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="order in orders|orderBy:sortKey:reverse|filter:search">
+        <tr dir-paginate="order in orders|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
             <td>{{order.title}}</td>
             <td>{{order.price}}</td>
             <td>{{order.from.username}}</td>
@@ -56,4 +56,9 @@
         </tr>
         </tbody>
     </table>
+    <dir-pagination-controls
+            max-size="5"
+            direction-links="true"
+            boundary-links="true">
+    </dir-pagination-controls>
 </div>
