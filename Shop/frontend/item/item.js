@@ -4,6 +4,8 @@
 const angular = require('../bower_components/angular/angular');
 
 require('../service/errorService');
+require('../service/multipartForm');
+//require('../directives/fileModel');
 
 var addProperty = function(form) {
     if(!form.properties) {
@@ -23,7 +25,7 @@ var removeByIndex = function(array, index) {
     array.splice(index,1);
 };
 
-angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
+angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error', 'service.multipartForm'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/item/:id/delete', {
@@ -38,14 +40,31 @@ angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
         });
     }])
 
-    .controller('newItemCtrl', function($scope, $http, $location, errorService) {
+    .directive('fileModel', ['$parse', function($parse){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                var model = $parse(attrs.fileModel);
+                var modelSetter = model.assign;
+
+                element.bind('change', function(){
+                    scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                    })
+                })
+            }
+        }
+    }])
+    
+    .controller('newItemCtrl', function($scope, $http, $location, errorService, multipartForm) {
         $scope.form = {};
         $scope.errors = {};
         $scope.submitItem = function() {
             if($scope.itemForm.$invalid) {
                 return;
             }
-            $http.put('/items', $scope.form)
+            //$http.put('/items', $scope.form)
+            multipartForm.put('/items', $scope.form)
                 .success(function (data) {
                     if(data.success) {
                         $location.path('/list');
@@ -69,7 +88,7 @@ angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
         $scope.removeByIndex = removeByIndex;
     })
 
-    .controller('editItemCtrl', function($scope, $http, $routeParams, $location, errorService) {
+    .controller('editItemCtrl', function($scope, $http, $routeParams, $location, errorService, multipartForm) {
         $scope.form = {};
         $http.get('/items/' + $routeParams.id)
             .success(function (data) {
@@ -89,7 +108,8 @@ angular.module('catalog.item', ['ngRoute', 'ngMessages', 'service.error'])
             if($scope.itemForm.$invalid) {
                 return;
             }
-            $http.post('/items/' + $routeParams.id, $scope.form)
+            //$http.post('/items/' + $routeParams.id, $scope.form)
+            multipartForm.post('/items/' + $routeParams.id, $scope.form)
                 .success(function (data) {
                     if(data.success) {
                         $location.path('/list');

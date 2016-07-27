@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer  = require('multer')
 //var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
 var catalog = require('./routes/catalog');
@@ -69,7 +70,7 @@ var auth = function(req, res, next) {
         next();
     }
 };
-app.use('/items', auth, catalog);
+app.use('/items', auth, multer({ dest: 'public/uploads/' }).any(), catalog);
 app.use('/login', login);
 app.use('/filter', auth, filter);
 

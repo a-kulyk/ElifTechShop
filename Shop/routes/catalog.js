@@ -48,7 +48,7 @@ router.get('/:id', function(req, res/*, next*/) {
 router.put('/', function(req, res/*, next*/) {
     let item = req.body;
 
-    productService.createProduct(item)
+    productService.createProduct(item, req.files)
     .then(function() {
         res.json({ success: true});
     })
@@ -80,7 +80,7 @@ router.post('/:id', function(req, res/*, next*/) {
     let product = req.body;//ToDo: valid
     delete product._id;
 
-    productService.updateById(id, product)
+    productService.updateById(id, product, req.files)
     .then(function() {
         res.json({success: true});
     })

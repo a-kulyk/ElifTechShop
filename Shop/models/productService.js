@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const Product = require('./product');
 
 var productService = {};
@@ -53,8 +54,15 @@ productService.getProductById = function(id) {
     }).exec();
 };
 
-productService.createProduct = function(item) {
+productService.createProduct = function(item, files) {
     let self = this;
+
+    item.images = [];
+
+    for(var i = 0; i < files.length; i++) {
+        item.images.push('uploads/' +files[i].filename);
+    }
+
     return new Promise(function(resolve, reject){
         Product.create(item, function(err, result)  {
             if(err) {
@@ -74,6 +82,16 @@ productService.removeProduct = function(id) {
             if(err) {
                 reject(err);
             } else {
+                let images = doc.images;
+
+                for(var i = 0; i < images.length; i++) {
+                    fs.unlink(__dirname +'/../public/' +images[i], function(err, date){//ToDO: replace literal on const
+                        if(err) {
+                            console.error(err);
+                        }
+                    });//ToDo: too deep and calback
+                }
+
                 self.updateFilter();
                 resolve(doc);
             }
@@ -81,8 +99,19 @@ productService.removeProduct = function(id) {
     });
 };
 
-productService.updateById = function(id, product) {
+productService.updateById = function(id, product, files) {
     let self = this;
+
+    if(!product.images) {
+        product.images = [];
+    }
+
+    //ToDO:delete file
+
+    for(var i = 0; i < files.length; i++) {
+        product.images.push('uploads/' +files[i].filename);
+    }
+
     return new Promise(function(resolve, reject){
         Product.findByIdAndUpdate(id, product, {runValidators: true}, function(err, doc) {
             if(err) {

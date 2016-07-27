@@ -224,10 +224,18 @@
                 </div>
                 <div class="col-sm-6">
                     <input type="text" class="form-control"
+                        ng-if="form.images[$index]"
                         name="images[$index]"
                         ng-model="form.images[$index]"
                         required
                     />
+
+                    <input type="file" class="form-control"
+                        ng-if="!form.images[$index]"
+                        file-model="form.images[$index]"
+                        name="images[$index]"
+                    />
+
                     <span ng-if="errors['images.' + $index]" class="text-danger">
                         {{errors['images.' + $index].message}}
                     </span>
