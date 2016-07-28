@@ -23,7 +23,6 @@ module.exports = function (app) {
                     successMsg.state = order.state;
                     successMsg.from = order.from;
                     successMsg.to = order.to;
-                    console.log(successMsg);
                     res.json(successMsg);
                 } else {
                     res.json(failedMsg);
@@ -37,7 +36,6 @@ module.exports = function (app) {
     )
     ;
     app.post('/order', function (req, res) {
-            console.log(req.body);
             let successMsg = {"success": true};
             let failedMsg = {"success": false};
             req.checkBody(validationSchema);
