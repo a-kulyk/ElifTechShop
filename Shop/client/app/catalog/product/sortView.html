@@ -1,0 +1,5 @@
+<select ng-change="product.sortThis()" ng-model="product.sorted">
+	<option value="">pleas select</option>
+	<option ng-repeat="value in product.sort"  value="{{value}}">{{value}}</option>
+</select>
+{{product.sorted}}

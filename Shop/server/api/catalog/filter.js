@@ -3,20 +3,23 @@ class Filter {
     this.properties = [{}];
     this.searchField = "";
     this.categories = [];
-    this.min_price = 0,
+    this.min_price = 0;
     this.max_price = Math.pow(10,6);
     this.page = 1;
     this.perPage = 9;
+    this.sort =  {
+      'quantity' : -1,
+      'price': 1
+    }
   }
 
   setProperties(name,value) {
     if(name && value) {
-      let property = new Object();
-      console.log("ues")
+      let property = {};
       if(Array.isArray(value)) {
-        let propertyArray = []
-        for (item in value) {
-          if (!(value[item] == "")) {
+        let propertyArray = [];
+        for (var item in value) {
+          if (!("" == value[item])) {
             let valueObject = {'properties.value' : value[item]}
             propertyArray.push(valueObject);
           }
@@ -30,6 +33,29 @@ class Filter {
     this.properties.push(property);
     }
   }
+
+  getSort () {
+    return this.sort;
+  }
+
+  setSort (by) {
+    if(typeof by == "undefined") return;
+    switch(by) {
+      case 'cheap' : {
+        this.sort.price = 1
+        break;
+      }
+      case 'expensive' : {
+        this.sort.price = -1
+        break;
+      }
+      default : {
+        this.sort.price = 1
+        };
+        
+      }
+    }
+  
 
   setPage (number) {
     this.page = Math.abs(parseInt(number)) || 1;
@@ -85,7 +111,7 @@ class Filter {
       query.$and.push(searchQuery);
     }
     if((typeof this.min_price !== 'undefined') && (typeof this.max_price !== 'undefined')) {
-      let priceQuery = {'price': { $gt: (this.min_price - 1), $lt: (this.max_price+1) } };
+      let priceQuery = {'price': { $gt: (this.min_price - 1), $lt: (this.max_price + 1) } };
       query.$and.push(priceQuery);
     } 
     if(this.properties) {

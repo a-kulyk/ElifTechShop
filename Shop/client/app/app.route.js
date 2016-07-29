@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ngRoute','ui-rangeSlider']);
+var myApp = angular.module('app', ['ngRoute','ui-rangeSlider', 'ngActivityIndicator']);
 
 
 myApp.config(function($routeProvider) {
