@@ -13,20 +13,25 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-exports.notifyAboutDelivery=function (username) {
-    let subject='Delivery service notification';
-    let text='Your order has been successfully delivered';
-    let mailOptions = {
-        from: config.get("email-sender:user"),
-        to: username,
-        subject: subject,
-        text: text
-    };
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
-        }else{
-            console.log('Message sent: ' + info.response);
+exports.notifyAboutDelivery = function (username) {
+    return new Promise((resolve, reject)=> {
+        let subject = 'Delivery service notification';
+        let text = 'Your order has been successfully delivered';
+        let mailOptions = {
+            from: config.get("email-sender:user"),
+            to: username,
+            subject: subject,
+            text: text
         };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+                reject();
+            } else {
+                console.log('Message sent: ' + info.response);
+                resolve();
+            }
+            ;
+        });
     });
 }

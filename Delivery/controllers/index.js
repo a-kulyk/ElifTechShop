@@ -6,6 +6,8 @@ let validationSchema = require('../common/validation-schema');
 let orderService = require('../services/order-service');
 let emailSender = require('../lib/email-sender');
 let historyService = require('../services/history-service');
+let eachLimit = require('async/eachLimit');
+var config = require('config');
 
 module.exports = function (app) {
 
@@ -61,15 +63,20 @@ module.exports = function (app) {
         let successMsg = {"success": true};
         let failedMsg = {"success": false};
         let ordersArray = req.body;
-        for (let i = 0; i < ordersArray.length; i++) {
-            let servicePromise = orderService.findById(ordersArray[i]);
+        eachLimit(ordersArray, config.get('email-sender:send-at-once'), function (order, callback) {
+            let servicePromise = orderService.findById(order);
             servicePromise.then((order)=> {
-                emailSender.notifyAboutDelivery(order.to.username);
-                console.log(order.to.username);
-            }).catch((err)=> {
-                console.error(err);
-            });
-        }
+                return emailSender.notifyAboutDelivery(order.to.username);
+            }).then(()=> {
+                callback();
+            }).catch((error=> {
+                callback(error);
+            }));
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        })
         res.json(successMsg);
     });
     app.get('/history/:fromUsername/:toUsername', function (req, res) {
