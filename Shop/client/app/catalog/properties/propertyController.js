@@ -1,24 +1,59 @@
 
 angular.module('app')
   .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location','$routeParams',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location,$routeParams) {
-      var that = this;
+      let that = this;
+      let defineProperty = function() {
+          let currentUrl = JSON.parse(JSON.stringify($route.current.params));
+          for(let item in currentUrl) {
+            for(let i in $rootScope.data.properties) {
+                if($rootScope.data.properties[i].name == item) {
+                    console.log( $rootScope.data.properties[i].value);
+                    $rootScope.data.properties[i].value.forEach(function (value) {
+
+                        if(Array.isArray(currentUrl[item])) {
+                            if(currentUrl[item].includes(value.name)) {
+                                value.state = true;
+                            }
+                        } else {
+                            if (currentUrl[item] == value.name) {
+                                value.state = true;
+                            }
+                        }
+                    })
+                }
+            }
+
+          }
+
+      }
+
+
       that.createPropertyScreen = function (data) {
         var propertyScreen = {};
         propertyScreen.categories = $route.current.params.categories;
+          if($rootScope.data.searchField) {
+              let additionalSearchQuery = {
+                  searchField : $rootScope.data.searchField || ''
+              }
+              Object.assign(propertyScreen,additionalSearchQuery);
+          }
+          if($route.current.params.sort) {
+              let additionalSortQuery = {
+                  sort : $route.current.params.sort || 'cheap'
+              }
+              Object.assign(propertyScreen,additionalSortQuery);
+          }
+
         if (typeof data == 'undefined') return propertyScreen;
           if(data.hasOwnProperty('properties')) {
               data.properties.forEach(function (item) {
                   if (item.hasOwnProperty('value')) {
-                      console.log(item.value);
                       item.value.forEach(function (val) {
                           if (val.state) {
-                              console.log(val);
-                              if (propertyScreen[item.name]) {
-                                  propertyScreen[item.name].push(val.name)
-                              } else {
+                              if (!propertyScreen[item.name]) {
                                   propertyScreen[item.name] = []
-                                  propertyScreen[item.name].push(val.name)
                               }
+                              propertyScreen[item.name].push(val.name)
                           }
                       })
                   }
@@ -28,17 +63,50 @@ angular.module('app')
         return propertyScreen;
       }
 
-      let propScr = that.createPropertyScreen($rootScope.data);
+
 
 
 
       that.clickToProperty = function () {
-          let urlObj = that.createPropertyScreen($rootScope.data);
+          let urlObj = that.createPropertyScreen($rootScope.data) || {};
+
+          if($rootScope.data.price) {
+              let additionalPriceQuery = {
+                  minprice: $rootScope.data.price.min || 0,
+                  maxprice: $rootScope.data.price.max || Math.pow(10, 6)
+              }
+              Object.assign(urlObj,additionalPriceQuery);
+          }
+
           $location.url("?" + $httpParamSerializer(urlObj));
       }
 
+      that.clickToFilterButton = function () {
+          let urlObj = that.createPropertyScreen($rootScope.data) || {};
+          if($rootScope.data.searchField) {
+              let additionalSearchQuery = {
+                  searchField : $rootScope.data.searchField || ''
+              }
+              Object.assign(urlObj,additionalSearchQuery);
+
+          }
+          if($rootScope.data.price) {
+              let additionalPriceQuery = {
+                  minprice: $rootScope.data.price.min || 0,
+                  maxprice: $rootScope.data.price.max || Math.pow(10, 6)
+                }
+              Object.assign(urlObj,additionalPriceQuery);
+          }
+
+          $location.url("?" + $httpParamSerializer(urlObj));
+      }
+      
+
+
       function addCount () {
+
         if(typeof $rootScope.data == 'undefined') return
+        propScr = that.createPropertyScreen($rootScope.data);
         data = $rootScope.data;
         for (var property in data.properties) {
           for (var i in data.properties[property].value) {
@@ -50,18 +118,20 @@ angular.module('app')
               params[data.properties[property].name].push(data.properties[property].value[i].name)
             }
             function setCount(property,i) {
+
               if(typeof params == 'undefined') return null;
-                srcCount = 0;
+                let srcCount = 0;
                 Parameters.count(propScr)
                 .then(
+
                     result => {
+                        console.log(result);
                         srcCount = result.data;
                         return Parameters.count(params)
                     }
                 )
                 .then(
                     result => {
-                        console.log(srcCount,result.data);
                         if(srcCount < result.data) {
                             $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
                         } else {
@@ -77,29 +147,9 @@ angular.module('app')
             setCount(property,i);
           }
         }
+          
       }
 
-
-
-
-        /*
-        data.properties.forEach(function (item) {
-          let params = that.propertyScreen.slice(0);
-          if (item.hasOwnProperty('value')) {
-            for (var i in item.value) {
-                for(var j = 0 ; j < params.length; j++) {
-                  if (params[j][item.name]) {
-                    params[j][item.name].push(item.value[i].name)
-                  } else {
-                    params[j][item.name] = []
-                    params[j][item.name].push(item.value[i].name)
-                  }
-                }
-            }
-          }
-          console.log(params);
-         });
-        */
 
 
      var currentCategory = $route.current.params.categories;
@@ -107,6 +157,7 @@ angular.module('app')
       if($rootScope.category != currentCategory) {
         Parameters.paramsOfCat(currentCategory)
             .success(function (result) {
+
               $rootScope.complete.property = false;
               $rootScope.category = currentCategory;
               $rootScope.data = result || [];
@@ -126,8 +177,11 @@ angular.module('app')
                     }
                   });
                 }
-              $rootScope.complete.property = true;
-              addCount();
+
+                defineProperty();
+                this.propScr = that.createPropertyScreen($rootScope.data);
+                addCount();
+                $rootScope.complete.property = true;
 
         })
         .error(function(data, status){
@@ -136,6 +190,7 @@ angular.module('app')
           $rootScope.complete.property = true;
         });
     } else {
+          defineProperty();
           addCount();
       }
 

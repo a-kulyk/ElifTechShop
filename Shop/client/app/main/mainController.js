@@ -2,7 +2,8 @@ angular.module('app').controller('mainController',
   ['$rootScope', '$location', 'AuthService', 'orderService',
   function ( $rootScope, $location, AuthService, orderService) {
     var main = this;
-     $rootScope.complete = {};
+     $rootScope.complete = {};$
+      $rootScope.data = {};
      $rootScope.complete.property = false;
      $rootScope.complete.product = false;
      

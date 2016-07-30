@@ -1,8 +1,11 @@
 angular.module('app')
-    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location) {  
-        var that = this; 
+    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location) {
+        var that = this;
 
+
+        that.currentSort = $routeParams.sort || '';
         that.sort = ['cheap','expensive'];
+
         that.sortThis = function() {
           $routeParams.sort = that.sorted || 'cheap';
           $location.url('?'+$httpParamSerializer($routeParams));
