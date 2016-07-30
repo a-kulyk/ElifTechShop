@@ -1,6 +1,7 @@
-<div ng-show="catalog.items.notMatch">There is not nothing ot find</div>
+<div ng-hide="complete.product" class="loader"></div>
+<div ng-show="catalog.items.notMatch">There is not nothing to find</div>
 <div ng-show="catalog.items.error">Something went wrong.</div>
-<div id="product" class="product col-md-4 col-xs-12" ng-repeat="item in catalog.items">
+<div ng-show="complete.product" id="product" class="product col-md-4 col-xs-12" ng-repeat="item in catalog.items">
     <div class="image">
         <a ng-href="#/product/{{item._id}}"><img ng-src="{{item.images[0]}}" width="100%" /></a>
     </div>
