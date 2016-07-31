@@ -1,0 +1,19 @@
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                New account
+                <button type="button" class="close" ng-click="close()" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <form>
+                    <input class="form-control" placeholder="Name" name="name" type="text"
+                           ng-model="name"
+                           required>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" ng-click="newAccount()">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,7 @@ exports.post = function (req, res) {
                     console.log(result);
                     res.send({
                         "success": true,
+                        "id": result.transactionId,
                         "sender": result.from._id,
                         "transactionId": result.to._id,
                         "amount": result.amount,

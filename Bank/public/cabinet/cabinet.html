@@ -23,7 +23,7 @@
         <div class="panel-body">
             <div ng-repeat="account in accounts" class="account">
                 <div class="text-center">
-                    <strong>{{account._id}}</strong>
+                    <strong>{{account.name}}</strong> {{account._id}}
                 </div>
                 <div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">
@@ -63,7 +63,7 @@
                     <td>{{ record.sender }}</td>
                     <td>{{ record.receiver }}</td>
                     <td>{{ record.event }}</td>
-                    <td>{{ record.date }}</td>
+                    <td>{{ time(record.date) }}</td>
                 </tr>
             </table>
         </div>

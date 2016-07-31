@@ -1,5 +1,6 @@
 var bank = require("../app");
 var shared = require("./shared");
+var moment = require('moment');
 bank.controller('cabinet', function ($scope, $http, $location, ModalService, shared) {
     
     $http.get("/islogin")
@@ -33,20 +34,21 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
         .error(function (error) {
            console.log(error);
         });
+
+
+    $http.get("/history")
+        .success(function (data) {
+           // console.log(data);
+            $scope.history = data.history;
+
+        })
+        .error(function (err) {
+            console.log(err.message);
+        });
     
-    $scope.history = function () {
-        $http.get("/history")
-            .success(function (data) {
-                console.log(data);
-                $scope.history = data.history;
-
-            })
-            .error(function (err) {
-                console.log(err.message);
-            });
+    $scope.time = function (time) {
+        return moment(time).format('D MM YYYY, h:mm:ss a');
     };
-
-    $scope.history();
 
     $scope.logout = function () {
         $http.post("/logout",{})
@@ -69,13 +71,19 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
             modal.element.modal();
             modal.close.then(function(result) {
                 if(result) {
-                   // console.log(result);
+                  //  console.log(result);
                     for(let i=0; i<$scope.accounts.length; i++){
                         if($scope.accounts[i]._id == result.accountId){
-                            $scope.accounts[i].amount = result.amount;
+                            $scope.accounts[i].amount = result.accountAmount;
                         }
                     }
-                    $scope.history.unshift(result.history);
+                    $scope.history.unshift({
+                        "id": result.id,
+                        "sender": result.accountId,
+                        "receiver": result.accountId,
+                        "event": "payment",
+                        "amount": result.amount
+                    });
                 }
             });
         });
@@ -98,28 +106,27 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
                             $scope.accounts[i].amount = result.receiverAmount;
                         }
                     }
+                    $scope.history.unshift({
+                        "id": result.id,
+                        "sender": result.sender,
+                        "receiver": result.receiver,
+                        "event": "transfer",
+                        "amount": result.amount
+                    });
                 }
             });
         });
     };
     
     $scope.newAccount = function () {
-        shared.setMessage("Are you sure, that you want to create new account?");
+      //  shared.setMessage("Are you sure, that you want to create new account?");
         ModalService.showModal({
-            templateUrl: "../modals/confirm.html",
+            templateUrl: "../modals/account.html",
             controller: "modal"
         }).then(function(modal) {
             modal.element.modal();
             modal.close.then(function(result) {
-                if(result.result) {
-                    $http.post("/account",{})
-                        .success(function (account) {
-                            $scope.accounts.push(account.account);
-                        })
-                        .error(function (error) {
-                            console.log(error);
-                        });
-                }
+                $scope.accounts.push(result.account);
             });
         });
 
