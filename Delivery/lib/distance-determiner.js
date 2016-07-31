@@ -4,6 +4,7 @@
 "use strict";
 let request = require('request');
 let config = require('../config');
+let GoogleResError = require('../common/errors/google-res-error');
 
 module.exports = function (from, to) {
     return new Promise((resolve, reject)=> {
@@ -11,7 +12,7 @@ module.exports = function (from, to) {
             '&destinations=' + to.lat + ',' + to.lng + '&key=' + config.get('googleApi:key');
         request(url, function (error, response, body) {
             if (error) {
-                reject(error);
+                reject(new GoogleResError('Cannot process google response correctly'));
                 return;
             }
             resolve(body);

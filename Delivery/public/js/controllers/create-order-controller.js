@@ -30,7 +30,14 @@ app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) 
             if (data.success) {
                 $window.location.href = '#/order_info/' + data.trackingCode;
             } else {
-                console.log('fields don`t match the requirements')
+                switch (data.error.name) {
+                    case'GoogleResError':
+                        alert('The service is currently unavailable, please try again later');
+                        break;
+                    case 'ValidationError':
+                        alert('Some fields doesn`t match the requirements');
+                        break;
+                }
             }
         }).error(function (data, status, headers) {
             console.log(status);

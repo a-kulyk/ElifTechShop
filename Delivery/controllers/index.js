@@ -8,6 +8,7 @@ let emailSender = require('../lib/email-sender');
 let historyService = require('../services/history-service');
 let eachLimit = require('async/eachLimit');
 let config = require('config');
+let ValidationError = require('../common/errors/validation-error');
 
 module.exports = function (app) {
 
@@ -44,7 +45,7 @@ module.exports = function (app) {
             let errors = req.validationErrors();
             if (errors) {
                 console.error(errors);
-                failedMsg.message = errors.message;
+                failedMsg.error = new ValidationError('Incorrect fields');
                 res.json(failedMsg);
             } else {
                 let servicePromise = orderService.createOrder(req.body);
@@ -53,8 +54,8 @@ module.exports = function (app) {
                     successMsg.trackingCode = order.trackingCode;
                     res.json(successMsg)
                 }).catch((err)=> {
-                    console.error(err);
-                    failedMsg.message = err.message;
+                    console.error(err.name);
+                    failedMsg.error = err;
                     res.json(failedMsg);
                 });
             }
