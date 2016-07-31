@@ -11,7 +11,7 @@ module.exports = function (from, to) {
         let url = 'https://' + config.get('googleApi:host') + config.get('googleApi:path') + 'origins=' + from.lat + ',' + from.lng +
             '&destinations=' + to.lat + ',' + to.lng + '&key=' + config.get('googleApi:key');
         request(url, function (error, response, body) {
-            if (error) {
+            if (error || response.statusCode !== 200) {
                 reject(new GoogleResError('Cannot process google response correctly'));
                 return;
             }

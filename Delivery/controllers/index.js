@@ -32,6 +32,7 @@ module.exports = function (app) {
                 }
             }).catch((err)=> {
                 console.error(err);
+                console.error(err.stack);
                 failedMsg.message = err.message;
                 res.json(failedMsg);
             });
@@ -54,7 +55,8 @@ module.exports = function (app) {
                     successMsg.trackingCode = order.trackingCode;
                     res.json(successMsg)
                 }).catch((err)=> {
-                    console.error(err.name);
+                    console.error(err);
+                    console.error(err.stack);
                     failedMsg.error = err;
                     res.json(failedMsg);
                 });
