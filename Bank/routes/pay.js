@@ -14,7 +14,8 @@ exports.post = function(req, res){
             if (result) {
                 res.send({
                     "success": true,
-                    "userAmount": result.to.amount,
+                    "id": result.transactionId,
+                    "accountAmount": result.to.amount,
                     "accountId": result.to._id,
                     "transactionId": result.transactionId,
                     "amount": result.amount
