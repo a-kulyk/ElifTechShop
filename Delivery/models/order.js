@@ -2,7 +2,7 @@
  * Created by dmytro on 28.06.16.
  */
 var mongoose = require('../lib/mongoose');
-var orderStates = require('../enums/order-states').orderStates;
+var orderStates = require('../common/enums/order-states').orderStates;
 
 var Schema = mongoose.Schema;
 

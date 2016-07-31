@@ -7,7 +7,7 @@ let orderService = require('../services/order-service');
 let emailSender = require('../lib/email-sender');
 let historyService = require('../services/history-service');
 let eachLimit = require('async/eachLimit');
-var config = require('config');
+let config = require('config');
 
 module.exports = function (app) {
 
@@ -44,6 +44,7 @@ module.exports = function (app) {
             let errors = req.validationErrors();
             if (errors) {
                 console.error(errors);
+                failedMsg.message = errors.message;
                 res.json(failedMsg);
             } else {
                 let servicePromise = orderService.createOrder(req.body);
@@ -66,7 +67,7 @@ module.exports = function (app) {
         eachLimit(ordersArray, config.get('email-sender:send-at-once'), function (order, callback) {
             let servicePromise = orderService.findById(order);
             servicePromise.then((order)=> {
-                return emailSender.notifyAboutDelivery(order.to.username);
+                return emailSender.notifyAboutDelivery(order.to.username, order.trackingCode);
             }).then(()=> {
                 callback();
             }).catch((error=> {
@@ -93,10 +94,3 @@ module.exports = function (app) {
         });
     });
 }
-
-
-
-
-
-
-

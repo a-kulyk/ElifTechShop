@@ -30,7 +30,9 @@ exports.createOrder = function (order) {
                     reject(err);
                 }
             });
-        });
+        }).catch(error=> {
+            reject(error);
+        })
     })
 }
 

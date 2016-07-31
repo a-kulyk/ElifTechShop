@@ -12,9 +12,6 @@ app.use(bodyParser.json());
 
 app.use(validator());
 
-//app.set('views', __dirname + '/views');
-//app.set('view engine', 'ejs');
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(config.get('port'), function () {

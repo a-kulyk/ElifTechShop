@@ -3,8 +3,7 @@
  */
 var Car = require('../models/car');
 var Order = require('../models/order');
-var orderStates = require('../enums/order-states').orderStates;
-//var deliveryTimer = require('./timer-service');
+var orderStates = require('../common/enums/order-states').orderStates;
 
 exports.loadOrderOnCar = function (order) {
     Car.findOne({isAvailable: true}, function (err, car) {

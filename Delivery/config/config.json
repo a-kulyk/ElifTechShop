@@ -1,4 +1,5 @@
 {
+  "host": "localhost",
   "port": 3000,
   "mongoose": {
     "uri": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd"
@@ -12,6 +13,6 @@
     "service": "Gmail",
     "user": "super.delivery.service@gmail.com",
     "password": "genius1111",
-    "send-at-once": 10
+    "send-at-once": 3
   }
 }
