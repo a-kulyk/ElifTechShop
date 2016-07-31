@@ -16,19 +16,15 @@ bank.controller('modal', function ($scope, close, $http, ModalService, shared) {
         })
             .success(function (data) {
                 if(data.success){
+                   // console.log(data);
                     $('.modal').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     close({
-                        "amount": data.userAmount,
+                        "id": data.id,
+                        "accountAmount": data.accountAmount,
                         "accountId": data.accountId,
-                        "history": {
-                            "_id": data.transactionId,
-                            "amount": data.amount,
-                            "event": "payment",
-                            "destination": "Payment",
-                            "date": new Date()
-                        }
+                        "amount": data.amount
                     }, 500);
                     ModalService.close();
                 } else {
@@ -57,41 +53,43 @@ bank.controller('modal', function ($scope, close, $http, ModalService, shared) {
             "amount": $scope.formData.amount
         })
             .success(function (data) {
-
                 if(data.success){
                     $('.modal').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
                     close({
+                        "id": data.id,
                         "senderAmount": data.senderAmount,
+                        "amount": data.amount,
                         "sender": data.sender,
                         "receiver": data.receiver,
-                        "receiverAmount": data.receiverAmount,
-                        "history": {
-                            "_id": data.transactionId,
-                            "amount": data.amount,
-                            "event": "transfer",
-                            "destination": data.receiver,
-                            "date": new Date()
-                        }
+                        "receiverAmount": data.receiverAmount
+
                     }, 500);
                     ModalService.close();
                 }
                 
-                
-                
-                console.log(data);
-                $scope.cabinet.amount = data.amount;
-                document.getElementById("modalTransfer").style.display = "none";
-                $scope.cabinet.history.unshift({
-                    "_id": data.transactionId,
-                    "event": "transaction",
-                    "destination": data.receiver,
-                    "date": new Date()
-                });
             })
             .error(function (err) {
                 console.log(err);
             });
     };
+    
+    $scope.newAccount = function () {
+        $http.post("/account",{name: $scope.name})
+            .success(function (account) {
+                if(account.success){
+                    $('.modal').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    close({
+                        account: account.account
+                    }, 500);
+                    ModalService.close();
+                }
+            })
+            .error(function (error) {
+                console.log(error);
+            });
+    }
 });

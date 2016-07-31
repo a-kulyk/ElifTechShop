@@ -2,9 +2,9 @@ let Account = require('../models/account').Account;
 
 exports.post = function (req, res) {
     let user = req.session.user;
-    console.log(user);
+  //  console.log(user);
     if(user) {
-        let account = new Account({owner: user, amount: 0});
+        let account = new Account({name: req.body.name, owner: user, amount: 0});
         account.save()
             .then(function (account) {
                 if(account) {
@@ -33,7 +33,7 @@ exports.post = function (req, res) {
 exports.get = function (req, res) {
     let user = req.session.user;
     if(user) {
-        Account.find({owner: user}).exec()
+        Account.find({owner: user, enabled: true}).exec()
             .then(function (result) {
                 if(result) {
                     return res.send({
@@ -59,8 +59,8 @@ exports.delete = function (req, res) {
         .then(function (account) {
            // console.log(account);
             if(account.owner == user){
-                console.log("ready");
-                return account.remove();
+               account.enabled = false;
+                return account.save();
             }
             throw new Error("Forbidden");
         })
