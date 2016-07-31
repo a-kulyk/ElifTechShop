@@ -37,7 +37,7 @@
                     <th>price</th>
                     <th>company</th>
                     <th>quantity</th>
-                    <th>command</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -50,8 +50,12 @@
                     <td>{{item.company}}</td>
                     <td>{{item.quantity}}</td>
                     <td>
-                        <a class="btn btn-primary btn-xs" href="#!/item/{{item._id}}">Edit</a>
-                        <a class="btn btn-danger btn-xs" href="#!/item/{{item._id}}/delete">Delete</a>
+                        <a class="btn btn-primary btn-xs" href="#!/item/{{item._id}}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a class="btn btn-danger btn-xs" href="#!/item/{{item._id}}/delete">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
                     </td>
                 </tr>
             </tbody>

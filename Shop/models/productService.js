@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const Product = require('./product');
+const imageService = require('../service/cloudinaryImageService');
 
 var productService = {};
 
@@ -59,20 +60,30 @@ productService.createProduct = function(item, files) {
 
     item.images = [];
 
+    let uploadImagesPromise = [];
     for(var i = 0; i < files.length; i++) {
-        item.images.push('uploads/' +files[i].filename);
+        uploadImagesPromise.push(imageService.upload(files[i].path));
+        //item.images.push('uploads/' +files[i].filename);
     }
 
-    return new Promise(function(resolve, reject){
-        Product.create(item, function(err, result)  {
-            if(err) {
-                reject(err);
-            } else {
-                self.updateFilter();
-                resolve(result);
-            }
+    return Promise.all(uploadImagesPromise).then(values => {
+        for(var i = 0; i < values.length; i++) {
+            item.images.push(values[i].url);
+        }
+
+        return new Promise(function(resolve, reject){
+            Product.create(item, function(err, result)  {
+                if(err) {
+                    reject(err);
+                } else {
+                    self.updateFilter();
+                    resolve(result);
+                }
+            });
         });
     });
+
+
 };
 
 productService.removeProduct = function(id) {
@@ -84,13 +95,15 @@ productService.removeProduct = function(id) {
             } else {
                 let images = doc.images;
 
-                for(var i = 0; i < images.length; i++) {
-                    fs.unlink(__dirname +'/../public/' +images[i], function(err, date){//ToDO: replace literal on const
-                        if(err) {
-                            console.error(err);
-                        }
-                    });//ToDo: too deep and calback
-                }
+                imageService.deleteByUrls(images);//ToDO: error handler
+
+                // for(var i = 0; i < images.length; i++) {
+                //     fs.unlink(__dirname +'/../public/' +images[i], function(err, date){//ToDO: replace literal on const
+                //         if(err) {
+                //             console.error(err);
+                //         }
+                //     });//ToDo: too deep and calback
+                // }
 
                 self.updateFilter();
                 resolve(doc);
@@ -106,23 +119,61 @@ productService.updateById = function(id, product, files) {
         product.images = [];
     }
 
+    return this.getProductById(id)
+    .then(function(oldProduct) {
+        let oldImagesSet = new Set(oldProduct.images);
+        let imagesSet = new Set(product.images);
+        product.images = product.images.filter(x => oldImagesSet.has(x));
+        //let removedImages = oldProduct.images.filter(x => imagesSet.has(x));
+        return oldProduct.images.filter(x => !imagesSet.has(x));
+
+    }).then(function(removedImages) {
+        imageService.deleteByUrls(removedImages);
+        return null;
+    }).then(function() {
+        let uploadImagesPromise = [];
+        for(var i = 0; i < files.length; i++) {
+            uploadImagesPromise.push(imageService.upload(files[i].path));
+            //item.images.push('uploads/' +files[i].filename);
+        }
+
+        return Promise.all(uploadImagesPromise);
+    }).then(values => {
+        for (var i = 0; i < values.length; i++) {
+            product.images.push(values[i].url);
+        }
+        return null;
+    }).then(()=> {
+        return Product.findByIdAndUpdate(id, product, {runValidators: true}).exec();
+    }).then((doc) => {
+        self.updateFilter();
+        return doc;
+    });
     //ToDO:delete file
 
-    for(var i = 0; i < files.length; i++) {
-        product.images.push('uploads/' +files[i].filename);
-    }
-
-    return new Promise(function(resolve, reject){
-        Product.findByIdAndUpdate(id, product, {runValidators: true}, function(err, doc) {
-            if(err) {
-                reject(err);
-            } else {
-                self.updateFilter();
-                resolve(doc);
-            }
-        });
-
-    });
+    // let uploadImagesPromise = [];
+    // for(var i = 0; i < files.length; i++) {
+    //     uploadImagesPromise.push(imageService.upload(files[i].path));
+    //     //item.images.push('uploads/' +files[i].filename);
+    // }
+    //
+    // return Promise.all(uploadImagesPromise).then(values => {
+    //     for (var i = 0; i < values.length; i++) {
+    //         item.images.push(values[i].url);
+    //     }
+    //
+    //     return new Promise(function (resolve, reject) {
+    //         Product.findByIdAndUpdate(id, product, {runValidators: true}, function (err, doc) {
+    //             if (err) {
+    //                 reject(err);
+    //             } else {
+    //                 self.updateFilter();
+    //                 resolve(doc);
+    //             }
+    //         });
+    //
+    //     });
+    // });
 };
 
 productService.updateFilter = function() {

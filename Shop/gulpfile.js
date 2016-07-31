@@ -36,6 +36,12 @@ gulp.task('webpack', function () {
         .pipe(gulp.dest('public'));
 });
 
+gulp.task('font', function () {
+    return gulp.src('frontend/**/*.{eot,svg,ttf,woff,woff2}')
+        .pipe(newer('public'))
+        .pipe(gulp.dest('public'));
+});
+
 gulp.task('css', function () {
     return gulp.src('frontend/**/*.css')
         .pipe(newer('public'))
@@ -68,7 +74,7 @@ gulp.task('check', gulp.series('check_frontend', 'check_backend'));
 gulp.task('build',
     gulp.series(
         'clean',
-        gulp.parallel('html', 'js', 'css', 'webpack')));
+        gulp.parallel('html', 'js', 'css', 'font', 'webpack')));
 
 gulp.task('default', gulp.series('build'));
 
