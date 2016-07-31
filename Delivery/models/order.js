@@ -54,7 +54,7 @@ var schema = new Schema({
         },
         state: {
             type: Number,
-            default: orderStates.LOADING,
+            default: orderStates.SHIPMENT,
             required: true
         },
         created: {

@@ -1,7 +1,7 @@
 /**
  * Created by dmytro on 09.07.16.
  */
-app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http) {
+app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http, orderStates) {
     $rootScope.makeOrderActiveClass = '';
     $rootScope.trackOrderActiveClass = '';
     $rootScope.historyActiveClass = '';
@@ -10,7 +10,9 @@ app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $ht
         $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
             if (data.success) {
                 $scope.estimatedTime = data.estimatedTime;
-                $scope.state = data.state;
+                $scope.state = orderStates.statesArray[data.state];
+                $scope.fromUsername = data.from.username;
+                $scope.toUsername = data.from.username;
                 var coordinates = {};
                 coordinates.from = data.from;
                 coordinates.to = data.to;

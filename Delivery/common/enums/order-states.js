@@ -3,7 +3,7 @@
  */
 
 var orderStates = {
-    LOADING: 0,
+    SHIPMENT: 0,
     TRANS: 1,
     DELIVERED: 2
 }
