@@ -8,7 +8,7 @@ class Filter {
         this.pages = 1;
         this.perPage = 9;
         this.sort =  {
-            'quantity' : -1,
+
             'price': 1
         }
     }
@@ -68,7 +68,10 @@ class Filter {
     setSearchField(text) {
         let searchExp = {};
         if(text) {
-            searchExp = new RegExp(text+"*","i");
+            let words = text.split(" ");
+            var searchExpe = "(" + words.join('|') + ')';
+            searchExp = new RegExp(searchExpe,"i");
+            //searchExp = new RegExp(text+"*","i");
         }
         this.searchField = searchExp;
     }
@@ -96,8 +99,14 @@ class Filter {
         }
     }
 
-    creatQuery () {
+    creatQuery (notQuantity) {
         let query = {$and: [{}]};
+        /*if(notQuantity) {
+            query.$and.push({ quantity: { $lt: 1 } })
+        } else {
+            query.$and.push({ quantity: { $gt: 1 } })
+        }
+        */
         if (this.searchField) {
             let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]};
             query.$and.push(searchQuery);

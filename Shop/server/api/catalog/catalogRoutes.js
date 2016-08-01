@@ -119,6 +119,8 @@ router.get('/filter/', function(req,res,next) {
   
     let sort = myFilter.getSort();
 
+
+
     Promise.all([
         Products.find(myFilter.creatQuery()).sort(sort).skip(pagination.skip()).limit(pagination.per_page()),
         Products.find(myFilter.creatQuery()).count()

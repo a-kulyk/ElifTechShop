@@ -65,7 +65,7 @@ angular.module('app')
       that.clickToProperty = function () {
           let urlObj = that.createPropertyScreen($rootScope.data) || {};
 
-          if($rootScope.data.price) {
+          if($rootScope.data.price && $route.current.params.categories) {
               let additionalPriceQuery = {
                   minprice: $rootScope.data.price.min || 0,
                   maxprice: $rootScope.data.price.max || Math.pow(10, 6)
@@ -79,7 +79,9 @@ angular.module('app')
       function creatCountObject (data) {
           let object = {};
           object.categories = $route.current.params.categories;
+          if($route.current.params.searchField) object.searchField = $route.current.params.searchField;
           object[data.item] = data.name;
+          console.log(object);
           return object;
       }
 
@@ -122,7 +124,7 @@ angular.module('app')
                                 Parameters.count(countQuery)
                                 .then(
                                     result => {
-                                        debugger;
+
                                             $rootScope.data.properties[property].value[i].count = result.data;
                                             if($rootScope.data.properties[property].value[i].state) {
                                                 $rootScope.data.properties[property].value[i].count = null;
@@ -152,7 +154,7 @@ angular.module('app')
       if($rootScope.category != currentCategory) {
         Parameters.paramsOfCat(currentCategory)
             .success(function (result) {
-
+                that.price = JSON.parse(JSON.stringify(result.price));
               $rootScope.complete.property = false;
               $rootScope.category = currentCategory;
               $rootScope.data = result || [];
