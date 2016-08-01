@@ -2,7 +2,7 @@ var Transaction = require('../models/transaction').Transaction;
 var Account = require('../models/account').Account;
 
 exports.post = function(req, res){
-    Account.findOne({_id: req.body.account})
+    Account.findOne({_id: req.body.account, enabled: true})
         .then(function (account) {
             if(account.owner == req.session.user) {
                 return Transaction.action(account._id, account._id, req.body.amount);
@@ -17,6 +17,7 @@ exports.post = function(req, res){
                     "id": result.transactionId,
                     "accountAmount": result.to.amount,
                     "accountId": result.to._id,
+                    "accountName": result.to.name,
                     "transactionId": result.transactionId,
                     "amount": result.amount
                 });

@@ -40,12 +40,22 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
         .success(function (data) {
            // console.log(data);
             $scope.history = data.history;
+            console.log(data);
 
         })
         .error(function (err) {
             console.log(err.message);
         });
-    
+
+    // $scope.tableParams = new ngTableParams({
+    //     page: 1,
+    //     count: 2
+    // },
+    //     {
+    //         total: $scope.history.length
+    //     }
+    // );
+
     $scope.time = function (time) {
         return moment(time).format('D MM YYYY, h:mm:ss a');
     };
@@ -79,8 +89,8 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
                     }
                     $scope.history.unshift({
                         "id": result.id,
-                        "sender": result.accountId,
-                        "receiver": result.accountId,
+                        "sender": "",
+                        "receiver": result.accountName,
                         "event": "payment",
                         "amount": result.amount
                     });
