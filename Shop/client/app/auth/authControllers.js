@@ -1,6 +1,6 @@
 angular.module('app').controller('loginController',
-  ['$scope', '$rootScope', '$location', 'AuthService',
-  function ($scope, $rootScope, $location, AuthService) {
+  ['$scope', '$location', 'AuthService',
+  function ($scope, $location, AuthService) {
 
     $scope.login = function () {
 
