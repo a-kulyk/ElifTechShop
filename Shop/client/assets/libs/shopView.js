@@ -80,7 +80,6 @@ function makeVisualEffects() {
         var carouselSlideWidth = $('.product').width();
         $(window).resize(function () {
             carouselSlideWidth = $('.product').width();
-            console.log(carouselSlideWidth);
         })
 
         var carouselWidth = 0;
@@ -92,9 +91,7 @@ function makeVisualEffects() {
         $(carousel).find('li').each(function () {
             carouselWidth += carouselSlideWidth;
             $(this).css({'width': carouselSlideWidth})
-            console.log($(this).children().on('load',function(){
-                console.log($(this).height());
-            }))
+
         });
 
         $(carousel).css('width', carouselWidth);
@@ -144,7 +141,7 @@ function makeVisualEffects() {
         $(el).find('div.carouselPrev').on('click', function () {
             var currentLeft = Math.abs(parseInt($(carousel).css("left")));
             var newLeft = currentLeft - carouselSlideWidth;
-            console.log('newleft', newLeft)
+
             if (newLeft < 0 || isAnimating === true) {
                 return;
             }
