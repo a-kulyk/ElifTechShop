@@ -178,38 +178,42 @@ productService.updateById = function(id, product, files) {
 
 productService.updateFilter = function() {
     Product.aggregate([
-            { '$project': { _id: 0, category: 1, properties: 1, price: 1  } },
-            { '$unwind': '$properties' },
-            {'$group': {
-                '_id': {category:'$category'},
-                properties:{'$push': '$properties'  },
-                minPrice: { $min: "$price" },
-                maxPrice: { $max: "$price" }
-            }},
-            {'$unwind': '$properties' },
-            { '$project': { _id: 1, properties: 1, price: { min: '$minPrice', max: '$maxPrice'}  } },
-            { '$group': {
-                '_id': {
-                    category: '$_id.category',
-                    name: '$properties.name',
-                    value: '$properties.value'
-                },
-                price: {$first: '$price'}
-            }},
-            { '$group': {
-                '_id': {
-                    category: '$_id.category',
-                    name:'$_id.name'
-                },
-                value: {'$push': '$_id.value'},
-                price: {$first: '$price'}
-            }},
-            { '$group': {
-                '_id': '$_id.category',
-                properties: {'$push': {name: '$_id.name', value: '$value'}},
-                price: {$first: '$price'}
-            }},
-            { '$out': 'filters'}
+        { '$project': { _id: 0, category: 1, properties: 1, price: 1, company: 1  } },
+        { '$unwind': '$properties' },
+        {'$group': {
+            '_id': {category:'$category'},
+            properties:{'$push': '$properties'  },
+            minPrice: { $min: "$price" },
+            maxPrice: { $max: "$price" },
+            company: { $addToSet: "$company" }
+        }},
+        {'$unwind': '$properties' },
+        { '$project': { _id: 1, properties: 1, price: { min: '$minPrice', max: '$maxPrice'}, company: 1  } },
+        { '$group': {
+            '_id': {
+                category: '$_id.category',
+                name: '$properties.name',
+                value: '$properties.value'
+            },
+            price: {$first: '$price'},
+            company: {$first: '$company'}
+        }},
+        { '$group': {
+            '_id': {
+                category: '$_id.category',
+                name:'$_id.name'
+            },
+            value: {'$push': '$_id.value'},
+            price: {$first: '$price'},
+            company: {$first: '$company'}
+        }},
+        { '$group': {
+            '_id': '$_id.category',
+            properties: {'$push': {name: '$_id.name', value: '$value'}},
+            price: {$first: '$price'},
+            company: {$first: '$company'}
+        }},
+        { '$out': 'filters'}
     ], function(err){
         if(err) {
             console.error(err);//ToDo; what to do? Product.aggregate?
@@ -219,8 +223,6 @@ productService.updateFilter = function() {
     // db.products.aggregate([
     //
     // ]).pretty()
-
-
 
 };
 
