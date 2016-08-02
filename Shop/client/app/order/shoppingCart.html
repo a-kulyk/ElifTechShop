@@ -1,37 +1,45 @@
 <div class="container">
-  <h2>My Shopping Cart</h2>
-  <p>Created {{shoppingCart.order.date.created}}</p>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Category</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat='item in shoppingCart.order.itemSet'>
-        <td>
-          <a ng-href="#/product/{{item.productId._id}}">{{item.productId.name}}</a>
-        </td>
-        <td>{{item.productId.category}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.productId.price}}</td>
-        <td>
-          <button class="btn btn-default btn-xs" ng-click="order.removeItem(item.productId._id)" data-toggle="tooltip" title="Remove this product from cart">&nbsp x &nbsp</button>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td>Total :</td>
-        <td>{{ shoppingCart.total }}</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <button type="button" class="btn btn-primary" ng-click="order.confirm()">Confirm Address</button>
+    <h3>My Shopping Cart</h3>
+    <p>Created {{shoppingCart.order.date.created | moment}}</p>
+    <div class="well">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price, $</th>
+                    <th>Sum, $</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='item in shoppingCart.order.itemSet'>
+                    <td>
 
+                        <a ng-href="#/product/{{item.productId._id}}">
+                            <img ng-src="{{item.productId.images[0]}}" style="width:100px">&nbsp
+                        {{item.productId.name}}</a>
+                    </td>
+                    <td>{{item.productId.category}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.productId.price}}</td>
+                    <td>{{item.quantity * item.productId.price}}</td>
+                    <td id="closeButton">
+                        <button class="btn btn-default btn-xs" ng-click="order.removeItem(item.productId._id)" data-toggle="tooltip" title="Remove this product from cart">&nbsp x &nbsp</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Total :</strong></td>
+                    <td><strong>{{ shoppingCart.total }} $</strong></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary pull-right" ng-click="order.confirm()">Confirm Address</button>
+    <button type="button" class="btn btn-primary pull-right" ng-click="order.pay()">PAY</button>
 </div>

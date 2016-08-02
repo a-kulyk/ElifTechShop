@@ -1,27 +1,17 @@
-<div class="well bs-component">
-    <form class="form-horizontal" name="confirm.addressForm" ng-submit="confirm.confirmAddress(confirm.address)">
+<div class="well">
+    <form class="form-horizontal" name="confirm.addressForm">
         <fieldset>
-            <legend>Confirm Your shipping address</legend>
+            <legend class="text-center">Confirm Your shipping address</legend>
             <div class="form-group">
-                <label for="inputCountry" class="col-lg-2 control-label">Country</label>
+                <label for="address" class="col-lg-2 control-label">Address</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="inputCountry" name="country" ng-model="confirm.address.country" required>
+                    <input googleplace ng-model="confirm.address" class="form-control" id="address" type="text" lat="confirm.mylat" lng="confirm.mylng" name="address" required>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="inputCity" class="col-lg-2 control-label">City</label>
-                <div class="col-lg-10">
-                    <input type="text" class="form-control" id="inputCity" name="city" ng-model="confirm.address.city" required>
-                </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" type="button" ng-click="confirm.doTheBack()">Go Back</button>
+                <button class="btn btn-primary" type="submit" ng-click="confirm.ok()">OK</button>
             </div>
-            <div class="form-group">
-                <label for="inputStreet" class="col-lg-2 control-label">Street</label>
-                <div class="col-lg-10">
-                    <input type="text" class="form-control" id="inputStreet" name="street" ng-model="confirm.address.street" required>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg pull-right" ng-disabled="disabled">Next</button>
-
         </fieldset>
     </form>
 </div>

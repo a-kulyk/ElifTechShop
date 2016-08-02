@@ -216,3 +216,7 @@ a:hover  {
     transform: rotate(360deg);
   }
 }
+
+#quantity {
+    width: 45px;
+}

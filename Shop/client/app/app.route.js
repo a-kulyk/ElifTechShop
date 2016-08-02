@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ngRoute','ui-rangeSlider', 'ngActivityIndicator']);
+var myApp = angular.module('app', ['ngRoute','ui-rangeSlider', 'ngAnimate', 'ui.bootstrap']);
 
 
 myApp.config(function($routeProvider) {
@@ -41,19 +41,26 @@ myApp.config(function($routeProvider) {
         })
         .when('/order/cart', {
             templateUrl: './app/order/shoppingCart.html',
-            controller: 'orderController',
+            controller: 'OrderController',
             controllerAs: 'order',
             access: { restricted: true }
         })
         .when('/confirmAddress', {
             templateUrl: './app/order/confirmAddress.html',
-            controller: 'confirmController',
+            controller: 'ConfirmCtrl',
             controllerAs: 'confirm',
             access: {restricted: true}
         })
         .when('/order/all', {
             templateUrl: './app/order/history.html',
-            controller: 'mainController',
+            controller: 'HistoryCtrl',
+            controllerAs: 'history',
+            access: { restricted: true }
+        })
+        .when('/order/:id', {
+            templateUrl: './app/order/orderDetail.html',
+            controller: 'OrderDetailController',
+            controllerAs: 'detail',
             access: { restricted: true }
         })
         .otherwise({

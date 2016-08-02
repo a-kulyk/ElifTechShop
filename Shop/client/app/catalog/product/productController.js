@@ -51,9 +51,25 @@ angular.module('app')
       });
 
     }])
-    .controller('ProductShowController',['$scope', 'Items', '$route', function ($scope, Items, $route) {
+    .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', function ($scope, $rootScope, Items, $route) {
       Items.item($route.current.params.id).success(function(data) {
-     $scope.product = data;
+        $scope.product = data;
+
+        $scope.addToCart = function(cart) {
+            if (!$rootScope.shoppingCart) {
+                orderService.createCart(cart)
+                    .then(function(response) {
+                        console.log("create response :  ", response.data);
+                        $rootScope.shoppingCart = response.data;
+                    });
+            } else {
+                orderService.addToCart(cart)
+                    .then(function(response) {
+                        console.log("addItem response :  ", response.data);
+                        $rootScope.shoppingCart = response.data;
+                    });
+            }
+        };
 
       });
     }]);

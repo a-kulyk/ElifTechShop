@@ -1,11 +1,11 @@
 angular.module('app').controller('mainController',
-  ['$rootScope', '$location', 'AuthService', 'orderService',
-  function ( $rootScope, $location, AuthService, orderService) {
+  ['$rootScope', '$location', 'AuthService', '$uibModal',
+  function ( $rootScope, $location, AuthService, $uibModal) {
     var main = this;
-     $rootScope.complete = {};$
-      $rootScope.data = {};
-     $rootScope.complete.property = false;
-     $rootScope.complete.product = false;
+    $rootScope.complete = {};
+    $rootScope.data = {};
+    $rootScope.complete.property = false;
+    $rootScope.complete.product = false;
      
     main.logout = function () {
       // call logout from service
@@ -17,28 +17,18 @@ angular.module('app').controller('mainController',
         });
     };
 
-    main.addToCart = function(itemId) {
-      if (!$rootScope.shoppingCart) {
-        orderService.createCart(itemId)
-          .then(function(response) {
-            console.log("create response :  ", response.data);
-            $rootScope.shoppingCart = response.data;
-          });
-      } else {
-        orderService.addToCart(itemId)
-          .then(function(response) {
-            console.log("addItem response :  ", response.data);
-            $rootScope.shoppingCart = response.data;
-          });
-      }
-    };
-
-    main.openCabinet = function() {
-      orderService.all()
-        .then(function(resp) {
-          main.allOrders = resp.data;
-          $location.path('/order/all');
-        });
-    };
+    main.addToCart = function(item) {
+            $uibModal.open({
+                templateUrl: './app/main/modalView.html',
+                controller: 'ModalCtrl',
+                controllerAs: 'modal',
+                // size: 'sm',
+                resolve: {
+                    item: function() {
+                        return item;
+                    }
+                }
+            });
+        };
     
 }]);

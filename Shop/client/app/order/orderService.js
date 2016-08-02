@@ -7,18 +7,18 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                     url: "/order/cart"
                 });
             },
-            createCart: function(itemId) {
+            createCart: function(cart) {
                 return $http({
                     method: 'POST',
                     url: '/order/create',
-                    data: { itemId: itemId }
+                    data: cart
                 });
             },
-            addToCart: function(itemId) {
+            addToCart: function(cart) {
                 return $http({
                     method: 'PUT',
                     url: '/order/addToCart',
-                    data: { itemId: itemId }
+                    data: cart
                 });
             },
             updateCart: function(itemId) {
@@ -28,6 +28,12 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                     data: { itemId: itemId }
                 });
             },
+            saveOrderDetails: function(cart) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/saveOrderDetails'
+                });
+            },
             setAddress: function(addr) {
                 return $http({
                     method: 'PUT',
@@ -35,16 +41,30 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                     data: addr
                 });
             },
-            all: function(object) {
+            all: function() {
                 return $http({
                     method: 'GET',
                     url: "/order/all/"
+                });
+            },
+            getOne: function(id) {
+                return $http({
+                    method: 'GET',
+                    url: "/order/" + id
                 });
             },
             delete: function() {
                 return $http({
                     method: 'DELETE',
                     url: "/order/remove"
+                });
+            },
+            pay: function(obj) {
+                return $http({
+                    method: 'POST',
+                    url: 'http://localhost:3001/transaction',
+                    data: obj,
+                    dataType:JSON
                 });
             }
         };

@@ -15,11 +15,7 @@ router.post('/register', function(req, res) {
   User.register(new User({ 
     username: req.body.username,
     email: req.body.email,
-    address:  {
-      country: req.body.country,
-      city: req.body.city,
-      street: req.body.street
-    }
+    address:  req.body.address
    }), req.body.password, function(err, account) {
     if (err) {
       console.log(err.message);
@@ -76,9 +72,5 @@ router.get('/status', function(req, res) {
     user: req.user
   });
 });
-
-// router.get('/getUser', function(req, res) {
-//   return res.send(req.user);
-// });
 
 module.exports = router;

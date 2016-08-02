@@ -8,7 +8,7 @@
   <link href="./assets/libs/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
   <link rel="stylesheet" href="./assets/css/shopStyle.css">
-  <link rel="stylesheet" href="./assets/bower_components/angular-rangeslider/angular.rangeSlider.css">
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_JCjSbuYTaArP7GiEwUS2YRlvgKMkcFY&libraries=places"></script>
 
 </head>
 <body  ng-controller="mainController as main">
@@ -20,17 +20,20 @@
   </div>
 
   <!-- scripts -->
+  <script src="./assets/bower_components/moment/moment.js"></script>
   <script src="./assets/libs/jquery.min.js"></script>
   <script src="./assets/libs/bootstrap.min.js"></script>
   <script src="./assets/libs/angular.min.js"></script>
   <script src="./assets/libs/angular-route.min.js"></script>
   <script src="./assets/bower_components/angular-rangeslider/angular.rangeSlider.js"></script>
-  <script src="./assets/bower_components/ngActivityIndicator/ngActivityIndicator.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+  <script src="./assets/libs/ui-bootstrap-tpls-2.0.0.min.js"></script>
   <script src="./app/app.route.js"></script>
   <script src="./app/auth/authServices.js"></script>
   <script src="./app/auth/authControllers.js"></script>
   <script src="./app/main/mainController.js"></script>
   <script src="./app/main/mainDirective.js"></script>
+  <script src="./app/main/modalController.js"></script>
   <script src="./app/order/orderService.js"></script>
   <script src="./app/order/orderController.js"></script>
   <script src="./app/order/confirmController.js"></script>

@@ -11,7 +11,21 @@
         <div class="product-info">
             <div class="title col-md-10 col-xs-10">{{product.name}}</div>
             <div class="price col-md-2 col-xs-2">{{product.price}}$
-                <button type="button" class="btn btn-primary" ng-click="main.addToCart(product._id)">Add to Cart</button>
+                <button type="button" class="btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
+                <div class="input-group" style="width:125px">
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default btn-number" ng-click="quan = quan > 1 ? quan - 1 : quan">
+                              <span class="glyphicon glyphicon-minus"></span>
+                          </button>
+                      </span>
+                      <input class="form-control" ng-model="quan" ng-init="quan=1" min="1" type="text"/>
+                      <span class="input-group-btn">
+                          <button type="button" class="btn btn-default btn-number" ng-click="quan = quan + 1">
+                              <span class="glyphicon glyphicon-plus"></span>
+                          </button>
+                      </span>
+                </div>
+                <span>Total: {{product.price * quan}}$</span>
             </div>
         </div>
         <div style="clear:both"></div>
