@@ -85,7 +85,7 @@ angular.module('app')
           object.categories = $route.current.params.categories;
           if($route.current.params.searchField) object.searchField = $route.current.params.searchField;
           object[data.item] = data.name;
-          console.log(object);
+          
           return object;
       }
 
@@ -123,7 +123,7 @@ angular.module('app')
                             $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
                         } else {
                             var countQuery = creatCountObject(data.properties[property].value[i]);
-                            console.log(countQuery);
+                            
                             function setCount (property,i) {
                                 Parameters.count(countQuery)
                                 .then(
