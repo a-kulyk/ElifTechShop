@@ -2,6 +2,10 @@
 angular.module('app')
   .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
       let that = this;
+      if($rootScope.data.price) {
+          that.price = JSON.parse(JSON.stringify($rootScope.data.price));
+      }
+     
       let defineProperty = function() {
           let currentUrl = JSON.parse(JSON.stringify($route.current.params));
           for(let item in currentUrl) {
@@ -158,6 +162,7 @@ angular.module('app')
               $rootScope.complete.property = false;
               $rootScope.category = currentCategory;
               $rootScope.data = result || [];
+
                 if($rootScope.data.hasOwnProperty('properties')) {
                   $rootScope.data.properties.forEach(function (item) {
                     if (item.hasOwnProperty('value')) {

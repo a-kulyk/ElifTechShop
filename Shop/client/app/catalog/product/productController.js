@@ -1,5 +1,5 @@
 angular.module('app')
-    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location) {
+    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location','$scope','$timeout' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location,$scope,$timeout) {
         var that = this;
 
 
@@ -22,7 +22,7 @@ angular.module('app')
           }
         
           for (var product in that.items) {
-            that.items[product].smallDescription = that.items[product].description.slice(0,130) + "...";
+            that.items[product].smallDescription = that.items[product].description.slice(0,105) + "...";
           }
           var pages = data.pages || 0;
           that.pages = [];
@@ -37,7 +37,10 @@ angular.module('app')
             property.url = $httpParamSerializer(property);
           }
           $rootScope.complete.product = true;
-            if($rootScope.data) $rootScope.data.count = data.count;
+            setTimeout(function(){
+                //do this after view has loaded :)\
+                makeVisualEffects();
+            }, 0);
 
 
       }).error(function(data, status){
@@ -46,6 +49,7 @@ angular.module('app')
         that.items.error = true;
         $rootScope.complete.product = true;
       });
+
     }])
     .controller('ProductShowController',['$scope', 'Items', '$route', function ($scope, Items, $route) {
       Items.item($route.current.params.id).success(function(data) {
