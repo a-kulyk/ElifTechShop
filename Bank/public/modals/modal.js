@@ -24,6 +24,7 @@ bank.controller('modal', function ($scope, close, $http, ModalService, shared) {
                         "id": data.id,
                         "accountAmount": data.accountAmount,
                         "accountId": data.accountId,
+                        "accountName": data.accountName,
                         "amount": data.amount
                     }, 500);
                     ModalService.close();
@@ -57,12 +58,13 @@ bank.controller('modal', function ($scope, close, $http, ModalService, shared) {
                     $('.modal').modal('hide');
                     $('body').removeClass('modal-open');
                     $('.modal-backdrop').remove();
+                    console.log(data);
                     close({
                         "id": data.id,
                         "senderAmount": data.senderAmount,
                         "amount": data.amount,
-                        "sender": data.sender,
-                        "receiver": data.receiver,
+                        "sender": data.senderName,
+                        "receiver": data.receiverName + " " + data.receiverAccountName,
                         "receiverAmount": data.receiverAmount
 
                     }, 500);
