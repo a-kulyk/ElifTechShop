@@ -8,7 +8,9 @@
                 <img style="float:left" ng-src="{{image}}" width="200px" /></a>
             </div>
         </div>
+
         <div class="product-info">
+            <button class="btn btn-warning pull-right" type="button" ng-click="doTheBack()">Go Back</button>
             <div class="title col-md-10 col-xs-10">{{product.name}}</div>
             <div class="price col-md-2 col-xs-2">{{product.price}}$
                 <button type="button" class="btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
@@ -33,6 +35,7 @@
         <div ng-repeat="property in product.properties">
             {{property.name}} : {{property.value}}
         </div>
+
         <p>{{product.description}}</p>
     </div>
     <div style="clear:both"></div>

@@ -23,9 +23,12 @@
                         <p>Contact</p>
                     </a>
                 </li>
-                <li ng-show="shoppingCart">
+                <li ng-show="shoppingCart" class="shoppingCart {{shoppingCart.order._id}}">
                     <a ng-href="#/order/cart">
                         <p> Your Cart <span class="glyphicon glyphicon-shopping-cart"></span></p>
+                        <p class="cart-count">
+                            <span class="count {{shoppingCart.order.itemSet.length}}">{{shoppingCart.order.itemSet.length}}</span>
+                        </p>
                     </a>
                 </li>
                 <li class="dropdown" ng-show="currentUser">

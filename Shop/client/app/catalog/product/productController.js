@@ -58,7 +58,7 @@ angular.module('app')
         });
 
     }])
-    .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', function ($scope, $rootScope, Items, $route) {
+    .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
         Items.item($route.current.params.id).success(function(data) {
             $scope.product = data;
 
@@ -76,6 +76,10 @@ angular.module('app')
                             $rootScope.shoppingCart = response.data;
                         });
                 }
+            };
+            
+            $scope.doTheBack = function() {
+                window.history.back();
             };
 
         });

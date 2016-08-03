@@ -1,10 +1,11 @@
 // dependencies
 var express = require('express');
 var config = require('./config');
-var api = require('./api/api')
+// var api = require('./api/api');
 
 // create instance of express
 var app = express();
+// var router = app.Router();
 
 // mongoose
 require('mongoose').connect(config.dbUrl,
@@ -16,7 +17,10 @@ require('mongoose').connect(config.dbUrl,
 require('./appMiddlware')(app);
 
 // routes
-app.use('/', api);
+// app.use('/', api);
+app.use('/user', require('./api/auth/authRoutes'));
+app.use('/order', require('./api/order/orderRoutes'));
+app.use('/catalog',require('./api/catalog/catalogRoutes'));
 
 // error handlers
 app.use(function(req, res, next) {
