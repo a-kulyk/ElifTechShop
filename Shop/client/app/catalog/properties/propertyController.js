@@ -94,7 +94,7 @@ angular.module('app')
 
             if(typeof $rootScope.data == 'undefined') return;
             let propScr = that.createPropertyScreen($rootScope.data);
-            data = $rootScope.data;
+            let data = $rootScope.data;
             for (let property in data.properties) {
                 for (var i in data.properties[property].value) {
                     let params = JSON.parse(JSON.stringify(propScr));
@@ -180,7 +180,7 @@ angular.module('app')
                     }
 
                     defineProperty();
-                    this.propScr = that.createPropertyScreen($rootScope.data);
+                    let propScr = that.createPropertyScreen($rootScope.data);
                     addCount();
                     $rootScope.complete.property = true;
 
