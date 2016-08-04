@@ -4,8 +4,8 @@ angular.module('app')
             return moment(dateString).format("D MMMM YYYY, HH:mm");
         };
     })
-    .controller('OrderController', ['$rootScope', '$location', 'orderService',
-        function($rootScope, $location, orderService) {
+    .controller('OrderController', ['$rootScope', '$location', '$timeout', 'orderService',
+        function($rootScope, $location, $timeout, orderService) {
             var order = this;
 
             orderService.getCart()
@@ -26,10 +26,9 @@ angular.module('app')
                     });
             };
 
-            order.confirm = function() {
-                $location.path('/confirmAddress');
+            order.doTheBack = function() {
+                window.history.back();
             };
-
             // var transaction = {
             //     from: '5793b140faa67ed10cf2bb4e',
             //     to: '5794fcc5c5421ff81b0b8c5e',
@@ -44,6 +43,11 @@ angular.module('app')
                 orderService.saveOrderDetails()
                     .then(function(resp) {
                         console.log("resp : ", resp);
+                        order.SuccessPayment = true;
+                        $timeout(function() {
+                            $location.path('/confirmAddress');
+                        }, 1000);
+                         
                     });
             };
 

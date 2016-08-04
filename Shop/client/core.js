@@ -2,6 +2,7 @@
     require("./app/app.route.js");
     require("./app/auth/authServices.js");
     require("./app/auth/authControllers.js");
+    require("./app/auth/autocompleteDirective.js");
     require("./app/main/mainController.js");
     require("./app/main/mainDirective.js");
     require("./app/main/modalController.js");

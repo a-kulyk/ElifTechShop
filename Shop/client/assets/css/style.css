@@ -237,7 +237,7 @@ a:hover  {
 }
 
 .count, .shoppingCart {
-  transition: opacity 1s;
+  transition: opacity 1s ease;
   opacity: 1
 }
 

@@ -40,6 +40,7 @@
             </tbody>
         </table>
     </div>
-    <button type="button" class="btn btn-primary pull-right" ng-click="order.confirm()">Confirm Address</button>
+    <button class="btn btn-warning" type="button" ng-click="order.doTheBack()">Go Back</button>
     <button type="button" class="btn btn-primary pull-right" ng-click="order.pay()">PAY</button>
 </div>
+<h4 ng-show="order.SuccessPayment" style="text-align: center">Operation successfull!</h4>

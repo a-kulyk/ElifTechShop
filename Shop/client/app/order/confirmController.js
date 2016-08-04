@@ -21,8 +21,8 @@ angular.module('app').controller('ConfirmCtrl', ['$scope', '$rootScope', '$locat
                 });
         };
 
-        confirm.doTheBack = function() {
-          window.history.back();
-        };
+        // confirm.doTheBack = function() {
+        //   window.history.back();
+        // };
     }
 ]);
