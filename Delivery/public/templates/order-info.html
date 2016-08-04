@@ -4,12 +4,33 @@
         <div class="panel-heading">Order info</div>
         <div class="panel-body">
             <div>
-                <p>Travel time:{{estimatedTime/60}} mins</p>
-                <p>Tracking-code :{{trackingCode}}</p>
-                <p>Current state:{{state}}</p>
-                <p>From:{{fromUsername}}</p>
-                <p>To:{{toUsername}}</p>
                 <div id="map" style="width:500px;height:380px;"></div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr>
+                        <td>Tracking-code</td>
+                        <td>{{trackingCode}}</td>
+                    </tr>
+                    <tr>
+                        <td>Travel time</td>
+                        <td>{{estimatedTime/60}} mins</td>
+                    </tr>
+                    <tr>
+                        <td>Current state</td>
+                        <td>{{state}}</td>
+                    </tr>
+                    <tr>
+                        <td>From</td>
+                        <td>{{fromUsername}}</td>
+                    </tr>
+                    <tr>
+                        <td>To</td>
+                        <td>{{toUsername}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
