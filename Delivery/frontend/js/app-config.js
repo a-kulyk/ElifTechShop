@@ -1,7 +1,7 @@
 /**
  * Created by dmytro on 04.08.16.
  */
-
+"use strict";
 module.exports = function (app) {
     app.config(function ($routeProvider) {
         $routeProvider.when('/create_order', {
@@ -20,5 +20,14 @@ module.exports = function (app) {
             templateUrl: 'templates/history.html',
             controller: 'historyCtrl'
         })
-    });
+    })/*.run(function ($rootScope) {
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            switch (next.templateUrl) {
+                case 'templates/track-order.html':
+                    require.ensure(['./controllers/track-order-controller'], function () {
+                        require('./controllers/track-order-controller')(app);
+                    })
+            }
+        });
+    })*/
 }
