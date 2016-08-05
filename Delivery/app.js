@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var validator = require('express-validator');
-var config = require('config');
+var config = require('./config');
 
 var app = express();
 
@@ -18,4 +18,4 @@ app.listen(config.get('port'), function () {
     console.log('Delivery app listening on port' + ' ' + config.get('port'));
 });
 
-require('controllers')(app);
+require('./controllers')(app);

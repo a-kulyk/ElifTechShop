@@ -7,7 +7,7 @@ let orderService = require('../services/order-service');
 let emailSender = require('../lib/email-sender');
 let historyService = require('../services/history-service');
 let eachLimit = require('async/eachLimit');
-let config = require('config');
+let config = require('../config');
 let ValidationError = require('../common/errors/validation-error');
 
 module.exports = function (app) {
