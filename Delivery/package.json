@@ -13,15 +13,19 @@
     "css-loader": "^0.23.1",
     "del": "^2.2.1",
     "express": "^4.14.0",
+    "express-validator": "^2.20.8",
     "file-loader": "^0.9.0",
-    "gulp": "gulpjs/gulp#4.0",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-nodemon": "^2.1.0",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "jquery": "^3.1.0",
     "mongoose": "^4.5.2",
     "nconf": "^0.8.4",
+    "nodemailer": "^2.5.0",
+    "request": "^2.74.0",
     "style-loader": "^0.13.1",
+    "uuid": "^2.0.2",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^3.2.0"
   },
@@ -31,5 +35,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "To run this project you must have NodeJS and NPM installed on your computer. Follow next steps to run Delivery application on Linux:"
 }
