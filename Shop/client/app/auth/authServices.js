@@ -103,9 +103,7 @@ angular.module('app').factory('AuthService',
           username: formData.username,
           password: formData.password,
           email: formData.email,
-          country: formData.country,
-          city: formData.city,
-          street: formData.street
+          address: formData.address
         })
         // handle success
         .success(function (data, status) {

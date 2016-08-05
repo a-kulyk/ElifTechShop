@@ -8,7 +8,7 @@
                     <select class="form-control" name="account" ng-model="formData.from" required>
                         <option value="">Account</option>
                         <option ng-repeat="account in accounts" value="{{ account._id }}">
-                            {{ account._id }}
+                            {{ account.name }}
                         </option>
                     </select>
                     <input class="form-control" placeholder="Amount" name="amount" type="number"

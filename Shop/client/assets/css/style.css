@@ -216,3 +216,32 @@ a:hover  {
     transform: rotate(360deg);
   }
 }
+
+#quantity {
+    width: 45px;
+}
+
+.cart-count {
+  position: absolute;
+  top: 23px;
+  right: -4px;
+  height: 23px;
+  width: 23px;
+  text-align: center;
+  background: #008cba;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 50%;
+  text-indent: 0;
+}
+
+.count, .shoppingCart {
+  transition: opacity 1s ease;
+  opacity: 1
+}
+
+.count[class*="-remove"], .shoppingCart[class*="-remove"] {
+  transition: none;
+  opacity: 0;
+}

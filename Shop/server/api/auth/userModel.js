@@ -16,18 +16,9 @@ var User = new Schema({
         unique: true
     },
     address: {
-        country: {
-            type: String,
-            required: true
-        },
-        city: {
-            type: String,
-            required: true
-        },
-        street: {
-            type: String,
-            required: true
-        }
+        str: String,
+        lat: String,
+        lng: String
     },
     password: String
 

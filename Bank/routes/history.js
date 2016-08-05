@@ -24,74 +24,87 @@ exports.get = function (req, res) {
             return Promise.all([Transaction.find({
                 $or: [
                     {
-                    from: {
-                        $in: accounts
-                    }
-                },
+                        from: {
+                            $in: accounts
+                        }
+                    },
                     {
                         to: {
                             $in: accounts
                         }
-                    },
-                ],
+                    }
+                ]
 
-            }).sort({date: -1}).exec(), Promise.resolve(accounts)]);
+            }).sort({date: -1}).exec(), Promise.resolve(result), Promise.resolve(accounts)]);
         })
         .then(function (result) {
             let transactions = result[0];
+            let ownAccounts = result[1];
+            let ownAccountsId = result[2];
+            let accountsFromId = transactions.map(transaction => transaction.from);
+            let accountsId = accountsFromId.concat(transactions.map(transaction => transaction.to));
+            return Promise.all([
+                Account.find({
+                    $and: [
+                        {
+                            _id: {
+                                $in: accountsId
+                            }
+                        },
+                        {
+                            _id: {
+                                $nin: ownAccountsId
+                            }
+                        }
+                    ]
+                }).exec(),
+                Promise.resolve(ownAccounts),
+                Promise.resolve(transactions)
+            ]);
+        })
+        .then(function (result) {
+            let accounts = result[0];
+            let ownAccounts = result[1];
+            let transactions = result[2];
+            let usersId = accounts.map(account => account.owner);
+            return Promise.all([
+               User.find({
+                   _id:{
+                       $in: usersId
+                   }
+               }).exec(),
+                Promise.resolve(accounts),
+                Promise.resolve(ownAccounts),
+                Promise.resolve(transactions)
+            ]);
+        })
+        .then(function (result) {
+            let users = result[0];
             let accounts = result[1];
+            let ownAccounts = result[2];
+            let transactions = result[3];
             let history = [];
+            let event, from, to;
             for(let item in transactions){
                 let transaction = transactions[item];
-                var event = "";
-                var from = "";
-                var to = "";
                 if(transaction.from == transaction.to){
-                    Account.findOne({_id: transaction.from})
-                        .then(function (result) {
-                            console.log(result.name);
-                            to = result.name;
-                        })
-                        .catch(function (error) {
-                            throw new Error(error);
-                        });
                     event = "payment";
-                } else if(accounts.indexOf(transaction.from) != -1){
-                    Account.findOne({_id: transaction.to})
-                        .then(function (result) {
-                            return Promise.all([User.findOne({_id: result.owner}), Promise.resolve(result)]);
-                        })
-                        .then(function (result) {
-                            from = result[0].name + " " + result[1].name;
-                            return Account.findOne({_id: transaction.from});
-                        })
-                        .then(function (result) {
-                            to = result.name;
-                        })
-                        .catch(function (error) {
-                            throw new Error(error);
-                        });
+                    to = ownAccounts.find(account => account._id.equals(transaction.to)).name;
+                } else if(ownAccounts.find(account => account._id.equals(transaction.from))){
                     event = "transfer";
-                } else if(accounts.indexOf(transaction.to) != -1){
-                    Account.findOne({_id: transaction.from})
-                        .then(function (result) {
-                            return Promise.all([User.findOne({_id: result.owner}), Promise.resolve(result)]);
-                        })
-                        .then(function (result) {
-                            from = result[0].name + " " + result[1].name;
-                            return Account.findOne({_id: transaction.to});
-                        })
-                        .then(function (result) {
-                            to = result.name;
-                        })
-                        .catch(function (error) {
-                            throw new Error(error);
-                        });
+                    from = ownAccounts.find(account => account._id.equals(transaction.from)).name;
+                    let receiverAccount = accounts.find(account => account._id.equals(transaction.to));
+                    let receiver = users.find(user => user._id.equals(receiverAccount.owner));
+                    to = receiver.username + " " + receiverAccount.name;
+                } else if(ownAccounts.find(account => account._id.equals(transaction.to))){
                     event = "receive";
+                    to = ownAccounts.find(account => account._id.equals(transaction.to)).name;
+                    let senderAccount = accounts.find(account => account._id.equals(transaction.from));
+                    let sender = users.find(user => user._id.equals(senderAccount.owner));
+                    from = sender.username + " " + senderAccount.name;
                 }
-                console.log(to);
                 history.push({
-                    "id": transaction._id,
+                   "id": transaction._id,
                     "sender": from,
                     "receiver": to,
                     "event": event,
@@ -102,9 +115,10 @@ exports.get = function (req, res) {
             res.send({
                 "success": true,
                 "history": history
-            });
+            })
         })
         .catch(function (error) {
+            console.log(error);
             res.send({
                 "success": false,
                 "errorDescription": error.message

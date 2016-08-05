@@ -1,7 +1,5 @@
-var angular = require('angular');
-var ngRoute = require('angular-route');
-var angularModalService = require('angular-modal-service');
-
+require('jquery/src/jquery');
+require('bootstrap-webpack');
 
 require("./stylesheets/style.css");
 require("./home/auth.js");

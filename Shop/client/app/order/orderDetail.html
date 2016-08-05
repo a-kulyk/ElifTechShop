@@ -1,0 +1,40 @@
+<div class="container">
+    <h3>Order</h3>
+    <p> #{{detail.order._id}}</p>
+    <div class="well">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price, $</th>
+                    <th>Sum, $</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='item in detail.order.itemSet'>
+                    <td>
+                        <a ng-href="#/product/{{item.productId._id}}">
+                        	<img ng-src="{{item.images[0]}}" style="width:100px">
+                        {{item.name}}</a>
+                    </td>
+                    <td>{{item.category}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.price}}</td>
+                    <td>{{item.quantity * item.price}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Total :</strong></td>
+                    <td><strong>{{ detail.order.total }} $</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p>Created: {{detail.order.date.created  | moment}}</p>
+    <p ng-show="detail.order.date.paid">Paid: {{detail.order.date.paid | moment}}</p>
+    <p ng-show="detail.order.date.completed">Completed: {{detail.order.date.completed | moment}}</p>
+</div>
