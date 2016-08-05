@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
     "angular": "^1.5.8",
@@ -12,6 +13,7 @@
     "body-parser": "~1.15.1",
     "bootstrap": "^3.3.7",
     "bootstrap-webpack": "0.0.5",
+    "chai": "^3.5.0",
     "connect-mongo": "^1.2.1",
     "cookie-parser": "~1.4.3",
     "crypto": "0.0.3",
@@ -24,8 +26,10 @@
     "imports-loader": "^0.6.5",
     "jade": "~1.11.0",
     "jquery": "^3.1.0",
+    "karma": "^1.1.2",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
+    "mocha": "^3.0.1",
     "moment": "^2.14.1",
     "mongoose": "^4.5.1",
     "morgan": "~1.7.0",

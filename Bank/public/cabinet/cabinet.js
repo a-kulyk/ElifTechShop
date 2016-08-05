@@ -1,16 +1,17 @@
 var bank = require("../app");
 var shared = require("./shared");
 var moment = require('moment');
-bank.controller('cabinet', function ($scope, $http, $location, ModalService, shared) {
-    
+var ngTable = require('ng-table');
+bank.controller('cabinet', function ($scope, $http, $location, ModalService, shared, NgTableParams) {
+
     $http.get("/islogin")
         .success(function (result) {
-            if(!result.success){
+            if (!result.success) {
                 $location.path("/");
             }
         })
         .catch(function (error) {
-           console.log(error);
+            console.log(error);
             $location.path("/");
         });
 
@@ -23,47 +24,60 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
         .error(function (error) {
             console.log(error);
         });
-    
+
     $http.get("/account")
         .success(function (result) {
             $scope.accounts = [];
-            for(let account in result.accounts){
+            for (let account in result.accounts) {
                 $scope.accounts.push(result.accounts[account]);
             }
         })
         .error(function (error) {
-           console.log(error);
+            console.log(error);
         });
 
 
-    $http.get("/history")
-        .success(function (data) {
-           // console.log(data);
-            $scope.history = data.history;
-            console.log(data);
-
-        })
-        .error(function (err) {
-            console.log(err.message);
-        });
-
-    // $scope.tableParams = new ngTableParams({
-    //     page: 1,
-    //     count: 2
-    // },
-    //     {
-    //         total: $scope.history.length
-    //     }
-    // );
+    // $http.get("/history")
+    //     .success(function (data) {
+    //         $scope.length = data.history.length;
+    //         $scope.history = data.history;
+    //
+    //
+    //     })
+    //     .error(function (err) {
+    //         console.log(err.message);
+    //     });
+    $scope.tableParams = new NgTableParams(
+        {
+            page: 1,
+            count: 2
+        },
+        {
+            total: history.length,
+            getData: function ($defer, params) {
+                $http.get("/history")
+                    .success(function (data) {
+                        $scope.length = data.history.length;
+                        $scope.history = data.history;
+                        console.log($defer);
+                        $scope.data = $scope.history.slice(($defer.page() - 1) * $defer.count(), $defer.page() * $defer.count());
+                        $defer.total($scope.history.length);
+                    })
+                    .error(function (err) {
+                        console.log(err.message);
+                    });
+            }
+        }
+    );
 
     $scope.time = function (time) {
         return moment(time).format('D MM YYYY, h:mm:ss a');
     };
 
     $scope.logout = function () {
-        $http.post("/logout",{})
+        $http.post("/logout", {})
             .success(function (data) {
-                if(data.success){
+                if (data.success) {
                     $location.path("/");
                 }
             })
@@ -77,13 +91,13 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
         ModalService.showModal({
             templateUrl: "../modals/pay.html",
             controller: "modal"
-        }).then(function(modal) {
+        }).then(function (modal) {
             modal.element.modal();
-            modal.close.then(function(result) {
-                if(result) {
-                  //  console.log(result);
-                    for(let i=0; i<$scope.accounts.length; i++){
-                        if($scope.accounts[i]._id == result.accountId){
+            modal.close.then(function (result) {
+                if (result) {
+                    //  console.log(result);
+                    for (let i = 0; i < $scope.accounts.length; i++) {
+                        if ($scope.accounts[i]._id == result.accountId) {
                             $scope.accounts[i].amount = result.accountAmount;
                         }
                     }
@@ -104,15 +118,15 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
         ModalService.showModal({
             templateUrl: "../modals/transfer.html",
             controller: "modal"
-        }).then(function(modal) {
+        }).then(function (modal) {
             modal.element.modal();
-            modal.close.then(function(result) {
-                if(result) {
-                    for(let i=0; i<$scope.accounts.length; i++){
-                        if($scope.accounts[i]._id == result.sender){
+            modal.close.then(function (result) {
+                if (result) {
+                    for (let i = 0; i < $scope.accounts.length; i++) {
+                        if ($scope.accounts[i]._id == result.sender) {
                             $scope.accounts[i].amount = result.senderAmount;
                         }
-                        if($scope.accounts[i]._id == result.receiver){
+                        if ($scope.accounts[i]._id == result.receiver) {
                             $scope.accounts[i].amount = result.receiverAmount;
                         }
                     }
@@ -127,39 +141,39 @@ bank.controller('cabinet', function ($scope, $http, $location, ModalService, sha
             });
         });
     };
-    
+
     $scope.newAccount = function () {
-      //  shared.setMessage("Are you sure, that you want to create new account?");
+        //  shared.setMessage("Are you sure, that you want to create new account?");
         ModalService.showModal({
             templateUrl: "../modals/account.html",
             controller: "modal"
-        }).then(function(modal) {
+        }).then(function (modal) {
             modal.element.modal();
-            modal.close.then(function(result) {
+            modal.close.then(function (result) {
                 $scope.accounts.push(result.account);
             });
         });
 
     };
 
-    $scope.deleteAccount = function(id){
+    $scope.deleteAccount = function (id) {
         shared.setMessage("Are you sure, that you want to delete this account?");
         shared.setAccount(id);
         ModalService.showModal({
             templateUrl: "../modals/confirm.html",
             controller: "modal"
-        }).then(function(modal) {
+        }).then(function (modal) {
             modal.element.modal();
-            modal.close.then(function(result) {
-                if(result.result) {
+            modal.close.then(function (result) {
+                if (result.result) {
                     $http.delete("/account/" + id)
                         .success(function (data) {
-                            if(data.success){
-                              for(let i = 0; i < $scope.accounts.length; i++){
-                                  if($scope.accounts[i]._id == id){
-                                      $scope.accounts.splice(i,1);
-                                  }
-                              }
+                            if (data.success) {
+                                for (let i = 0; i < $scope.accounts.length; i++) {
+                                    if ($scope.accounts[i]._id == id) {
+                                        $scope.accounts.splice(i, 1);
+                                    }
+                                }
                             }
                         });
                 }

@@ -48,7 +48,8 @@
             History
         </div>
         <div class="panel-body">
-            <table >
+            <table ng-table="tableParams" class="table table-bordered">
+                <thead>
                 <tr id="title">
                     <td>ID</td>
                     <td>Amount</td>
@@ -57,14 +58,17 @@
                     <td>Event</td>
                     <td>Date</td>
                 </tr>
+                </thead>
+                <tbody>
                 <tr ng-repeat="record in history" id="{{ record.event }}">
-                    <td>{{ record.id }}</td>
-                    <td>{{ record.amount }}</td>
-                    <td>{{ record.sender }}</td>
-                    <td>{{ record.receiver }}</td>
-                    <td>{{ record.event }}</td>
-                    <td>{{ time(record.date) }}</td>
+                    <td  data-title="'ID'">{{ record.id }}</td>
+                    <td  data-title="'Amount'">{{ record.amount }}</td>
+                    <td  data-title="'Sender'">{{ record.sender }}</td>
+                    <td  data-title="'Receiver'">{{ record.receiver }}</td>
+                    <td  data-title="'Event'">{{ record.event }}</td>
+                    <td  data-title="'Date'">{{ time(record.date) }}</td>
                 </tr>
+                </tbody>
             </table>
         </div>
     </div>
