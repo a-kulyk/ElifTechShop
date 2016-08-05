@@ -1,0 +1,17 @@
+.row {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+#track_input {
+    border-tgulpfileop-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-color: #323131;
+}
+
+#go_button {
+    color: white;
+    background-color:darkslategray;
+    border-color: #323131;
+}
