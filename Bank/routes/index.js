@@ -12,9 +12,9 @@ module.exports = function(app){
     
     app.post("/transfer", require('./transfer').post);
     
-    app.post("/transaction", require("./transaction").post);
+    app.post("/api/transaction", require("./transaction").post);
 
-    app.get("/transaction", require("./transaction").get);
+    app.get("/api/transaction", require("./transaction").get);
 
     app.get("/history", require("./history").get);
     
