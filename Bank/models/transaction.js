@@ -21,12 +21,12 @@ var schema = new Schema({
 });
 
 schema.statics.action = function (from, to, amount) {
+    
     let Transaction = this;
     let fromUser = Account.findOne({_id: from, enabled: true});
     let toUser = Account.findOne({_id: to, enabled: true});
     let usersAmount = Promise.all([fromUser, toUser])
         .then(function (result) {
-          //  console.log(result);
             if(from != to){
                 if(result[0].amount < amount){
                     throw new Error("Insufficient funds");

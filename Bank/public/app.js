@@ -1,8 +1,9 @@
 var angular = require('angular');
 var ngRoute = require('angular-route');
 var angularModalService = require('angular-modal-service');
+var ngTable = require('ng-table');
 
-var bank = angular.module('bank',['ngRoute', 'angularModalService']);
+var bank = angular.module('bank',['ngRoute', 'angularModalService', 'ngTable']);
 
 bank.config(function ($routeProvider) {
     $routeProvider

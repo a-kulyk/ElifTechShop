@@ -1,5 +1,5 @@
-var Transaction = require("../models/transaction").Transaction;
-
+var Transaction = require('../models/transaction').Transaction;
+var config = require('../config');
 exports.post = function (req, res) {
     if (req.body.API_KEY != config.get("key")) {
         return res.send({
@@ -24,7 +24,9 @@ exports.post = function (req, res) {
 };
 
 exports.get = function (req, res) {
-    let date = new Date(req.query.date);
+    console.log(req.query);
+    let date = new Date(req.query.date_year, req.query.date_month - 1, req.query.date_day);
+    date = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+1),-21);
     let nextDate = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+2),-21);
     console.log(date);
     console.log(nextDate);
@@ -34,7 +36,7 @@ exports.get = function (req, res) {
         to: req.query.to,
         amount: req.query.amount,
         date: {
-            "$gte": req.query.date,
+            "$gte": date,
             "$lt": Date.parse(nextDate)
         }
     })
