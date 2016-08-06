@@ -1,6 +1,15 @@
 angular.module('app')
     .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location','$scope','$timeout' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location,$scope,$timeout) {
         var that = this;
+        $scope.itemArray = [
+            {id: 1, name: 'first'},
+            {id: 2, name: 'second'},
+            {id: 3, name: 'third'},
+            {id: 4, name: 'fourth'},
+            {id: 5, name: 'fifth'},
+        ];
+
+        $scope.selected = { value: $scope.itemArray[0] };
         if(!$route.current.params.categories) {
 
             for(var property in $rootScope.data.properties) {

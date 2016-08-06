@@ -7,8 +7,8 @@ class Filter {
         this.max_price = Math.pow(10,6);
         this.pages = 1;
         this.perPage = 9;
+        this.company = [];
         this.sort =  {
-
             'price': 1
         }
     }
@@ -30,6 +30,22 @@ class Filter {
             }
             this.properties.push(property);
         }
+    }
+
+    setCompany (companies) {
+        let self = this;
+        if(companies) {
+            if(Array.isArray(companies)) {
+                companies.forEach(function (company) {
+                    console.log(this);
+                    self.company.push({"company" : company});
+                });
+                return
+            }
+            //console.log('asd');
+            this.company.push({"company" : companies});
+        }
+
     }
 
     getSort () {
@@ -88,10 +104,11 @@ class Filter {
 
 
     setCategories(categories) {
+        let self = this;
         if(categories) {
             if(Array.isArray(categories)) {
                 categories.forEach(function (category) {
-                    this.categories.push({"category" : category});
+                    self.categories.push({"category" : category});
                 });
                 return
             }
@@ -101,12 +118,19 @@ class Filter {
 
     creatQuery (notQuantity) {
         let query = {$and: [{}]};
+
         /*if(notQuantity) {
             query.$and.push({ quantity: { $lt: 1 } })
         } else {
             query.$and.push({ quantity: { $gt: 1 } })
         }
         */
+        if(!(this.company.length < 1)) {
+            let companyQuery = {$or : this.company};
+            
+            query.$and.push(companyQuery);
+        }
+
         if (this.searchField) {
             let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]};
             query.$and.push(searchQuery);
