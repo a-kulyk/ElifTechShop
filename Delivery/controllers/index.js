@@ -16,12 +16,13 @@ module.exports = function (app) {
         res.sendFile('index.html');
     });
 
-    app.get('/order/:id', function (req, res) {
+    app.get('/order/:trackingCode', function (req, res) {
             let successMsg = {"success": true};
             let failedMsg = {"success": false};
-            let servicePromise = orderService.findByTrackingCode(req.params.id);
+            let servicePromise = orderService.findByTrackingCode(req.params.trackingCode);
             servicePromise.then((order)=> {
                 if (order != null) {
+                    successMsg.arrivalTime = order.arrivalTime;
                     successMsg.travelTime = order.travelTime;
                     successMsg.state = order.state;
                     successMsg.from = order.from;

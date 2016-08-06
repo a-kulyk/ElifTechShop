@@ -10,6 +10,7 @@ module.exports = function (app) {
             $scope.trackingCode = $routeParams.trackingCode;
             $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
                 if (data.success) {
+                    $scope.arrivalTime = data.arrivalTime;
                     $scope.travelTime = data.travelTime;
                     $scope.state = orderStates.statesArray[data.state];
                     $scope.fromUsername = data.from.username;
