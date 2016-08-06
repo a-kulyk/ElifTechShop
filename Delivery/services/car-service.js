@@ -10,7 +10,7 @@ exports.loadOrderOnCar = function (order) {
         if (!err && car != null) {
             car._order = order._id;
             car.isAvailable = false;
-            car.arrivalTime = new Date(Date.now() + order.estimatedTime * 1000);
+            car.arrivalTime = new Date(Date.now() + order.travelTime * 1000);
             car.save(function (err, car) {
                 if (err) {
                     console.log(err);

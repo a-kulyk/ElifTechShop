@@ -57,7 +57,7 @@ function getArrivalTime(orders, cars) {
     for (let i = 0; i < orders.length; i++) {
         let minCarTime = Sugar.Array.min(carsTime);
         let index = carsTime.indexOf(minCarTime);
-        carsTime[index] += orders[i].estimatedTime * 1000;
+        carsTime[index] += orders[i].travelTime * 1000;
         if (i == orders.length - 1) {
             return  Sugar.Array.min(carsTime);
         }
