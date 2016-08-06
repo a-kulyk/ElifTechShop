@@ -47,6 +47,10 @@ var schema = new Schema({
             type: Number,
             required: true
         },
+        arrivalTime: {
+            type: Date,
+            required: true
+        },
         trackingCode: {
             type: String,
             unique: true,
