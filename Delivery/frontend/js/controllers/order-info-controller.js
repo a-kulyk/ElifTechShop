@@ -1,8 +1,13 @@
 /**
  * Created by dmytro on 09.07.16.
  */
+//var moment = require('moment');
+
 module.exports = function (app) {
     app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http, orderStates) {
+        var target = document.getElementById('map');
+        var spinner = new Spinner({color: '#333333', lines: 12, position: 'absolute'});
+        spinner.spin(target);
         $rootScope.makeOrderActiveClass = '';
         $rootScope.trackOrderActiveClass = '';
         $rootScope.historyActiveClass = '';
@@ -10,6 +15,7 @@ module.exports = function (app) {
             $scope.trackingCode = $routeParams.trackingCode;
             $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
                 if (data.success) {
+                    spinner.stop();
                     $scope.arrivalTime = data.arrivalTime;
                     $scope.travelTime = data.travelTime;
                     $scope.state = orderStates.statesArray[data.state];

@@ -4,7 +4,7 @@
 "use strict";
 let validationSchema = require('../common/validation-schema');
 let orderService = require('../services/order-service');
-let emailSender = require('../lib/email-sender');
+let deliveryNotifier = require('../lib/delivery-notifier');
 let historyService = require('../services/history-service');
 let eachLimit = require('async/eachLimit');
 let config = require('../config');
@@ -43,6 +43,7 @@ module.exports = function (app) {
     app.post('/order', function (req, res) {
             let successMsg = {"success": true};
             let failedMsg = {"success": false};
+            console.log(req.body);
             req.checkBody(validationSchema);
             let errors = req.validationErrors();
             if (errors) {
@@ -52,7 +53,6 @@ module.exports = function (app) {
             } else {
                 let servicePromise = orderService.createOrder(req.body);
                 servicePromise.then((order)=> {
-                    successMsg.estimatedTime = order.estimatedTime;
                     successMsg.trackingCode = order.trackingCode;
                     res.json(successMsg)
                 }).catch((err)=> {
@@ -71,7 +71,7 @@ module.exports = function (app) {
         eachLimit(ordersArray, config.get('email-sender:send-at-once'), function (order, callback) {
             let servicePromise = orderService.findById(order);
             servicePromise.then((order)=> {
-                return emailSender.notifyAboutDelivery(order.to.username, order.trackingCode);
+                return deliveryNotifier.notifyAboutDelivery(order.to.username, order.trackingCode);
             }).then(()=> {
                 callback();
             }).catch((error=> {
@@ -98,3 +98,4 @@ module.exports = function (app) {
         });
     });
 }
+

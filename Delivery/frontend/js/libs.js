@@ -4,3 +4,4 @@
 require('bootstrap/dist/css/bootstrap.min.css');
 window.jQuery = window.$ = require('jquery/dist/jquery.min');
 require('bootstrap/dist/js/bootstrap.min');
+require('spin/dist/spin.min.js');

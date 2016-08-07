@@ -3,7 +3,7 @@
  */
 "use strict"
 module.exports = function (app) {
-    app.controller('historyCtrl', function ($rootScope, $scope, $http, $window, $routeParams) {
+    app.controller('historyCtrl', function ($rootScope, $scope, $http, $window, $routeParams, orderStates) {
             $rootScope.makeOrderActiveClass = '';
             $rootScope.trackOrderActiveClass = '';
             $rootScope.historyActiveClass = 'active';
