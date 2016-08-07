@@ -1,18 +1,12 @@
-import expect from 'chai';
-import User from '../modules/user';
+
+var User = require('../../models/user').User;
+
+var mocha = require('mocha');
 describe('Create user', () => {
 
     it('New user', (done) => {
-        var Account = {
-            save: sinon.spy()
-        }
-        // Mock
-        // import
-
-        functionUseAccount();
-        expect(Account.save.calledNum).to.be.eq(2);
         let data = {
-            name: 'test' + Math.random(),
+            username: 'test' + Math.random(),
             password: 'test'
         };
         let user = new User(data);

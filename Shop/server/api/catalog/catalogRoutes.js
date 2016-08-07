@@ -49,6 +49,11 @@ router.get('/filter/count/', function(req,res,next) {
         delete filterQuery.categories
     }
 
+    if(filterQuery.company) {
+        myFilter.setCompany(filterQuery.company);
+        delete filterQuery.company
+    }
+
     if(filterQuery.sort) {
         delete filterQuery.sort
     }
@@ -89,6 +94,11 @@ router.get('/filter/', function(req,res,next) {
     if(filterQuery.categories) {
         myFilter.setCategories(filterQuery.categories);
         delete filterQuery.categories
+    }
+
+    if(filterQuery.company) {
+        myFilter.setCompany(filterQuery.company);
+        delete filterQuery.company
     }
 
     if(filterQuery.sort) {

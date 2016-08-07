@@ -1,7 +1,11 @@
 
-import expect from 'chai';
-import mongoose from '../libs/mongoose';
-import User from '../modules/user';
+// import expect from 'chai';
+var mongoose = require('../../libs/mongoose');
+//import mongoose from '../libs/mongoose';
+var User = require('../../models/user').User;
+//import User from '../modules/user';
+var mocha = require('mocha');
+//import mocha from 'mocha';
 describe('Database connection', () => {
     it('Connect to db', (done) => {
         let Test = mongoose.model('Test',{

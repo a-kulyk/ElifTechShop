@@ -6,6 +6,7 @@ var ngTable = require('ng-table');
 var bank = angular.module('bank',['ngRoute', 'angularModalService', 'ngTable']);
 
 bank.config(function ($routeProvider) {
+  //  $locationProvider.html5Mode(true);
     $routeProvider
         .when('/',{
             templateUrl: "home/auth.html"

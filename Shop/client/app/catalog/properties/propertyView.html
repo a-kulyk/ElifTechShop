@@ -1,8 +1,16 @@
 
 
-
 <form name="myForm" >
-Search: <input type="text" class="searchField"  ng-model="data.searchField"> <input type="button" class="send_form" ng-click="properties.clickToProperty()" value="OK" >
+
+	<div class="col-md-9 col-xs-9 search_col">
+		<input type="text" class="searchField"   ng-model="data.searchField">
+	</div>
+	<div class="col-md-3 col-xs-3 send_col">
+		<input type="button" class="send_form" ng-click="properties.clickToProperty()" value="OK" >
+	</div>
+	<div style="clear:both"></div>
+
+
 <div ng-show="properties.isCat" class="sidebar-category" category-items></div>
 <div ng-hide="properties.isCat">
 	<div ng-hide="complete.property" class="loader"></div>
@@ -14,6 +22,7 @@ Search: <input type="text" class="searchField"  ng-model="data.searchField"> <in
 				
 			</div>
 		</div>
+
 		<div range-slider  min="0" max="properties.price.max + 10" model-min="data.price.min" model-max="data.price.max" show-values="true"></div>
 		<input type="button" class="send_form" ng-click="properties.clickToProperty()" value="OK" >
 	</div>
@@ -21,4 +30,4 @@ Search: <input type="text" class="searchField"  ng-model="data.searchField"> <in
 </form>
 
 <!-- <a class="send_form"  ng-href="#/?{{data | setUrl}}">Send</a> -->
-</div>
+

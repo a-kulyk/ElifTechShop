@@ -103,6 +103,11 @@ angular.module('app')
                         params[data.properties[property].name].push(data.properties[property].value[i].name)
                         //setAdditionalCount(property,i);
                     }
+                    if(data.properties[property].name == 'company') {
+                        params.company = data.properties[property].value[i].name;
+                        console.log(params,i);
+                    }
+
 
 
                     function setAdditionalCount(property,i) {
@@ -113,11 +118,13 @@ angular.module('app')
                             .then(
                                 result => {
                             srcCount = result.data;
+                        console.log(params);
                         return Parameters.count(params)
                     }
                     )
                     .then(
                             result => {
+                            console.log(result, $rootScope.data.properties[property].value[i]);
                             if(srcCount < result.data) {
                             $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
                         } else {
@@ -177,7 +184,29 @@ angular.module('app')
                                 }
                             }
                         });
+                        if($rootScope.data.hasOwnProperty('company')) {
+                            let ourCompany = [];
+                            $rootScope.data.company.forEach(function (item) {
+                                var newValue = {
+                                    name: item,
+                                    item: 'company',
+                                    state: false,
+                                    count: null
+                                };
+                                ourCompany.push(newValue);
+                            });
+
+                            $rootScope.data.properties.push({
+                                name: 'company',
+                                value : ourCompany
+                            })
+
+
+                            console.log($rootScope.data.properties.company);
+                        }
                     }
+
+
 
                     defineProperty();
                     let propScr = that.createPropertyScreen($rootScope.data);
