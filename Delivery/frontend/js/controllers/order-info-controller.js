@@ -1,7 +1,7 @@
 /**
  * Created by dmytro on 09.07.16.
  */
-//var moment = require('moment');
+var moment = require('moment');
 
 module.exports = function (app) {
     app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http, orderStates) {
@@ -16,8 +16,10 @@ module.exports = function (app) {
             $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
                 if (data.success) {
                     spinner.stop();
-                    $scope.arrivalTime = data.arrivalTime;
-                    $scope.travelTime = data.travelTime;
+                    $scope.arrivalTime = moment(data.arrivalTime).format('DD.MM.YY, HH:mm');
+                    let tempTime = moment.duration(data.travelTime, 'seconds');
+                    console.log(data.travelTime);
+                    $scope.travelTime = tempTime.hours() + ' hours ' + tempTime.minutes()+' minutes';
                     $scope.state = orderStates.statesArray[data.state];
                     $scope.fromUsername = data.from.username;
                     $scope.toUsername = data.from.username;

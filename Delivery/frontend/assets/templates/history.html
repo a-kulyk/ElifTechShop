@@ -71,8 +71,8 @@
             <td>{{order.price}}</td>
             <td>{{order.from.username}}</td>
             <td>{{order.to.username}}</td>
-            <td>{{order.arrivalTime}}</td>
-            <td>{{order.state==0?'Shipment':order.state==1?'Transportation':'Delivered'}}</td>
+            <td>{{formatDate(order.arrivalTime)}}</td>
+            <td>{{translateOrderState(order.state)}}</td>
         </tr>
         </tbody>
     </table>

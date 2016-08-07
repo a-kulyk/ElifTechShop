@@ -2,6 +2,8 @@
  * Created by dmytro on 24.07.16.
  */
 "use strict"
+var moment = require('moment');
+
 module.exports = function (app) {
     app.controller('historyCtrl', function ($rootScope, $scope, $http, $window, $routeParams, orderStates) {
             $rootScope.makeOrderActiveClass = '';
@@ -32,6 +34,12 @@ module.exports = function (app) {
             }
             $scope.redirectToOrder = function (trackingCode) {
                 $window.location.href = '#/order_info/' + trackingCode
+            }
+            $scope.translateOrderState = function (state) {
+                return orderStates.statesArray[state];
+            }
+            $scope.formatDate = function (date) {
+                return moment(date).format('DD.MM.YY, HH:mm');
             }
         }
     );
