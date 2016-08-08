@@ -21,7 +21,7 @@ gulp.task('assets', function () {
 gulp.task('webpack', function () {
     let options = {
         watch: true,
-        devtool: 'source-map',
+        devtool: 'eval',
         module: {
             loaders: [
                 {
