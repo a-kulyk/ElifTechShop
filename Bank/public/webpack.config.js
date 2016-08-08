@@ -1,6 +1,6 @@
 var webpack = require("webpack");
 module.exports = {
-    entry: "./core",
+    entry: "./app",
     output: {
         publicPath: 'assets/',
         path: 'assets',
