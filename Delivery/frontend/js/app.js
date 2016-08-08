@@ -11,4 +11,5 @@ require('./controllers/history-controller')(app);
 require('./controllers/order-info-controller')(app);
 require('./controllers/track-order-controller')(app);
 require('./controllers/login-controller')(app);
+require('./controllers/admin-controller')(app);
 

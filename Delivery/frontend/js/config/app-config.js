@@ -22,6 +22,9 @@ module.exports = function (app) {
         }).when('/login', {
             templateUrl:'../templates/login.html',
             controller:'loginCtrl'
+        }).when('/admin', {
+            templateUrl:'../templates/admin.html',
+            controller:'adminCtrl'
         })
     })
     /*.run(function ($rootScope) {

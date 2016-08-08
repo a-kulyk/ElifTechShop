@@ -10,7 +10,9 @@ module.exports = function (app) {
     app.post('/order', require('./order').post);
 
     app.post('/delivered', require('./delivered').post);
-    
+
     app.get('/history/:fromUsername/:toUsername', require('./history').get);
+
+    app.post('/login', require('./login').post);
 }
 
