@@ -28,6 +28,12 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                     data: { itemId: itemId }
                 });
             },
+            pay: function() {
+                return $http({
+                    method: 'POST',
+                    url: '/order/pay'
+                });
+            },
             saveOrderDetails: function(cart) {
                 return $http({
                     method: 'PUT',

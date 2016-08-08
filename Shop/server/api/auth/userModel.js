@@ -20,6 +20,7 @@ var User = new Schema({
         lat: String,
         lng: String
     },
+    bankAccount: String,
     password: String
 
 });

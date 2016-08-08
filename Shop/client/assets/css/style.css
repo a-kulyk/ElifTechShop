@@ -245,3 +245,7 @@ a:hover  {
   transition: none;
   opacity: 0;
 }
+
+.modal-dialog {
+  margin-top: 65px;
+} 

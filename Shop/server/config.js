@@ -2,6 +2,8 @@ var config = {
   dev: 'development',
   prod: 'production',
   port: process.env.PORT || 3000,
+  API_KEY: "d6911f567ef734f18ea176481638cc8a",
+  shopBankAccount: "57a1d2595dc059901c34f45a",
   secrets: {
     secret: 'keyboard cat',
     resave: false,

@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var moment = require('moment');
+var config = require('../../config');
 
 var Order = require('./orderModel.js');
 
@@ -94,6 +95,18 @@ router.put('/update', function(req, res, next) {
       order => res.json( {order: order, total: order.findTotal()} ),
       err => next(err)
     );
+});
+
+router.post('/pay', function(req, res, next) {
+  Order.findOne({userId: req.user._id, status: "shoppingCart"})
+  .then(order => {
+      let totalSum = order.findTotal();
+      return totalSum;
+  })
+  .then(
+    order => res.json({order: order, total: order.findTotal()}),
+    error => next(error)
+  );
 });
 
 router.put('/saveOrderDetails', function(req, res, next) {

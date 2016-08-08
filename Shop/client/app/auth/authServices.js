@@ -103,6 +103,7 @@ angular.module('app').factory('AuthService',
           username: formData.username,
           password: formData.password,
           email: formData.email,
+          bankAccount: formData.bankAccount,
           address: formData.address
         })
         // handle success

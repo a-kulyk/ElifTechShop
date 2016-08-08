@@ -22,7 +22,6 @@ angular.module('app').controller('mainController',
                 templateUrl: './app/main/modalView.html',
                 controller: 'ModalCtrl',
                 controllerAs: 'modal',
-                // size: 'sm',
                 resolve: {
                     item: function() {
                         return item;

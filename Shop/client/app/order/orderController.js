@@ -11,7 +11,6 @@ angular.module('app')
             orderService.getCart()
                 .then(function(response) {
                     $rootScope.shoppingCart = response.data;
-                    // order.timeCreated = moment($rootScope.shoppingCart.order.created).format("D MMMM YYYY, HH:mm");
                 });
 
             order.removeItem = function(id) {
@@ -35,11 +34,11 @@ angular.module('app')
             //     amount: $rootScope.shoppingCart.total
             // };
 
-            order.pay = function(transaction) {
-                // orderService.pay(transaction)
-                // .then(function(bank_resp) {
-                //     console.log("bank_resp : ", bank_resp);
-                // });
+            order.pay = function(amount) {
+                orderService.pay(amount)
+                    .then(function(bank_resp) {
+                        console.log("bank_resp : ", bank_resp);
+                    });
                 orderService.saveOrderDetails()
                     .then(function(resp) {
                         console.log("resp : ", resp);
