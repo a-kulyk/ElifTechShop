@@ -33,11 +33,32 @@ module.exports = function (app) {
         }).when('/login', {
             templateUrl: '../templates/login.html',
             controller: 'loginCtrl'
-        }).when('/admin', {
-            templateUrl: '../templates/admin.html',
-            controller: 'adminCtrl'
+        }).when('/cars', {
+            templateUrl: '../templates/cars.html',
+            controller: 'carsCtrl'
         })
-    })
+    }).run(['$rootScope', 'AclService', function ($rootScope, AclService) {
+/*        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            console.log(next)
+        })*/
+        AclService.addRole('guest');
+        AclService.addRole('admin');
+
+        AclService.addResource('History');
+        AclService.addResource('Order');
+
+        AclService.allow('guest', 'Order');
+        AclService.allow('admin', 'History');
+
+        var guest = {
+            id: 1,
+            name: 'Duck',
+            getRoles: function () {
+                return ['guest'];
+            },
+        };
+        AclService.setUserIdentity(guest);
+    }]);
     /*.run(function ($rootScope) {
      $rootScope.$on('$routeChangeStart', function (event, next, current) {
      switch (next.templateUrl) {

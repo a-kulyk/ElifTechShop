@@ -14,5 +14,7 @@ module.exports = function (app) {
     app.get('/history/:fromUsername/:toUsername', require('./history').get);
 
     app.post('/login', require('./login').post);
+
+    app.get('/cars', require('./cars').get);
 }
 

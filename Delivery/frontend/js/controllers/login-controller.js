@@ -12,7 +12,7 @@ module.exports = function (app) {
             $http.post("/login", requestJSON).success(function (data, status, headers) {
                 console.log(data);
                 if (data.success) {
-                    $window.location.href = '#/admin'
+                    $window.location.href = '#/cars'
                 } else {
                     console.log(data.error);
                 }

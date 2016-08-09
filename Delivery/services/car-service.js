@@ -1,9 +1,10 @@
 /**
  * Created by dmytro on 12.07.16.
  */
-var Car = require('../models/car');
-var Order = require('../models/order');
-var orderStates = require('../common/enums/order-states').orderStates;
+"use strict";
+let Car = require('../models/car');
+//var Order = require('../models/order');
+let orderStates = require('../common/enums/order-states').orderStates;
 
 exports.loadOrderOnCar = function (order) {
     Car.findOne({isAvailable: true}, function (err, car) {
@@ -24,7 +25,17 @@ exports.loadOrderOnCar = function (order) {
                 }
             });
         } else if (car == null) {
-             console.log('there is no free car');
+            console.log('there is no free car');
         }
+    });
+}
+exports.findAll = function () {
+    return new Promise((resolve, reject)=> {
+        Car.find({}, function (err, cars) {
+            if (err) {
+                reject(err);
+            }
+            resolve(cars);
+        })
     });
 }
