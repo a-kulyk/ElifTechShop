@@ -21,7 +21,6 @@ var schema = new Schema({
 });
 
 schema.statics.action = function (from, to, amount) {
-    console.log("AMOUNT: ",amount);
     let Transaction = this;
     let fromUser = Account.findOne({_id: from, enabled: true});
     let toUser = Account.findOne({_id: to, enabled: true});
