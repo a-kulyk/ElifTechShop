@@ -43,8 +43,12 @@ var schema = new Schema({
                 required: true
             }
         },
-        estimatedTime: {
+        travelTime: {
             type: Number,
+            required: true
+        },
+        arrivalTime: {
+            type: Date,
             required: true
         },
         trackingCode: {

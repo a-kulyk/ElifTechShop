@@ -21,16 +21,23 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                     data: cart
                 });
             },
-            updateCart: function(itemId) {
+            updQuantity: function(itemId, quantity) {
                 return $http({
                     method: 'PUT',
-                    url: '/order/update',
+                    url: '/order/updateQuantity',
+                    data: { itemId, quantity }
+                });
+            },
+            removeItem: function(itemId) {
+                return $http({
+                    method: 'PUT',
+                    url: '/order/removeItem',
                     data: { itemId: itemId }
                 });
             },
             pay: function() {
                 return $http({
-                    method: 'POST',
+                    method: 'GET',
                     url: '/order/pay'
                 });
             },
@@ -63,14 +70,6 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                 return $http({
                     method: 'DELETE',
                     url: "/order/remove"
-                });
-            },
-            pay: function(obj) {
-                return $http({
-                    method: 'POST',
-                    url: 'http://localhost:3001/transaction',
-                    data: obj,
-                    dataType:JSON
                 });
             }
         };

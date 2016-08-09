@@ -1,42 +1,67 @@
 <div  class="col-md-3 col-xs-12" id="sidebar">
     <property-items></property-items>
 </div>
-<div class="col-md-9 col-xs-12">
-    <div id="product" class="product col-md-12 col-xs-12">
-        <div class="image">
-            <div ng-repeat="image in product.images">
-                <img style="float:left" ng-src="{{image}}" width="200px" /></a>
+    <div  class="product_show_view col-md-9 col-xs-12">
+        <div class="product_view col-md-12 col-xs-12">
+            <div class="product_image col-md-3 col-xs-12">
+                    <div ng-repeat="image in product.images">
+                        <img  ng-src="{{image}}" /></a>
+                    </div>
             </div>
-        </div>
-
-        <div class="product-info">
-            <button class="btn btn-warning pull-right" type="button" ng-click="doTheBack()">Go Back</button>
-            <div class="title col-md-10 col-xs-10">{{product.name}}</div>
-            <div class="price col-md-2 col-xs-2">{{product.price}}$
-                <button type="button" class="btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
-                <div class="input-group" style="width:125px">
+            <div class="product_option col-md-9 col-xs-12">
+                <div class="description col-md-9 col-xs-12">
+                    <button class="btn btn-warning pull-right" type="button" ng-click="doTheBack()">Go Back</button>
+                    <div class="title">{{product.name}}</div>
+                    <p class="description">{{product.description}}</p>
+                </div>
+                <div class="buy col-md-3 col-xs-12">
+                    <p class="product_price">{{product.price}}$</p>
+                    <div class="buy_button col-md-12 col-xs-6">
+                        <button type="button" class="buy-btn btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
+                    </div>
+                    <div class="range_button col-md-12 col-xs-6">
+                        <div class="input-group" style="width:100%">
                       <span class="input-group-btn">
                           <button type="button" class="btn btn-default btn-number" ng-click="quan = quan > 1 ? quan - 1 : quan">
                               <span class="glyphicon glyphicon-minus"></span>
                           </button>
                       </span>
-                      <input class="form-control" ng-model="quan" ng-init="quan=1" min="1" type="text"/>
+                            <input class="form-control cartQuant" ng-model="quan" ng-init="quan=1" min="1" type="number" onfocus="this.blur()"/>
                       <span class="input-group-btn">
                           <button type="button" class="btn btn-default btn-number" ng-click="quan = quan + 1">
                               <span class="glyphicon glyphicon-plus"></span>
                           </button>
                       </span>
+                        </div>
+                        <p class="total">Total: {{product.price * quan}}$</p>
+                    </div>
+
                 </div>
-                <span>Total: {{product.price * quan}}$</span>
+
             </div>
         </div>
-        <div style="clear:both"></div>
-        PROPERTIES
-        <div ng-repeat="property in product.properties">
-            {{property.name}} : {{property.value}}
-        </div>
+        <div class="product_information  col-md-12 col-xs-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#properties" data-toggle="tab" aria-expanded="true">Properties</a></li>
+                <li class=""><a href="/#photo" data-toggle="tab" aria-expanded="false">Photo</a></li>
 
-        <p>{{product.description}}</p>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in" id="properties">
+                    <div ng-repeat="property in product.properties">
+                        <p>{{property.name}} : {{property.value}}</p>
+                    </div> </div>
+                <div class="tab-pane fade" id="photo">
+                    <div ng-repeat="image in product.images">
+                        <img  ng-src="{{image}}" /></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
+
+    <div style="clear:both;"></div>
+
     <div style="clear:both"></div>
-</div>
+

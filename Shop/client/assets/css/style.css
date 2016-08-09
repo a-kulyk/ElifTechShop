@@ -42,10 +42,19 @@ body {
     color : #676a74;
     padding-left:10px;
 }
+.send_col {
+    padding: 0;
+}
+.search_col {
+    padding: 0 5px 0 0 ;
+}
+
+#sidebar {
+    margin-top:5px;
+}
 .send_form {
-    margin-top: 15px;
     background: #FFF;
-    display: inline-block;
+    width: 100%;
     padding: 10px;
     text-align: center;
     border:2px solid #008cba;
@@ -62,8 +71,8 @@ body {
 input.searchField {
     border:2px solid #008cba;
     padding: 10px;
-    width: 80%;
-    margin-top: 5px;
+    width: 100%;
+
     display: inline-block;
 }
 .pages {
@@ -148,6 +157,12 @@ a:hover  {
     background-color: #f88585;
 }
 
+
+.buy-btn {
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 5px;
+}
 
 .loader,
 .loader:before,
@@ -249,3 +264,52 @@ a:hover  {
 .modal-dialog {
   margin-top: 65px;
 } 
+
+.product_image img{
+    width: 100%;
+}
+.product_image,.product_option, .range_button,.buy_button,.buy {
+    padding: 0;
+}
+.buy {
+    text-align:center;
+}
+p.product_price {
+    padding: 0px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.sort {
+    float: right;
+    margin: 0px 30px 5px 5px;
+}
+
+.cartQuant{
+  text-align: center;
+}
+
+.cartQuant::-webkit-inner-spin-button {
+  -webkit-appearance: none; 
+  margin: 0;
+}
+
+.plusMinus .btn {
+  width: 100%;
+}
+
+.plusMinus .btn:hover {
+  background-color: lightblue;
+}
+
+.plusMinus .input-group {
+  width: 120px;
+}
+
+.plusMinus .input-group-btn {
+  width: 34px;
+}
+
+.well .table {
+  font-size: 14px;
+}

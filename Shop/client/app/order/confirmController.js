@@ -21,7 +21,7 @@ angular.module('app').controller('ConfirmCtrl',
                     console.log(resp.data);
                     $rootScope.shoppingCart = null;
                     $uibModal.open({
-                        templateUrl: './app/order/finalPage.html',
+                        templateUrl: './app/order/modals/finalPage.html',
                         controller: function($uibModalInstance, $scope) {
                             $scope.close = function() {
                                 $location.path('/');

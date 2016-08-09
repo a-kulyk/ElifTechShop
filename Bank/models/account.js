@@ -11,7 +11,8 @@ var schema = new Schema({
     },
     amount: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     enabled: {
         type: Boolean,

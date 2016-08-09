@@ -1,8 +1,11 @@
 var router = require('express').Router();
-var moment = require('moment');
+var querystring = require('querystring');
+var http = require('http');
+// var moment = require('moment');
 var config = require('../../config');
 
 var Order = require('./orderModel.js');
+// var User = require('../auth/userModer.js')
 
 router.get('/all', function(req, res, next) {
     Order.find({userId: req.user._id})
@@ -22,10 +25,56 @@ router.get('/cart', function(req, res, next) {
       );
   });
 
+router.get('/pay', function(req, res, next) {
+  Order.findOne({userId: req.user._id, status: "shoppingCart"})
+  .populate({path: 'itemSet.productId', select: 'price'})
+  .exec()
+  .then(order => {
+    let total = order.findTotal();
+    return total;
+  })
+  .then(total => {
+    console.log("TOTAL",typeof(total));
+    let post_data = querystring.stringify({
+        from: req.user.bankAccount,
+        to: config.shopBankAccount,
+        amount: total,
+        API_KEY: config.API_KEY
+      });
+
+    let options = {
+      host: 'localhost',
+      port: 4000,
+      path: '/api/transaction/',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(post_data)
+      }
+    };
+
+    var httpreq = http.request(options, (response) => {
+      let body = '';
+      response.setEncoding('utf8');
+      response.on('data', (chunk) => {
+        body += chunk;
+      });
+      response.on('end', () => {
+        console.log("END OF RESP: " + body);
+        res.send(body);
+      });
+    });
+    httpreq.write(post_data);
+    httpreq.on('error', function(e) {
+        console.log("Got error: " + e.message);
+        next(e);
+      });
+    httpreq.end();
+  });
+});
+
 router.get('/:id', function(req, res, next) {
     Order.findById(req.params.id)
-      // .populate({path: 'itemSet.productId', select: 'category name price images'})
-      // .exec()
       .then(
         order => res.json(order),
         err => next(err)
@@ -42,7 +91,7 @@ router.post('/create', function(req, res, next) {
     email: req.user.email,
     status: 'shoppingCart',
     date: {
-      created: moment().format("D MMMM YYYY, HH:mm"),
+      created: new Date(),
       paid: '',
       completed: ''
     }
@@ -76,7 +125,24 @@ router.put('/addToCart', function(req, res, next) {
     );
 });
 
-router.put('/update', function(req, res, next) {
+router.put('/updateQuantity', function(req, res, next) {
+  console.log("req : ", req.body.itemId, "quan : ", req.body.quantity);
+  Order.findOne({userId: req.user._id, status: "shoppingCart"})
+    .then(order => {
+      var item = order.itemSet.find(function(i){
+        return i.productId.toString() === req.body.itemId;
+      });
+      item.quantity = req.body.quantity;
+      return order.save();        
+    })
+    .then(order => Order.populate(order, {path: 'itemSet.productId', select: 'category name price images'} ))
+    .then(
+      order => res.json( {order: order, total: order.findTotal()} ),
+      err => next(err)
+    );
+});
+
+router.put('/removeItem', function(req, res, next) {
   Order.findOne({userId: req.user._id, status: "shoppingCart"})
     .then(order => {
       var arr = order.itemSet;
@@ -97,17 +163,6 @@ router.put('/update', function(req, res, next) {
     );
 });
 
-router.post('/pay', function(req, res, next) {
-  Order.findOne({userId: req.user._id, status: "shoppingCart"})
-  .then(order => {
-      let totalSum = order.findTotal();
-      return totalSum;
-  })
-  .then(
-    order => res.json({order: order, total: order.findTotal()}),
-    error => next(error)
-  );
-});
 
 router.put('/saveOrderDetails', function(req, res, next) {
   Order.findOne({userId: req.user._id, status: "shoppingCart"})

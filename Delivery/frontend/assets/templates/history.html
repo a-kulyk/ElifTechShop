@@ -51,6 +51,17 @@
                 </span>
                 To
             </th>
+            <th ng-click="sort('arrivalTime')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='arrivalTime'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>Arrival time
+            </th>
+            <th ng-click="sort('title')">
+                <span class="glyphicon sort-icon" ng-show="sortKey=='state'"
+                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+                </span>
+                State
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -60,6 +71,8 @@
             <td>{{order.price}}</td>
             <td>{{order.from.username}}</td>
             <td>{{order.to.username}}</td>
+            <td>{{formatDate(order.arrivalTime)}}</td>
+            <td>{{translateOrderState(order.state)}}</td>
         </tr>
         </tbody>
     </table>

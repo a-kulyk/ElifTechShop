@@ -6,6 +6,7 @@ var Order = require('../models/order');
 var googleConnector = require('../lib/distance-determiner');
 var uuid = require('uuid');
 var carService = require('./car-service');
+var shipmentTimeDeterminer = require('./shipment-time-determiner');
 
 exports.createOrder = function (order) {
     return new Promise((resolve, reject)=> {
@@ -18,21 +19,28 @@ exports.createOrder = function (order) {
                 lng: order.to.lng
             });
         googlePromise.then(resultJSON=> {
-            order.estimatedTime = JSON.parse(resultJSON).rows[0].elements[0].duration.value;
+            order.travelTime = JSON.parse(resultJSON).rows[0].elements[0].duration.value;
             var trackingCode = uuid.v4();
             order.trackingCode = trackingCode;
             order.created = new Date();
-            new Order(order).save(function (err, doc) {
-                if (!err) {
-                    carService.loadOrderOnCar(doc);
-                    resolve(doc);
-                } else {
-                    reject(err);
-                }
-            });
-        }).catch(error=> {
-            reject(error);
+            return shipmentTimeDeterminer();
         })
+            .then((val)=> {
+                order.arrivalTime = Date.now() + val + order.travelTime * 1000;
+            })
+            .then(()=> {
+                new Order(order).save(function (err, doc) {
+                    if (!err) {
+                        carService.loadOrderOnCar(doc);
+                        resolve(doc);
+                    } else {
+                        reject(err);
+                    }
+                });
+            })
+            .catch(error=> {
+                reject(error);
+            })
     })
 }
 

@@ -3,7 +3,7 @@ var config = {
   prod: 'production',
   port: process.env.PORT || 3000,
   API_KEY: "d6911f567ef734f18ea176481638cc8a",
-  shopBankAccount: "57a1d2595dc059901c34f45a",
+  shopBankAccount: "57a9152719e3cdbc10730705",
   secrets: {
     secret: 'keyboard cat',
     resave: false,

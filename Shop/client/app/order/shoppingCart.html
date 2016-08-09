@@ -16,13 +16,24 @@
             <tbody>
                 <tr ng-repeat='item in shoppingCart.order.itemSet'>
                     <td>
-
                         <a ng-href="#/product/{{item.productId._id}}">
-                            <img ng-src="{{item.productId.images[0]}}" style="width:100px">&nbsp
-                        {{item.productId.name}}</a>
+                            <img ng-src="{{item.productId.images[0]}}" style="width:100px">&nbsp {{item.productId.name}}
+                        </a>
                     </td>
                     <td>{{item.productId.category}}</td>
-                    <td>{{item.quantity}}</td>
+                    <td>
+                        <div class="plusMinus">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn" ng-click="item.quantity=item.quantity-1;order.updQuantity(item.productId._id,item.quantity)" >-</button>
+                                </span>
+                                <input class="form-control cartQuant" ng-model="item.quantity" min="1" type="number" onfocus="this.blur()" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn" ng-click="item.quantity=item.quantity+1;order.updQuantity(item.productId._id,item.quantity)">+</button>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
                     <td>{{item.productId.price}}</td>
                     <td>{{item.quantity * item.productId.price}}</td>
                     <td id="closeButton">

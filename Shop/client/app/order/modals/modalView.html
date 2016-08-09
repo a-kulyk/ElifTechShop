@@ -8,7 +8,7 @@
 	<strong>{{modal.item.name}}&nbsp</strong> Price: {{modal.item.price}}$</div>
 
 	<div class="text-center"><label for="quantity">Quantity</label>
-	<input type="number" id="quantity" name="number" ng-model="modal.quantity" min="1">
+	<input type="number" id="quantity" name="number" ng-model="modal.quantity" min="1" onfocus="this.blur()">
 	Total: <strong>{{modal.total()}}$</strong></div>
   </div>
 	

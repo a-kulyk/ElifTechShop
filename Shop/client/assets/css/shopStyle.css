@@ -13,9 +13,12 @@ body {
 .product{
     position: relative;
 	margin: 0 auto;
+	perspective: 800px;
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
     perspective: 800px;
     margin-bottom: 20px;
-    width:100%;
+    width:246px;
     height:230px;
     transform-style: preserve-3d;
     transition: transform 5s;
@@ -28,6 +31,7 @@ body {
 }
 
 
+
 .main_inner {
 	display: inline-block;
 	position:relative;
@@ -37,7 +41,7 @@ body {
 .main_inner img {
 	position: relative;
 	margin-bottom:-50%;
-
+	margin-top:-5px;
 	min-height: 140px;
 	min-width:100%;
 	max-height: 140px;
@@ -62,20 +66,20 @@ body {
 div.large .product-back{
 	top:0px;
 	left:0px;
-	-webkit-transition: all 100ms ease-out; 
-       -moz-transition: all 100ms ease-out; 
-         -o-transition: all 100ms ease-out; 
-            transition: all 100ms ease-out; 
+	-webkit-transition: all 100ms ease-out;
+       -moz-transition: all 100ms ease-out;
+         -o-transition: all 100ms ease-out;
+            transition: all 100ms ease-out;
 }
 .make3D{
-	width: 100%;
+	width: 246px;
 	height: 230px;
 	overflow: hidden;
-	position:absolute;    
+	position:absolute;
     transform-style: preserve-3d;
-	-webkit-transition:  100ms ease-out; 
-       -moz-transition:  100ms ease-out; 
-         -o-transition:  100ms ease-out; 
+	-webkit-transition:  100ms ease-out;
+       -moz-transition:  100ms ease-out;
+         -o-transition:  100ms ease-out;
             transition:  100ms ease-out;
 }
 div.make3D.flip-10{
@@ -100,20 +104,22 @@ div.make3D.flip190{
 			   transition:  100ms ease-out; 			
 }
 div.make3D.flip180{
-	 -webkit-transform: rotateY( 180deg );
-         -moz-transform: rotateY( 180deg );
-           -o-transform: rotateY( 180deg );
-              transform: rotateY( 180deg );
+
+	 -webkit-transform: rotateY( 180deg ) translateZ(-0px);
+         -moz-transform: rotateY( 180deg ) translateZ(1px);
+           -o-transform: rotateY( 180deg ) translateZ(1px);
+              transform: rotateY( 180deg ) translateZ(-0px);
 			   transition:  150ms ease-out; 			
 }
 .make3D.animate{
 	width: 100%;
-	
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
 	box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0.15);
-	-webkit-transition:  100ms ease-out; 
-       -moz-transition:  100ms ease-out; 
-         -o-transition:  100ms ease-out; 
-            transition:  100ms ease-out; 
+	-webkit-transition:  900ms ease-out;
+       -moz-transition:  900ms ease-out;
+         -o-transition:  900ms ease-out;
+            transition:  900ms ease-out;
 }
 
 .large div.make3D{box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0);}
@@ -142,18 +148,28 @@ div.make3D.flip180{
     color: #393c45;
     font-weight: 700;
 }
+
+.visibble-stats {
+	position: relative;
+	display: block;
+	height: 80px;
+	overflow: hidden;
+}
+
 .stats-container a:hover  {
 	color: #393c45;
 
 }
 .stats-container p{
 	font-size:12px;
-	color:#b1b1b3;	
+	color:#b1b1b3;
+	display: block;
+
 
 }
 
 .stats_end {
-	height: 10px;
+	height: 30px;
 	width: 100%;
 	background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -175,7 +191,7 @@ div.make3D.flip180{
 	top:0;
 	left:0; 
 	width:100%;
-	height:100%;
+	height: 130px;;
 	background:#008cba;
 	opacity:0;	
 }
@@ -286,7 +302,7 @@ div.make3D.flip180{
 .cx, .cy{
 	background:#d2d5dc;
 	position:absolute;
-	width:0px;
+	width:0 px;
 	top:15px;
 	right:15px;
 	height:3px;
@@ -363,6 +379,7 @@ div.make3D.flip180{
 			transition: all 100ms ease-out;
 }
 .carousel{
+
 	width:100%;
 	height: 250px;
 	overflow:hidden;
@@ -374,16 +391,17 @@ div.make3D.flip180{
 	left:0;
 }
 .carousel li{
-	width:315px;
+	width:100%;
 	height:500px;
 	float:left;
 	margin: 0 auto;
-	overflow:hidden;	
+	overflow:hidden;
+	display: block;
 }
 .carousel .inner img{
 	position: relative;
 	left:-50%;
-	margin-top:-19px;
+
 	height: 230px;
 	min-width: 100%;
 }
@@ -391,12 +409,14 @@ div.make3D.flip180{
 	display: inline-block;
 	position:relative;
 	right: -50%;
+	margin-left:5px;
 }
 .arrows-perspective{
 	width:100%;
 	height:55px;
 	position: absolute;
-	top: 120px;
+	overflow: hidden;
+	top: 90px;
 	transform-style: preserve-3d;
     transition: transform 5s;
 	perspective: 335px;
@@ -454,7 +474,7 @@ div.make3D.flip180{
 .carousel .x, .carousel .y{
 	height:2px;
 	width:15px;
-	background:#5ff7d2;
+	background:#1b6d85;
 	position:absolute;
 	top:31px;
 	left:17px;
@@ -479,4 +499,31 @@ div.make3D.flip180{
 	transform: rotate(135deg);		
 }
 
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px) {
+	.product, .make3D {
+		width: 310px;
+	}
+}
 
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px) {
+	.product, .make3D {
+		width: 100%;
+	}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+
+}
