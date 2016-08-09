@@ -51,3 +51,23 @@ exports.post = function (req, res) {
         });
     }
 }
+
+exports.getById = function (req, res) {
+    let successMsg = {"success": true};
+    let failedMsg = {"success": false};
+    orderService.findById(req.params.id)
+        .then((order)=> {
+            if (order != null) {
+                successMsg.trackingCode = order.trackingCode;
+                res.json(successMsg);
+            } else {
+                res.json(failedMsg);
+            }
+        }).catch((err)=> {
+        console.error(err);
+        console.error(err.stack);
+        failedMsg.message = err.message;
+        res.json(failedMsg);
+    });
+
+}

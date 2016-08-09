@@ -7,6 +7,8 @@ module.exports = function (app) {
 
     app.get('/order/:trackingCode', require('./order').get);
 
+    app.get('/order/id/:id', require('./order').getById);
+
     app.post('/order', require('./order').post);
 
     app.post('/delivered', require('./delivered').post);

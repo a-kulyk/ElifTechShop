@@ -16,17 +16,6 @@ module.exports = function (app) {
         }).when('/history', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl',
-            resolve: {
-                'acl': ['$q', 'AclService', function ($q, AclService) {
-                    if (AclService.can('History')) {
-                        // Has proper permissions
-                        return true;
-                    } else {
-                        // Does not have permission
-                        return $q.reject('Unauthorized');
-                    }
-                }]
-            }
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl'
@@ -35,7 +24,18 @@ module.exports = function (app) {
             controller: 'loginCtrl'
         }).when('/cars', {
             templateUrl: '../templates/cars.html',
-            controller: 'carsCtrl'
+            controller: 'carsCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('Cars')) {
+                        // Has proper permissions
+                        return true;
+                    } else {
+                        // Does not have permission
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         })
     }).run(['$rootScope', 'AclService', function ($rootScope, AclService) {
 /*        $rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -44,17 +44,15 @@ module.exports = function (app) {
         AclService.addRole('guest');
         AclService.addRole('admin');
 
-        AclService.addResource('History');
-        AclService.addResource('Order');
+        AclService.addResource('Cars');
 
-        AclService.allow('guest', 'Order');
-        AclService.allow('admin', 'History');
+        AclService.allow('admin', 'Cars');
 
         var guest = {
             id: 1,
             name: 'Duck',
             getRoles: function () {
-                return ['guest'];
+                return ['admin'];
             },
         };
         AclService.setUserIdentity(guest);

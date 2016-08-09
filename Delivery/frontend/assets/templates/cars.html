@@ -28,7 +28,7 @@
         <tr dir-paginate="car in cars|orderBy:sortKey:reverse|filter:search|itemsPerPage:10">
             <td>{{formatDate(order.arrivalTime)}}</td>
             <td>{{car.isAvailable}}</td>
-            <td>Order</td>
+            <td><a href="" ng-click="redirectToOrder(car._order)" ng-show="!car.isAvailable">Order</a></td>
         </tr>
         </tbody>
     </table>
