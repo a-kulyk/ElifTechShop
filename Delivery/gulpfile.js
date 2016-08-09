@@ -25,6 +25,13 @@ gulp.task('webpack', function () {
         module: {
             loaders: [
                 {
+                    test: /\.js$/,
+                    loader: 'babel',
+                    query: {
+                        presets: ['es2015']
+                    }
+                },
+                {
                     test: /\.css$/,
                     loader: 'style!css'
                 },

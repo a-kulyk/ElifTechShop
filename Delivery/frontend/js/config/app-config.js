@@ -15,16 +15,27 @@ module.exports = function (app) {
             controller: 'timeOutputCtrl'
         }).when('/history', {
             templateUrl: '../templates/history.html',
-            controller: 'historyCtrl'
+            controller: 'historyCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('History')) {
+                        // Has proper permissions
+                        return true;
+                    } else {
+                        // Does not have permission
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl'
         }).when('/login', {
-            templateUrl:'../templates/login.html',
-            controller:'loginCtrl'
+            templateUrl: '../templates/login.html',
+            controller: 'loginCtrl'
         }).when('/admin', {
-            templateUrl:'../templates/admin.html',
-            controller:'adminCtrl'
+            templateUrl: '../templates/admin.html',
+            controller: 'adminCtrl'
         })
     })
     /*.run(function ($rootScope) {
