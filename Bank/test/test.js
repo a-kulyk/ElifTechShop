@@ -9,3 +9,5 @@ require('./routes/islogin.test');
 require('./routes/login.test');
 require('./routes/logout.test');
 require('./routes/pay.test');
+require('./routes/signup.test');
+require('./routes/transaction.test');
