@@ -2,7 +2,6 @@ let Account = require('../models/account').Account;
 
 exports.post = function (req, res) {
     let user = req.session.user;
-  //  console.log(user);
     if(user) {
         let account = new Account({name: req.body.name, owner: user, amount: 0});
         account.save()

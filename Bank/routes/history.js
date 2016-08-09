@@ -2,20 +2,6 @@ var Transaction = require('../models/transaction').Transaction;
 var Account = require('../models/account').Account;
 var User = require('../models/user').User;
 
-function event(from, to, accounts) {
-    for (let item in accounts) {
-        let account = accounts[item];
-        if (account.owner == from && account.owner == to) {
-            return "payment";
-        } else if (account.owner == from) {
-            return "transfer";
-        } else if (account.owner == to) {
-            return "receive";
-        }
-    }
-    return false;
-}
-
 exports.get = function (req, res) {
     let user = req.session.user;
     Account.find({owner: user}).exec()
