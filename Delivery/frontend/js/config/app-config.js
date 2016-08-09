@@ -19,15 +19,22 @@ module.exports = function (app) {
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl'
+        }).when('/login', {
+            templateUrl:'../templates/login.html',
+            controller:'loginCtrl'
+        }).when('/admin', {
+            templateUrl:'../templates/admin.html',
+            controller:'adminCtrl'
         })
-    })/*.run(function ($rootScope) {
-        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            switch (next.templateUrl) {
-                case 'templates/track-order.html':
-                    require.ensure([], function () {
-                        require('../../css/track-order.css');
-                    })
-            }
-        });
-    })*/
+    })
+    /*.run(function ($rootScope) {
+     $rootScope.$on('$routeChangeStart', function (event, next, current) {
+     switch (next.templateUrl) {
+     case 'templates/track-order.html':
+     require.ensure([], function () {
+     require('../../css/track-order.css');
+     })
+     }
+     });
+     })*/
 }

@@ -1,6 +1,7 @@
 /**
  * Created by dmytro on 09.07.16.
  */
+'use strict';
 var mongoose = require('../lib/mongoose');
 var Schema = mongoose.Schema;
 

@@ -1,6 +1,7 @@
 /**
  * Created by dmytro on 08.07.16.
  */
+"use strict";
 module.exports = function (app) {
     app.controller('trackOrderCtrl', function ($rootScope, $scope, $http, $window) {
         $rootScope.makeOrderActiveClass = '';

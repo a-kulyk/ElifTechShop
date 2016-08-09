@@ -14,5 +14,13 @@
     "user": "super.delivery.service@gmail.com",
     "password": "genius1111",
     "send-at-once": 3
+  },
+  "session": {
+    "secret": "KillerIsJim",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
   }
 }

@@ -7,7 +7,6 @@ module.exports = function (app) {
         $rootScope.trackOrderActiveClass = '';
         $rootScope.historyActiveClass = '';
         $scope.createOrder = function () {
-
             var requestJSON = {};
             requestJSON.title = $scope.title;
             requestJSON.price = $scope.price;
