@@ -1,13 +1,13 @@
 /**
  * Created by dmytro on 04.08.16.
  */
-let angular = require('angular');
-let ngRoute = require('angular-route');
-let ngMessages = require('angular-messages');
-let pagination = require('angular-utils-pagination');
+var angular = require('angular');
+var ngRoute = require('angular-route');
+var ngMessages = require('angular-messages');
+var pagination = require('angular-utils-pagination');
 require('angularjs-acl/dist/acl.js');
 
-let app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl']);
+var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl']);
 
 require('./config/app-config')(app);
 require('./services/order-states-service')(app);

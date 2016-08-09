@@ -1,6 +1,3 @@
-/**
- * Created by dmytro on 04.08.16.
- */
 "use strict";
 const gulp = require('gulp');
 const webpackStream = require('webpack-stream');
@@ -24,13 +21,6 @@ gulp.task('webpack', function () {
         devtool: 'eval',
         module: {
             loaders: [
-                {
-                    test: /\.js$/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
-                },
                 {
                     test: /\.css$/,
                     loader: 'style!css'

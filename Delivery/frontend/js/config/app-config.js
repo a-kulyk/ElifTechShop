@@ -38,14 +38,16 @@ module.exports = function (app) {
             }
         })
     }).run(['$rootScope', 'AclService', function ($rootScope, AclService) {
-/*        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            console.log(next)
-        })*/
+        /*        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+         console.log(next)
+         })*/
         AclService.addRole('guest');
         AclService.addRole('admin');
 
+        AclService.addResource('Order');
         AclService.addResource('Cars');
 
+        AclService.allow('guest', 'Order');
         AclService.allow('admin', 'Cars');
 
         var guest = {

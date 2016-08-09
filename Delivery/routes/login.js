@@ -2,27 +2,26 @@
  * Created by dmytro on 08.08.16.
  */
 'use strict';
-let User = require('../models/user');
+//let User = require('../models/user');
+let userService = require('../services/user-service');
 
 exports.post = function (req, res) {
+    let successMsg = {"success": true};
+    let failedMsg = {"success": false};
+
     let username = req.body.username;
     let password = req.body.password;
 
-    User.findOne({username: username}, function (err, user) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-
-        if (user) {
-            if (user.checkPassword(password)) {
-                console.log('welcome');
-                req.session.user = 'admin';
-                res.json({"success": true});
+    userService.authorize(username, password)
+        .then((isSuccessful)=> {
+            if (isSuccessful) {
+                res.json(successMsg);
             } else {
-                //403
-                console.log('incorrect login or password')
+                failedMsg.message = 'AccessDenied'
+                res.json(failedMsg);
             }
-        }
+        }).catch(err=> {
+        failedMsg.message = err.message;
+        res.json(failedMsg);
     });
 }

@@ -13,8 +13,6 @@ module.exports = function (app) {
                 console.log(data);
                 if (data.success) {
                     var admin = {
-                        id: 2,
-                        name: 'Duck2',
                         getRoles: function () {
                             return ['admin'];
                         },
@@ -22,7 +20,7 @@ module.exports = function (app) {
                     AclService.setUserIdentity(admin);
                     $window.location.href = '#/cars'
                 } else {
-                    console.log(data.error);
+                    console.log(data.message);
                 }
             }).error(function (data, status, headers) {
                 console.log(status);
