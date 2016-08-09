@@ -17,7 +17,7 @@ exports.post = function (req, res) {
         if (user) {
             if (user.checkPassword(password)) {
                 console.log('welcome');
-                req.session.user = user._id;
+                req.session.user = 'admin';
                 res.json({"success": true});
             } else {
                 //403
