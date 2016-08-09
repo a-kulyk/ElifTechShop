@@ -32,9 +32,9 @@ schema.statics.action = function (from, to, amount) {
                     throw new Error("Insufficient funds");
                 }
                 result[0].amount -= amount;
-                result[1].amount += amount;
+                result[1].amount += +amount;
             } else {
-                result[1].amount += amount;
+                result[1].amount += +amount;
             }
             return Promise.all([result[0].save(), result[1].save()]);
         })

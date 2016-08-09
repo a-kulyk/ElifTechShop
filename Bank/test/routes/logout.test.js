@@ -15,10 +15,10 @@ describe('Logout route', () => {
        let res = {
            send: (object) => {
                spy(object);
+               expect(spy.callCount).to.equal(2);
+               expect(object.success).to.equal(true);
            }
        };
        logout(req, res);
-       expect(spy.callCount).to.equal(2);
-       expect(spy.args[0].success).to.equal(true);
    });
 });

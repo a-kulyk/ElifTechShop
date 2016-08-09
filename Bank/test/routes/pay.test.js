@@ -32,15 +32,15 @@ describe('Pay route', () => {
                 let res = {
                     send: (object) => {
                         spy(object);
+                        expect(spy.callCount).to.equal(1);
+                        expect(spy.args[0][0].success).to.equal(true);
+                        expect(spy.args[0][0].accountAmount).to.equal(1);
+                        expect(spy.args[0][0].amount).to.equal(1);
+                        expect(spy.args[0][0].accountId.toString()).to.equal(account._id.toString());
+                        done();
                     }
                 };
                 pay(req, res);
-                expect(spy.callCount).to.equal(1);
-                expect(spy.args[0].success).to.equal(true);
-                expect(spy.args[0].accountAmount).to.equal(1);
-                expect(spy.args[0].amount).to.equal(1);
-                expect(spy.args[0].accountId).to.equal(account._id);
-                done();
             });
     });
 });

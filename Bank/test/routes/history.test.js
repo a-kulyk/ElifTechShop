@@ -28,12 +28,12 @@ describe('History route', () => {
                let res = {
                    send: (object) => {
                        spy(object);
+                       expect(spy.callCount).to.equal(1);
+                       expect(spy.args[0][0].success).to.equal(true);
+                       done();
                    }
                };
                history(req, res);
-               expect(spy.callCount).to.equal(1);
-               expect(spy.args[0].success).to.equal(true);
-               done();
            })
            .catch((error) => {
                throw new Error(error);
