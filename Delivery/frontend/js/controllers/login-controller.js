@@ -3,7 +3,7 @@
  */
 "use strict";
 module.exports = function (app) {
-    app.controller('loginCtrl', function ($rootScope, $scope, $http, $window) {
+    app.controller('loginCtrl', function ($rootScope, $scope, $http, $window, AclService) {
         $scope.login = function () {
             var requestJSON = {};
             requestJSON.username = $scope.username;
@@ -12,6 +12,14 @@ module.exports = function (app) {
             $http.post("/login", requestJSON).success(function (data, status, headers) {
                 console.log(data);
                 if (data.success) {
+                    var admin = {
+                        id: 2,
+                        name: 'Duck2',
+                        getRoles: function () {
+                            return ['admin'];
+                        },
+                    };
+                    AclService.setUserIdentity(admin);
                     $window.location.href = '#/cars'
                 } else {
                     console.log(data.error);

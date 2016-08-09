@@ -52,7 +52,7 @@ module.exports = function (app) {
             id: 1,
             name: 'Duck',
             getRoles: function () {
-                return ['admin'];
+                return ['guest'];
             },
         };
         AclService.setUserIdentity(guest);
