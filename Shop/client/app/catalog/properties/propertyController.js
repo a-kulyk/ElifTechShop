@@ -104,8 +104,13 @@ angular.module('app')
                         //setAdditionalCount(property,i);
                     }
                     if(data.properties[property].name == 'company') {
-                        params.company = data.properties[property].value[i].name;
-                        console.log(params,i);
+                        if(!params.company) {
+                            params.company = [];
+                            params.company.push(data.properties[property].value[i].name);
+                        } else {
+                            params.company.push(data.properties[property].value[i].name);
+                        }
+
                     }
 
 
@@ -126,7 +131,7 @@ angular.module('app')
                             result => {
                             console.log(result, $rootScope.data.properties[property].value[i]);
                             if(srcCount < result.data) {
-                            $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
+                            $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) +')';
                         } else {
                             var countQuery = creatCountObject(data.properties[property].value[i]);
 
@@ -135,7 +140,7 @@ angular.module('app')
                                     .then(
                                         result => {
 
-                                    $rootScope.data.properties[property].value[i].count = result.data;
+                                    $rootScope.data.properties[property].value[i].count = '('+result.data +')';
                                 if($rootScope.data.properties[property].value[i].state) {
                                     $rootScope.data.properties[property].value[i].count = null;
                                 }

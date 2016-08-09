@@ -901,8 +901,12 @@
 	                    //setAdditionalCount(property,i);
 	                }
 	                if (data.properties[property].name == 'company') {
-	                    params.company = data.properties[property].value[i].name;
-	                    console.log(params, i);
+	                    if (!params.company) {
+	                        params.company = [];
+	                        params.company.push(data.properties[property].value[i].name);
+	                    } else {
+	                        params.company.push(data.properties[property].value[i].name);
+	                    }
 	                }
 
 	                function setAdditionalCount(property, i) {
@@ -916,12 +920,12 @@
 	                    }).then(function (result) {
 	                        console.log(result, $rootScope.data.properties[property].value[i]);
 	                        if (srcCount < result.data) {
-	                            $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
+	                            $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) + ')';
 	                        } else {
 	                            var setCount = function setCount(property, i) {
 	                                Parameters.count(countQuery).then(function (result) {
 
-	                                    $rootScope.data.properties[property].value[i].count = result.data;
+	                                    $rootScope.data.properties[property].value[i].count = '(' + result.data + ')';
 	                                    if ($rootScope.data.properties[property].value[i].state) {
 	                                        $rootScope.data.properties[property].value[i].count = null;
 	                                    }
