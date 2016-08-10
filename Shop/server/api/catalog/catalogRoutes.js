@@ -86,15 +86,21 @@ router.get('/filter/count/', function(req,res,next) {
 
 
 router.get('/filter/', function(req,res,next) {
-  
-    let myFilter = new Filter();
-    let pagination = myFilter.definePage();
+
+    let pagination, myFilter = new Filter();
     let filterQuery = JSON.parse(JSON.stringify(req.query));
 
     if(filterQuery.categories) {
         myFilter.setCategories(filterQuery.categories);
         delete filterQuery.categories
     }
+
+    if(filterQuery.per_page) {
+        myFilter.setPerPage(filterQuery.per_page);
+        delete filterQuery.per_page
+    }
+
+    pagination = myFilter.definePage();
 
     if(filterQuery.company) {
         myFilter.setCompany(filterQuery.company);
@@ -128,6 +134,7 @@ router.get('/filter/', function(req,res,next) {
     }
   
     let sort = myFilter.getSort();
+
 
 
 

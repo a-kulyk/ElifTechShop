@@ -6,10 +6,20 @@ class Filter {
         this.min_price = 0;
         this.max_price = Math.pow(10,6);
         this.pages = 1;
-        this.perPage = 9;
+        this.perPage = 1000;
         this.company = [];
         this.sort =  {
             'price': 1
+        }
+    }
+
+    setPerPage (perpage) {
+        if(perpage) {
+            try {
+                this.perPage = parseInt(perpage)
+            } catch (err) {
+                this.perPage = 1000;
+            }
         }
     }
 
@@ -73,6 +83,7 @@ class Filter {
 
     definePage (number) {
         this.pages = Math.abs(parseInt(number)) || 1;
+        console.log("pages",this.pages);
         let per_page = this.perPage;
         let skip = per_page > 0 ? (this.pages-1)*per_page : 0;
         return {
