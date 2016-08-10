@@ -85,9 +85,12 @@ class Filter {
         let searchExp = {};
         if(text) {
             let words = text.split(" ");
-            var searchExpe = "(" + words.join('|') + ')';
+            for(let i=0;i < words.length;i++) {
+                words[i]  = '?=.*' + words[i];
+            }
+            var searchExpe = "(" + words.join(')(') + ')';
             searchExp = new RegExp(searchExpe,"i");
-            //searchExp = new RegExp(text+"*","i");
+
         }
         this.searchField = searchExp;
     }
@@ -116,15 +119,13 @@ class Filter {
         }
     }
 
-    creatQuery (notQuantity) {
+    creatQuery (params) {
         let query = {$and: [{}]};
 
-        /*if(notQuantity) {
-            query.$and.push({ quantity: { $lt: 1 } })
-        } else {
-            query.$and.push({ quantity: { $gt: 1 } })
+        if(params) {
+            query.$and.push(params)
         }
-        */
+
         if(!(this.company.length < 1)) {
             let companyQuery = {$or : this.company};
             

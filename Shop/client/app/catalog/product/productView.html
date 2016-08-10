@@ -1,10 +1,15 @@
 
 
-<div ng-hide="complete.product" class="loader"></div>
+<div ng-hide="complete" class="loader"></div>
+
 <div ng-show="catalog.items.notMatch">There is not nothing to find</div>
 <div ng-show="catalog.items.error">Something went wrong.</div>
-<div class="col-md-4 col-xs-12 " ng-repeat="item in catalog.items">
-    <div class="product">
+<div ng-show="complete" >
+    <sort-items></sort-items>
+    <div style="clear:both"></div>
+<div class="col-md-4 col-xs-12 " ng-repeat="item in items">
+
+    <div class="product" ng-class="{not_active: item.qty == 0}">
 
         <div class="make3D">
             <div class="product-front">
@@ -17,7 +22,7 @@
 
 
                 <a ng-href="#/product/{{item._id}}"> <div class="image_overlay"></div></a>
-                <div class="add_to_cart" ng-click="main.addToCart(item)">Add to cart</div>
+                <div class="add_to_cart" ng-click="main.addToCart(item)">Add to cart </div>
                 <div class="view_gallery">View gallery</div>
                 <div class="stats">
                     <div class="stats-container">
@@ -63,10 +68,10 @@
 
 </div>
 <div style="clear:both"></div>
-<div ng-repeat="i in catalog.pages" class="pages">
+<div ng-repeat="i in pages" class="pages">
     <a ng-href="#/?{{i.url}}" class="page">{{i.number}}</a>
 </div>
 
-
+</div>
 
 

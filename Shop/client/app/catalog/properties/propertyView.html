@@ -13,8 +13,8 @@
 
 <div ng-show="properties.isCat" class="sidebar-category" category-items></div>
 <div ng-hide="properties.isCat">
-	<div ng-hide="complete.property" class="loader"></div>
-	<div ng-show="complete.property">
+	<div ng-hide="complete" class="loader"></div>
+	<div ng-show="complete">
 		<div ng-repeat="property in data.properties" class="property_name">{{property.name}} 
 			
 			<div ng-repeat="value in property.value">

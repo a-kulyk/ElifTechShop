@@ -5,8 +5,7 @@ angular.module('app').factory('Items', ['$http', function ProductFactory($http){
            withCredentials: false,
            method: 'GET',
            url: "/catalog/filter/",
-           params: object,
-           headers : {'Content-Type': 'application/json'}
+           params: object
          });
       },
        item : function(id) {

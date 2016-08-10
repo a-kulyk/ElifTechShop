@@ -31,6 +31,10 @@ body {
 }
 
 
+.not_active {
+	opacity: 0.1;
+}
+
 
 .main_inner {
 	display: inline-block;
@@ -116,10 +120,10 @@ div.make3D.flip180{
 	-webkit-transform: translate3d(0,0,0);
 	transform: translate3d(0,0,0);
 	box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0.15);
-	-webkit-transition:  900ms ease-out;
-       -moz-transition:  900ms ease-out;
-         -o-transition:  900ms ease-out;
-            transition:  900ms ease-out;
+	-webkit-transition:  100ms ease-out;
+       -moz-transition:  100ms ease-out;
+         -o-transition:  100ms ease-out;
+            transition:  100ms ease-out;
 }
 
 .large div.make3D{box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0);}

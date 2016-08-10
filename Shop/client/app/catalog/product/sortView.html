@@ -1,7 +1,7 @@
 <div class="sort">
-	<select ui-select2="{minimumResultsForSearch: -1}" ng-change="product.sortThis()" data-placeholder="Pleas Select" ng-model="product.sorted" class="sort" ng-init="product.sorted = product.currentSort">
+	<select ui-select2="{minimumResultsForSearch: -1}" ng-change="catalog.sortThis()" data-placeholder="Pleas Select" ng-model="catalog.sorted" class="sort" ng-init="catalog.sorted = catalog.currentSort">
 		<option value="" ng-selected="true"></option>
-		<option  ng-repeat="value in product.sort"  value="{{value}}" >{{value}}</option>
+		<option  ng-repeat="value in catalog.sort"  value="{{value}}" >{{value}}</option>
 	</select>
 </div>
 

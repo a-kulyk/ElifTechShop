@@ -78,7 +78,7 @@
 	myApp.config(function ($routeProvider) {
 	    $routeProvider.when('/', {
 	        templateUrl: '/main.html',
-	        access: { restricted: true }
+	        access: { restricted: false }
 	    }).when('/login', {
 	        templateUrl: './app/auth/login.html',
 	        controller: 'loginController',
@@ -94,17 +94,7 @@
 	        templateUrl: './app/catalog/product/productShowView.html',
 	        controller: 'ProductShowController',
 	        controllerAs: 'product',
-	        access: { restricted: true }
-	    }).when('/category/:name', {
-	        templateUrl: './app/catalog/categories/categoryShowView.html',
-	        controller: 'CategoryShowController',
-	        controllerAs: 'categories',
-	        access: { restricted: true }
-	    }).when('/filter/', {
-	        templateUrl: './app/catalog/filter/filterView.html',
-	        controller: 'FilterItemsController',
-	        controllerAs: 'product',
-	        access: { restricted: true }
+	        access: { restricted: false }
 	    }).when('/order/cart', {
 	        templateUrl: './app/order/shoppingCart.html',
 	        controller: 'OrderController',
@@ -689,12 +679,10 @@
 	'use strict';
 
 	angular.module('app').controller('CatalogController', ['Items', '$route', '$routeParams', '$httpParamSerializer', '$rootScope', '$location', '$scope', '$timeout', function (Items, $route, $routeParams, $httpParamSerializer, $rootScope, $location, $scope, $timeout) {
+
 	    var that = this;
-	    $scope.itemArray = [{ id: 1, name: 'first' }, { id: 2, name: 'second' }, { id: 3, name: 'third' }, { id: 4, name: 'fourth' }, { id: 5, name: 'fifth' }];
-
-	    $scope.selected = { value: $scope.itemArray[0] };
+	    $scope.complete = false;
 	    if (!$route.current.params.categories) {
-
 	        for (var property in $rootScope.data.properties) {
 	            for (var i in $rootScope.data.properties[property].value) {
 	                $rootScope.data.properties[property].value.state = false;
@@ -709,41 +697,39 @@
 	        $routeParams.sort = that.sorted || 'cheap';
 	        $location.url('?' + $httpParamSerializer($routeParams));
 	    };
-	    Items.all($route.current.params).success(function (data) {
+	    Items.all($route.current.params).then(function (response) {
 
-	        $rootScope.complete.product = false;
-	        that.items = data.items;
-	        if (that.items.length === 0) {
+	        $scope.items = response.data.items;
+	        console.log($scope.items);
+	        if ($scope.items.length === 0) {
 	            $rootScope.complete.product = true;
-	            that.items.notMatch = true;
+	            $scope.items.notMatch = true;
 	            return;
 	        }
 
-	        for (var product in that.items) {
-	            that.items[product].smallDescription = that.items[product].description.slice(0, 105) + "...";
+	        for (var product in $scope.items) {
+	            $scope.items[product].smallDescription = $scope.items[product].description.slice(0, 105) + "...";
+	            $scope.items[product].qty = $scope.items[product].quantity;
+	            console.log($scope.items[product]);
 	        }
-	        var pages = data.pages || 0;
-	        that.pages = [];
+	        var pages = response.data.pages || 0;
+	        $scope.pages = [];
 	        for (var i = 1; i <= pages; i++) {
 	            var params = $route.current.params;
-
 	            params.page = i;
 	            var page = { number: i, url: $httpParamSerializer(params) };
-	            that.pages.push(page);
+	            $scope.pages.push(page);
 	        }
-	        for (var property in that.items.properties) {
-	            property.url = $httpParamSerializer(property);
-	        }
-	        $rootScope.complete.product = true;
+	        $scope.complete = true;
 	        setTimeout(function () {
 	            //do this after view has loaded :)\
 	            makeVisualEffects();
 	        }, 0);
-	    }).error(function (data, status) {
-	        console.log(data, status);
+	    }, function (error) {
+	        console.log(error);
 	        that.items = [];
 	        that.items.error = true;
-	        $rootScope.complete.product = true;
+	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
 	    Items.item($route.current.params.id).success(function (data) {
@@ -799,6 +785,7 @@
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
 	    var that = this;
+	    $scope.complete = false;
 	    if ($rootScope.data.price) {
 	        that.price = JSON.parse(JSON.stringify($rootScope.data.price));
 	    }
@@ -915,16 +902,13 @@
 	                    var srcCount = 0;
 	                    Parameters.count(propScr).then(function (result) {
 	                        srcCount = result.data;
-	                        console.log(params);
 	                        return Parameters.count(params);
 	                    }).then(function (result) {
-	                        console.log(result, $rootScope.data.properties[property].value[i]);
 	                        if (srcCount < result.data) {
 	                            $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) + ')';
 	                        } else {
 	                            var setCount = function setCount(property, i) {
 	                                Parameters.count(countQuery).then(function (result) {
-
 	                                    $rootScope.data.properties[property].value[i].count = '(' + result.data + ')';
 	                                    if ($rootScope.data.properties[property].value[i].state) {
 	                                        $rootScope.data.properties[property].value[i].count = null;
@@ -941,6 +925,7 @@
 	                    });
 	                }
 	                setAdditionalCount(property, i);
+	                $scope.complete = false;
 	            };
 
 	            for (var i in data.properties[property].value) {
@@ -954,7 +939,6 @@
 	    if ($rootScope.category != currentCategory) {
 	        Parameters.paramsOfCat(currentCategory).success(function (result) {
 	            if (result.price) that.price = JSON.parse(JSON.stringify(result.price));
-	            $rootScope.complete.property = false;
 	            $rootScope.category = currentCategory;
 	            $rootScope.data = result || [];
 
@@ -1029,8 +1013,7 @@
 	        withCredentials: false,
 	        method: 'GET',
 	        url: "/catalog/filter/",
-	        params: object,
-	        headers: { 'Content-Type': 'application/json' }
+	        params: object
 	      });
 	    },
 	    item: function item(id) {
@@ -1100,8 +1083,6 @@
 	angular.module('app').directive('sortItems', [function () {
 		return {
 			restrict: "E",
-			controller: 'CatalogController',
-			controllerAs: 'product',
 			templateUrl: "./app/catalog/product/sortView.html"
 		};
 	}]);
