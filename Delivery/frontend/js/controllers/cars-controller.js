@@ -6,8 +6,7 @@
 var moment = require('moment');
 
 module.exports = function (app) {
-    app.controller('carsCtrl', ['$rootScope', '$scope', '$http', '$window', 'AclService', function ($rootScope, $scope, $http, $window, AclService) {
-        $scope.can = AclService.can;
+    app.controller('carsCtrl', function ($rootScope, $scope, $http, $window) {
         $http.get('/cars').success(function (data, status, headers) {
             $scope.isTableVisible = data.cars.length;
             console.log(data);
@@ -19,11 +18,11 @@ module.exports = function (app) {
 
             $scope.redirectToOrder = function (order) {
                 $http.get('/order/id/' + order).success(function (data, status, headers) {
-                    if (data.success) {
+                    if(data.success){
                         $window.location.href = '#/order_info/' + data.trackingCode;
                     }
                 });
             }
         });
-    }])
+    })
 }

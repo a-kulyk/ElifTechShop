@@ -28,47 +28,32 @@ module.exports = function (app) {
             resolve: {
                 'acl': ['$q', 'AclService', function ($q, AclService) {
                     if (AclService.can('Cars')) {
-                        // Has proper permissions
                         return true;
                     } else {
-                        // Does not have permission
                         return $q.reject('Unauthorized');
                     }
                 }]
             }
         })
     }).run(['$rootScope', 'AclService', function ($rootScope, AclService) {
-        /*        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-         console.log(next)
-         })*/
         AclService.addRole('guest');
         AclService.addRole('admin');
 
         AclService.addResource('Order');
         AclService.addResource('Cars');
+        AclService.addResource('Login');
         AclService.addResource('Logout');
 
         AclService.allow('guest', 'Order');
+        AclService.allow('guest', 'Login');
+
         AclService.allow('admin', 'Cars');
         AclService.allow('admin', 'Logout');
 
-        var guest = {
-            id: 1,
-            name: 'Duck',
+        AclService.setUserIdentity({
             getRoles: function () {
                 return ['guest'];
-            },
-        };
-        AclService.setUserIdentity(guest);
+            }
+        });
     }]);
-    /*.run(function ($rootScope) {
-     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-     switch (next.templateUrl) {
-     case 'templates/track-order.html':
-     require.ensure([], function () {
-     require('../../css/track-order.css');
-     })
-     }
-     });
-     })*/
 }
