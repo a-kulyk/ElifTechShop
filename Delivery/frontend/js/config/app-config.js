@@ -46,9 +46,11 @@ module.exports = function (app) {
 
         AclService.addResource('Order');
         AclService.addResource('Cars');
+        AclService.addResource('Logout');
 
         AclService.allow('guest', 'Order');
         AclService.allow('admin', 'Cars');
+        AclService.allow('admin', 'Logout');
 
         var guest = {
             id: 1,

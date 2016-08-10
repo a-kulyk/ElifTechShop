@@ -2,7 +2,6 @@
  * Created by dmytro on 08.08.16.
  */
 'use strict';
-//let User = require('../models/user');
 let userService = require('../services/user-service');
 
 exports.post = function (req, res) {
@@ -15,6 +14,7 @@ exports.post = function (req, res) {
     userService.authorize(username, password)
         .then((isSuccessful)=> {
             if (isSuccessful) {
+                req.session.user = 'admin';
                 res.json(successMsg);
             } else {
                 failedMsg.message = 'AccessDenied'
