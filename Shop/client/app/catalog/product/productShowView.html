@@ -1,25 +1,25 @@
-<div  class="col-md-3 col-xs-12" id="sidebar">
-    <property-items></property-items>
-</div>
-    <div  class="product_show_view col-md-9 col-xs-12">
+    <div class="col-md-3 col-xs-12" id="sidebar">
+        <property-items></property-items>
+    </div>
+
+<div  class="product_show_view col-md-9 col-xs-12">
         <div class="product_view col-md-12 col-xs-12">
             <div class="product_image col-md-3 col-xs-12">
-                    <div ng-repeat="image in product.images">
-                        <img  ng-src="{{image}}" /></a>
-                    </div>
+                        <img  ng-src="{{product.images[0]}}" /></a>
             </div>
             <div class="product_option col-md-9 col-xs-12">
                 <div class="description col-md-9 col-xs-12">
-                    <button class="btn btn-warning pull-right" type="button" ng-click="doTheBack()">Go Back</button>
+
                     <div class="title">{{product.name}}</div>
                     <p class="description">{{product.description}}</p>
                 </div>
                 <div class="buy col-md-3 col-xs-12">
                     <p class="product_price">{{product.price}}$</p>
                     <div class="buy_button col-md-12 col-xs-6">
-                        <button type="button" class="buy-btn btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
+                       <p ng-show="product.quantity == 0" class="" >Not avaliable</p>
+                        <button type="button" ng-hide="product.quantity == 0" class="buy-btn btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
                     </div>
-                    <div class="range_button col-md-12 col-xs-6">
+                    <div class="range_button col-md-12 col-xs-6" ng-hide="product.quantity == 0">
                         <div class="input-group" style="width:100%">
                       <span class="input-group-btn">
                           <button type="button" class="btn btn-default btn-number" ng-click="quan = quan > 1 ? quan - 1 : quan">
@@ -41,27 +41,24 @@
             </div>
         </div>
         <div class="product_information  col-md-12 col-xs-12">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#properties" data-toggle="tab" aria-expanded="true">Properties</a></li>
-                <li class=""><a href="/#photo" data-toggle="tab" aria-expanded="false">Photo</a></li>
-
-            </ul>
-            <div id="myTabContent" class="tab-content">
-                <div class="tab-pane fade active in" id="properties">
-                    <div ng-repeat="property in product.properties">
-                        <p>{{property.name}} : {{property.value}}</p>
-                    </div> </div>
-                <div class="tab-pane fade" id="photo">
-                    <div ng-repeat="image in product.images">
-                        <img  ng-src="{{image}}" /></a>
+            <uib-tabset active="active">
+                <uib-tab index="0" heading="Properties">
+                    <div style="margin-top: 15px;">
+                        <div class="product_properties col-md-6 col-xs-12" ng-repeat="property in product.properties">
+                            <p>{{property.name}} : {{property.value}}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </uib-tab>
+                <uib-tab index="1" heading="Photos">
+                    <div class="product_images" ng-repeat="image in product.images">
+                        <img  ng-src="{{image}}" width="100%" /></a>
+                    </div>
+                </uib-tab>
+
+
+            </uib-tabset>
 
         </div>
     </div>
-
     <div style="clear:both;"></div>
-
-    <div style="clear:both"></div>
 

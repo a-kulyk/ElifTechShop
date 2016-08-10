@@ -313,3 +313,20 @@ p.product_price {
 .well .table {
   font-size: 14px;
 }
+
+
+.product_view {
+    padding:0px;
+}
+.product_images {
+    margin:10px 0;
+}
+
+.product_properties {
+
+}
+.product_properties p {
+    padding: 10px;
+    background: #eeeeee;
+    border-bottom: 1px solid #e1e1e1;
+}

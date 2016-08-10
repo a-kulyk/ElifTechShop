@@ -699,18 +699,17 @@
 	    };
 	    Items.all($route.current.params).then(function (response) {
 
+	        response.data.items.forEach(function (element) {
+	            element.smallDescription = element.description.slice(0, 105) + "...";
+	        });
+	        for (var product in response.data.items) {
+	            response.data.items[product].smallDescription = response.data.items[product].description.slice(0, 105) + "...";
+	        }
 	        $scope.items = response.data.items;
-	        console.log($scope.items);
 	        if ($scope.items.length === 0) {
 	            $rootScope.complete.product = true;
 	            $scope.items.notMatch = true;
 	            return;
-	        }
-
-	        for (var product in $scope.items) {
-	            $scope.items[product].smallDescription = $scope.items[product].description.slice(0, 105) + "...";
-	            $scope.items[product].qty = $scope.items[product].quantity;
-	            console.log($scope.items[product]);
 	        }
 	        var pages = response.data.pages || 0;
 	        $scope.pages = [];

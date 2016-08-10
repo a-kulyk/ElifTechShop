@@ -8,8 +8,7 @@
     <sort-items></sort-items>
     <div style="clear:both"></div>
 <div class="col-md-4 col-xs-12 " ng-repeat="item in items">
-
-    <div class="product" ng-class="{not_active: item.qty == 0}">
+    <div class="product" ng-class="{not_active: item.quantity == 0}">
 
         <div class="make3D">
             <div class="product-front">
@@ -22,7 +21,8 @@
 
 
                 <a ng-href="#/product/{{item._id}}"> <div class="image_overlay"></div></a>
-                <div class="add_to_cart" ng-click="main.addToCart(item)">Add to cart </div>
+                <div class="add_to_cart" ng-hide="{{item.quantity == 0}}" ng-click="main.addToCart(item)">Add to cart </div>
+                <div class="not_avaliable" ng-show="{{item.quantity == 0}}" >Not avaliable </div>
                 <div class="view_gallery">View gallery</div>
                 <div class="stats">
                     <div class="stats-container">
