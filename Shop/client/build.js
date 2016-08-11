@@ -78,7 +78,7 @@
 	myApp.config(function ($routeProvider) {
 	    $routeProvider.when('/', {
 	        templateUrl: '/main.html',
-	        access: { restricted: true }
+	        access: { restricted: false }
 	    }).when('/login', {
 	        templateUrl: './app/auth/login.html',
 	        controller: 'loginController',
@@ -94,17 +94,7 @@
 	        templateUrl: './app/catalog/product/productShowView.html',
 	        controller: 'ProductShowController',
 	        controllerAs: 'product',
-	        access: { restricted: true }
-	    }).when('/category/:name', {
-	        templateUrl: './app/catalog/categories/categoryShowView.html',
-	        controller: 'CategoryShowController',
-	        controllerAs: 'categories',
-	        access: { restricted: true }
-	    }).when('/filter/', {
-	        templateUrl: './app/catalog/filter/filterView.html',
-	        controller: 'FilterItemsController',
-	        controllerAs: 'product',
-	        access: { restricted: true }
+	        access: { restricted: false }
 	    }).when('/order/cart', {
 	        templateUrl: './app/order/shoppingCart.html',
 	        controller: 'OrderController',
@@ -246,6 +236,7 @@
 	      username: formData.username,
 	      password: formData.password,
 	      email: formData.email,
+	      bankAccount: formData.bankAccount,
 	      address: formData.address
 	    })
 	    // handle success
@@ -403,10 +394,9 @@
 
 	    main.addToCart = function (_item) {
 	        $uibModal.open({
-	            templateUrl: './app/main/modalView.html',
+	            templateUrl: './app/order/modals/modalView.html',
 	            controller: 'ModalCtrl',
 	            controllerAs: 'modal',
-	            // size: 'sm',
 	            resolve: {
 	                item: function item() {
 	                    return _item;
@@ -496,11 +486,24 @@
 	                data: cart
 	            });
 	        },
-	        updateCart: function updateCart(itemId) {
+	        updQuantity: function updQuantity(itemId, quantity) {
 	            return $http({
 	                method: 'PUT',
-	                url: '/order/update',
+	                url: '/order/updateQuantity',
+	                data: { itemId: itemId, quantity: quantity }
+	            });
+	        },
+	        removeItem: function removeItem(itemId) {
+	            return $http({
+	                method: 'PUT',
+	                url: '/order/removeItem',
 	                data: { itemId: itemId }
+	            });
+	        },
+	        pay: function pay() {
+	            return $http({
+	                method: 'GET',
+	                url: '/order/pay'
 	            });
 	        },
 	        saveOrderDetails: function saveOrderDetails(cart) {
@@ -533,14 +536,6 @@
 	                method: 'DELETE',
 	                url: "/order/remove"
 	            });
-	        },
-	        pay: function pay(obj) {
-	            return $http({
-	                method: 'POST',
-	                url: 'http://localhost:3001/transaction',
-	                data: obj,
-	                dataType: JSON
-	            });
 	        }
 	    };
 	}]);
@@ -555,16 +550,25 @@
 	    return function (dateString) {
 	        return moment(dateString).format("D MMMM YYYY, HH:mm");
 	    };
-	}).controller('OrderController', ['$rootScope', '$location', '$timeout', 'orderService', function ($rootScope, $location, $timeout, orderService) {
+	}).controller('OrderController', ['$rootScope', '$location', '$timeout', '$uibModal', 'orderService', function ($rootScope, $location, $timeout, $uibModal, orderService) {
 	    var order = this;
 
 	    orderService.getCart().then(function (response) {
 	        $rootScope.shoppingCart = response.data;
-	        // order.timeCreated = moment($rootScope.shoppingCart.order.created).format("D MMMM YYYY, HH:mm");
 	    });
 
+	    order.updQuantity = function (id, quan) {
+	        if (quan === 0) {
+	            order.removeItem(id);
+	        }
+	        orderService.updQuantity(id, quan).then(function (response) {
+	            $rootScope.shoppingCart = response.data;
+	        });
+	    };
+
 	    order.removeItem = function (id) {
-	        orderService.updateCart(id).then(function (response) {
+	        orderService.removeItem(id).then(function (response) {
+	            console.log(response.data);
 	            $rootScope.shoppingCart = response.data;
 	            if ($rootScope.shoppingCart.order.itemSet.length === 0) {
 	                orderService.delete();
@@ -577,25 +581,42 @@
 	    order.doTheBack = function () {
 	        window.history.back();
 	    };
-	    // var transaction = {
-	    //     from: '5793b140faa67ed10cf2bb4e',
-	    //     to: '5794fcc5c5421ff81b0b8c5e',
-	    //     amount: $rootScope.shoppingCart.total
-	    // };
 
-	    order.pay = function (transaction) {
-	        // orderService.pay(transaction)
-	        // .then(function(bank_resp) {
-	        //     console.log("bank_resp : ", bank_resp);
-	        // });
-	        orderService.saveOrderDetails().then(function (resp) {
-	            console.log("resp : ", resp);
-	            order.SuccessPayment = true;
-	            $timeout(function () {
-	                $location.path('/confirmAddress');
-	            }, 1000);
+	    order.pay = function () {
+	        orderService.pay().then(function (bank_resp) {
+	            console.log("bank_resp : ", bank_resp.data);
+	            if (bank_resp.data.success === true) {
+	                saveOrder();
+	            } else if (bank_resp.data.success === false) {
+	                console.log("Insufficient funds on Your bank account");
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/paymentFail.html'
+	                });
+	            } else if (bank_resp.data.error) {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/connectionErr.html'
+	                });
+	                console.log('Could not connect to Your bank');
+	            }
 	        });
 	    };
+
+	    function saveOrder() {
+	        orderService.saveOrderDetails().then(function (resp) {
+	            console.log("resp : ", resp);
+	            $uibModal.open({
+	                templateUrl: './app/order/modals/paymentDone.html',
+	                backdrop: 'static',
+	                keyboard: false,
+	                controller: function controller($uibModalInstance, $scope) {
+	                    $scope.next = function () {
+	                        $uibModalInstance.close();
+	                        $location.path('/confirmAddress');
+	                    };
+	                }
+	            });
+	        });
+	    }
 	}]).controller('HistoryCtrl', ['orderService', function (orderService) {
 	    var history = this;
 	    orderService.all().then(function (resp) {
@@ -616,7 +637,7 @@
 
 	'use strict';
 
-	angular.module('app').controller('ConfirmCtrl', ['$scope', '$rootScope', '$location', 'orderService', function ($scope, $rootScope, $location, orderService) {
+	angular.module('app').controller('ConfirmCtrl', ['$scope', '$rootScope', '$location', 'orderService', '$uibModal', function ($scope, $rootScope, $location, orderService, $uibModal) {
 	    var confirm = this;
 	    var user = $rootScope.currentUser;
 
@@ -631,14 +652,24 @@
 	            lat = user.address.lat;
 	            lng = user.address.lng;
 	        }
+
 	        orderService.setAddress({ str: confirm.address, lat: lat, lng: lng }).then(function (resp) {
 	            console.log(resp.data);
+	            $rootScope.shoppingCart = null;
+	            $uibModal.open({
+	                templateUrl: './app/order/modals/finalPage.html',
+	                controller: function controller($uibModalInstance, $scope) {
+	                    $scope.close = function () {
+	                        $location.path('/');
+	                        $uibModalInstance.close();
+	                    };
+	                    $scope.$on('modal.closing', function () {
+	                        $location.path('/');
+	                    });
+	                }
+	            });
 	        });
 	    };
-
-	    // confirm.doTheBack = function() {
-	    //   window.history.back();
-	    // };
 	}]);
 
 /***/ },
@@ -648,12 +679,10 @@
 	'use strict';
 
 	angular.module('app').controller('CatalogController', ['Items', '$route', '$routeParams', '$httpParamSerializer', '$rootScope', '$location', '$scope', '$timeout', function (Items, $route, $routeParams, $httpParamSerializer, $rootScope, $location, $scope, $timeout) {
+
 	    var that = this;
-	    $scope.itemArray = [{ id: 1, name: 'first' }, { id: 2, name: 'second' }, { id: 3, name: 'third' }, { id: 4, name: 'fourth' }, { id: 5, name: 'fifth' }];
-
-	    $scope.selected = { value: $scope.itemArray[0] };
+	    $scope.complete = false;
 	    if (!$route.current.params.categories) {
-
 	        for (var property in $rootScope.data.properties) {
 	            for (var i in $rootScope.data.properties[property].value) {
 	                $rootScope.data.properties[property].value.state = false;
@@ -668,41 +697,38 @@
 	        $routeParams.sort = that.sorted || 'cheap';
 	        $location.url('?' + $httpParamSerializer($routeParams));
 	    };
-	    Items.all($route.current.params).success(function (data) {
+	    Items.all($route.current.params).then(function (response) {
 
-	        $rootScope.complete.product = false;
-	        that.items = data.items;
-	        if (that.items.length === 0) {
+	        response.data.items.forEach(function (element) {
+	            element.smallDescription = element.description.slice(0, 105) + "...";
+	        });
+	        for (var product in response.data.items) {
+	            response.data.items[product].smallDescription = response.data.items[product].description.slice(0, 105) + "...";
+	        }
+	        $scope.items = response.data.items;
+	        if ($scope.items.length === 0) {
 	            $rootScope.complete.product = true;
-	            that.items.notMatch = true;
+	            $scope.items.notMatch = true;
 	            return;
 	        }
-
-	        for (var product in that.items) {
-	            that.items[product].smallDescription = that.items[product].description.slice(0, 105) + "...";
-	        }
-	        var pages = data.pages || 0;
-	        that.pages = [];
+	        var pages = response.data.pages || 0;
+	        $scope.pages = [];
 	        for (var i = 1; i <= pages; i++) {
 	            var params = $route.current.params;
-
 	            params.page = i;
 	            var page = { number: i, url: $httpParamSerializer(params) };
-	            that.pages.push(page);
+	            $scope.pages.push(page);
 	        }
-	        for (var property in that.items.properties) {
-	            property.url = $httpParamSerializer(property);
-	        }
-	        $rootScope.complete.product = true;
+	        $scope.complete = true;
 	        setTimeout(function () {
 	            //do this after view has loaded :)\
 	            makeVisualEffects();
 	        }, 0);
-	    }).error(function (data, status) {
-	        console.log(data, status);
+	    }, function (error) {
+	        console.log(error);
 	        that.items = [];
 	        that.items.error = true;
-	        $rootScope.complete.product = true;
+	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
 	    Items.item($route.current.params.id).success(function (data) {
@@ -758,6 +784,7 @@
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
 	    var that = this;
+	    $scope.complete = false;
 	    if ($rootScope.data.price) {
 	        that.price = JSON.parse(JSON.stringify($rootScope.data.price));
 	    }
@@ -860,8 +887,12 @@
 	                    //setAdditionalCount(property,i);
 	                }
 	                if (data.properties[property].name == 'company') {
-	                    params.company = data.properties[property].value[i].name;
-	                    console.log(params, i);
+	                    if (!params.company) {
+	                        params.company = [];
+	                        params.company.push(data.properties[property].value[i].name);
+	                    } else {
+	                        params.company.push(data.properties[property].value[i].name);
+	                    }
 	                }
 
 	                function setAdditionalCount(property, i) {
@@ -870,17 +901,14 @@
 	                    var srcCount = 0;
 	                    Parameters.count(propScr).then(function (result) {
 	                        srcCount = result.data;
-	                        console.log(params);
 	                        return Parameters.count(params);
 	                    }).then(function (result) {
-	                        console.log(result, $rootScope.data.properties[property].value[i]);
 	                        if (srcCount < result.data) {
-	                            $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
+	                            $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) + ')';
 	                        } else {
 	                            var setCount = function setCount(property, i) {
 	                                Parameters.count(countQuery).then(function (result) {
-
-	                                    $rootScope.data.properties[property].value[i].count = result.data;
+	                                    $rootScope.data.properties[property].value[i].count = '(' + result.data + ')';
 	                                    if ($rootScope.data.properties[property].value[i].state) {
 	                                        $rootScope.data.properties[property].value[i].count = null;
 	                                    }
@@ -896,6 +924,7 @@
 	                    });
 	                }
 	                setAdditionalCount(property, i);
+	                $scope.complete = false;
 	            };
 
 	            for (var i in data.properties[property].value) {
@@ -909,7 +938,6 @@
 	    if ($rootScope.category != currentCategory) {
 	        Parameters.paramsOfCat(currentCategory).success(function (result) {
 	            if (result.price) that.price = JSON.parse(JSON.stringify(result.price));
-	            $rootScope.complete.property = false;
 	            $rootScope.category = currentCategory;
 	            $rootScope.data = result || [];
 
@@ -980,12 +1008,14 @@
 	angular.module('app').factory('Items', ['$http', function ProductFactory($http) {
 	  return {
 	    all: function all(object) {
+	      if (!object.per_page) {
+	        object.per_page = 9;
+	      }
 	      return $http({
 	        withCredentials: false,
 	        method: 'GET',
 	        url: "/catalog/filter/",
-	        params: object,
-	        headers: { 'Content-Type': 'application/json' }
+	        params: object
 	      });
 	    },
 	    item: function item(id) {
@@ -1055,8 +1085,6 @@
 	angular.module('app').directive('sortItems', [function () {
 		return {
 			restrict: "E",
-			controller: 'CatalogController',
-			controllerAs: 'product',
 			templateUrl: "./app/catalog/product/sortView.html"
 		};
 	}]);

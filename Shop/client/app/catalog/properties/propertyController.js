@@ -1,6 +1,7 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
         let that = this;
+        $scope.complete = false;
         if($rootScope.data.price) {
             that.price = JSON.parse(JSON.stringify($rootScope.data.price));
         }
@@ -104,8 +105,13 @@ angular.module('app')
                         //setAdditionalCount(property,i);
                     }
                     if(data.properties[property].name == 'company') {
-                        params.company = data.properties[property].value[i].name;
-                        console.log(params,i);
+                        if(!params.company) {
+                            params.company = [];
+                            params.company.push(data.properties[property].value[i].name);
+                        } else {
+                            params.company.push(data.properties[property].value[i].name);
+                        }
+
                     }
 
 
@@ -115,43 +121,40 @@ angular.module('app')
                         if(typeof params == 'undefined') return null;
                         let srcCount = 0;
                         Parameters.count(propScr)
-                            .then(
-                                result => {
-                            srcCount = result.data;
-                        console.log(params);
-                        return Parameters.count(params)
-                    }
-                    )
-                    .then(
+                        .then(
                             result => {
-                            console.log(result, $rootScope.data.properties[property].value[i]);
-                            if(srcCount < result.data) {
-                            $rootScope.data.properties[property].value[i].count = "+" + (result.data - srcCount);
-                        } else {
-                            var countQuery = creatCountObject(data.properties[property].value[i]);
-
-                            function setCount (property,i) {
-                                Parameters.count(countQuery)
-                                    .then(
-                                        result => {
-
-                                    $rootScope.data.properties[property].value[i].count = result.data;
-                                if($rootScope.data.properties[property].value[i].state) {
-                                    $rootScope.data.properties[property].value[i].count = null;
+                                srcCount = result.data;
+                                return Parameters.count(params)
+                             }
+                        )
+                        .then(
+                                result => {
+                                 if(srcCount < result.data) {
+                                $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) +')';
+                            } else {
+                                var countQuery = creatCountObject(data.properties[property].value[i]);
+                                function setCount (property,i) {
+                                    Parameters.count(countQuery)
+                                        .then(
+                                            result => {
+                                                $rootScope.data.properties[property].value[i].count = '('+ result.data +')';
+                                                if($rootScope.data.properties[property].value[i].state) {
+                                                    $rootScope.data.properties[property].value[i].count = null;
+                                                }
+                                            }
+                                        )
                                 }
+                                setCount(property,i);
                             }
-                            )
-                            }
-                            setCount(property,i);
                         }
-                    }
-                    )
+                        )
                     .catch(function(error) {
                             $rootScope.data.properties[property].value[i].count = null;
                         })
 
                     }
                     setAdditionalCount(property,i);
+                    $scope.complete = false;
                 }
             }
 
@@ -165,7 +168,6 @@ angular.module('app')
             Parameters.paramsOfCat(currentCategory)
                 .success(function (result) {
                     if(result.price) that.price= JSON.parse(JSON.stringify(result.price));
-                    $rootScope.complete.property = false;
                     $rootScope.category = currentCategory;
                     $rootScope.data = result || [];
 

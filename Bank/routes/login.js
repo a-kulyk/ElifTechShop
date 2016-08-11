@@ -6,7 +6,6 @@ exports.post = function (req, res) {
     
     User.findOne({username: username})
         .then(function (user) {
-            console.log(password);
             if(user.checkPassword(password)){
                 req.session.user = user._id;
                 res.send({

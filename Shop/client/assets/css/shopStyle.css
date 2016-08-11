@@ -31,6 +31,10 @@ body {
 }
 
 
+.not_active {
+	opacity: 0.5;
+}
+
 
 .main_inner {
 	display: inline-block;
@@ -116,10 +120,10 @@ div.make3D.flip180{
 	-webkit-transform: translate3d(0,0,0);
 	transform: translate3d(0,0,0);
 	box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0.15);
-	-webkit-transition:  900ms ease-out;
-       -moz-transition:  900ms ease-out;
-         -o-transition:  900ms ease-out;
-            transition:  900ms ease-out;
+	-webkit-transition:  100ms ease-out;
+       -moz-transition:  100ms ease-out;
+         -o-transition:  100ms ease-out;
+            transition:  100ms ease-out;
 }
 
 .large div.make3D{box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0);}
@@ -241,6 +245,27 @@ div.make3D.flip180{
 	cursor:pointer;
 
 }
+
+.not_avaliable{
+	position:absolute;
+	top:10px;
+	left:50%;
+	width:152px;
+	font-size:14px;
+	margin-left:-78px;
+	border:2px solid #fff;
+	color:#ccc;
+	text-align:center;
+	text-transform:uppercase;
+	font-weight:700;
+	padding:10px 0;
+	opacity:0.5;
+	-webkit-transition: all 200ms ease-out;
+	-moz-transition: all 200ms ease-out;
+	-o-transition: all 200ms ease-out;
+	transition: all 200ms ease-out;
+}
+
 .make3D.animate .add_to_cart{
 	opacity:1;	
 	-webkit-transition: all 200ms ease-out; 

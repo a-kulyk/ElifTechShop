@@ -1,4 +1,13 @@
+require('./config/config.test');
 require('./database/mongoose.test');
 require('./database/user.test');
 require('./database/account.test');
 require('./transaction/transaction.test');
+require('./routes/account.test');
+require('./routes/history.test');
+require('./routes/islogin.test');
+require('./routes/login.test');
+require('./routes/logout.test');
+require('./routes/pay.test');
+require('./routes/signup.test');
+require('./routes/transaction.test');

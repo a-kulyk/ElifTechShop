@@ -86,15 +86,21 @@ router.get('/filter/count/', function(req,res,next) {
 
 
 router.get('/filter/', function(req,res,next) {
-  
-    let myFilter = new Filter();
-    let pagination = myFilter.definePage();
+
+    let pagination, myFilter = new Filter();
     let filterQuery = JSON.parse(JSON.stringify(req.query));
 
     if(filterQuery.categories) {
         myFilter.setCategories(filterQuery.categories);
         delete filterQuery.categories
     }
+
+    if(filterQuery.per_page) {
+        myFilter.setPerPage(filterQuery.per_page);
+        delete filterQuery.per_page
+    }
+
+    pagination = myFilter.definePage();
 
     if(filterQuery.company) {
         myFilter.setCompany(filterQuery.company);
@@ -131,27 +137,65 @@ router.get('/filter/', function(req,res,next) {
 
 
 
-    Promise.all([
-        Products.find(myFilter.creatQuery()).sort(sort).skip(pagination.skip()).limit(pagination.per_page()),
-        Products.find(myFilter.creatQuery()).count()
-    ])
-    .then(
-    result => {
-      let promiseResult = {};
-      promiseResult.items = result[0];
-      if(promiseResult.items.length == 0) {
-        return res.json(promiseResult);
-      }
-      let count = result[1];
-        //promiseResult.count = count;
-      let countPage = count/pagination.per_page();
-      promiseResult.pages = countPage < 1 ? 1 : ((Math.floor(countPage) == countPage) ? countPage : (Math.floor(countPage)+1));
-      return res.json(promiseResult);
-    },
-    error =>  {
-      next(error);
-    }
-    )
+
+
+        let countActiveItems,count,activeResult;
+
+        Promise.all([
+            Products.count(myFilter.creatQuery()),
+            Products.count(myFilter.creatQuery({quantity : {$gt : 0}}))
+        ])
+            .then (
+                data => {
+                    count = data[0];
+                    countActiveItems = data[1];
+                    return Products.aggregate(
+                        [
+                            { $match : myFilter.creatQuery() },
+                            { $sort : sort },
+                            { $match : {quantity : {$gt: 0}}},
+                            { $skip : pagination.skip()},
+                            { $limit: pagination.per_page() }
+                        ]
+                    )
+                }
+            )
+            .then (
+            data => {
+                activeResult = data;
+                let skip = 0;
+                if (data.length === pagination.per_page())
+                    return Promise.resolve([])
+                if(data.length === 0) {
+                    skip = pagination.skip()  - countActiveItems
+                }
+                return Products.aggregate(
+                    [
+                        { $match : myFilter.creatQuery() },
+                        { $sort : sort },
+                        { $match : {quantity : 0}},
+                        { $skip : skip},
+                        { $limit: pagination.per_page() - data.length }
+                    ]
+                )
+            }
+        )
+        .then(
+        data => {
+        let result = activeResult.concat(data);
+          let promiseResult = {};
+          promiseResult.items = result;
+          if(promiseResult.items.length == 0) {
+            return res.json(promiseResult);
+          }
+          let countPage = count/pagination.per_page();
+          promiseResult.pages = countPage < 1 ? 1 : ((Math.floor(countPage) == countPage) ? countPage : (Math.floor(countPage)+1));
+          return res.json(promiseResult);
+        },
+        error =>  {
+          next(error);
+        }
+        )
  });
 
 module.exports = router;

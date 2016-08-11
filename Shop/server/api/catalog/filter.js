@@ -6,10 +6,20 @@ class Filter {
         this.min_price = 0;
         this.max_price = Math.pow(10,6);
         this.pages = 1;
-        this.perPage = 9;
+        this.perPage = 1000;
         this.company = [];
         this.sort =  {
             'price': 1
+        }
+    }
+
+    setPerPage (perpage) {
+        if(perpage) {
+            try {
+                this.perPage = parseInt(perpage)
+            } catch (err) {
+                this.perPage = 1000;
+            }
         }
     }
 
@@ -73,6 +83,7 @@ class Filter {
 
     definePage (number) {
         this.pages = Math.abs(parseInt(number)) || 1;
+        console.log("pages",this.pages);
         let per_page = this.perPage;
         let skip = per_page > 0 ? (this.pages-1)*per_page : 0;
         return {
@@ -85,9 +96,12 @@ class Filter {
         let searchExp = {};
         if(text) {
             let words = text.split(" ");
-            var searchExpe = "(" + words.join('|') + ')';
+            for(let i=0;i < words.length;i++) {
+                words[i]  = '?=.*' + words[i];
+            }
+            var searchExpe = "(" + words.join(')(') + ')';
             searchExp = new RegExp(searchExpe,"i");
-            //searchExp = new RegExp(text+"*","i");
+
         }
         this.searchField = searchExp;
     }
@@ -116,15 +130,13 @@ class Filter {
         }
     }
 
-    creatQuery (notQuantity) {
+    creatQuery (params) {
         let query = {$and: [{}]};
 
-        /*if(notQuantity) {
-            query.$and.push({ quantity: { $lt: 1 } })
-        } else {
-            query.$and.push({ quantity: { $gt: 1 } })
+        if(params) {
+            query.$and.push(params)
         }
-        */
+
         if(!(this.company.length < 1)) {
             let companyQuery = {$or : this.company};
             

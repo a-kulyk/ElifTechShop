@@ -19,10 +19,9 @@ angular.module('app').controller('mainController',
 
     main.addToCart = function(item) {
             $uibModal.open({
-                templateUrl: './app/main/modalView.html',
+                templateUrl: './app/order/modals/modalView.html',
                 controller: 'ModalCtrl',
                 controllerAs: 'modal',
-                // size: 'sm',
                 resolve: {
                     item: function() {
                         return item;

@@ -4,19 +4,27 @@ angular.module('app')
             return moment(dateString).format("D MMMM YYYY, HH:mm");
         };
     })
-    .controller('OrderController', ['$rootScope', '$location', '$timeout', 'orderService',
-        function($rootScope, $location, $timeout, orderService) {
+    .controller('OrderController', ['$rootScope', '$location', '$timeout', '$uibModal', 'orderService',
+        function($rootScope, $location, $timeout, $uibModal, orderService) {
             var order = this;
 
             orderService.getCart()
                 .then(function(response) {
                     $rootScope.shoppingCart = response.data;
-                    // order.timeCreated = moment($rootScope.shoppingCart.order.created).format("D MMMM YYYY, HH:mm");
                 });
 
-            order.removeItem = function(id) {
-                orderService.updateCart(id)
+            order.updQuantity = function(id, quan) {
+                if (quan === 0) { order.removeItem(id); }
+                orderService.updQuantity(id, quan)
                     .then(function(response) {
+                        $rootScope.shoppingCart = response.data;
+                    });
+            };
+
+            order.removeItem = function(id) {
+                orderService.removeItem(id)
+                    .then(function(response) {
+                        console.log(response.data);
                         $rootScope.shoppingCart = response.data;
                         if ($rootScope.shoppingCart.order.itemSet.length === 0) {
                             orderService.delete();
@@ -29,28 +37,45 @@ angular.module('app')
             order.doTheBack = function() {
                 window.history.back();
             };
-            // var transaction = {
-            //     from: '5793b140faa67ed10cf2bb4e',
-            //     to: '5794fcc5c5421ff81b0b8c5e',
-            //     amount: $rootScope.shoppingCart.total
-            // };
 
-            order.pay = function(transaction) {
-                // orderService.pay(transaction)
-                // .then(function(bank_resp) {
-                //     console.log("bank_resp : ", bank_resp);
-                // });
-                orderService.saveOrderDetails()
-                    .then(function(resp) {
-                        console.log("resp : ", resp);
-                        order.SuccessPayment = true;
-                        $timeout(function() {
-                            $location.path('/confirmAddress');
-                        }, 1000);
-                         
+            order.pay = function() {
+                orderService.pay()
+                    .then(function(bank_resp) {
+                        console.log("bank_resp : ", bank_resp.data);
+                        if (bank_resp.data.success === true) {
+                            saveOrder();
+                        } else if (bank_resp.data.success === false) {
+                            console.log("Insufficient funds on Your bank account");
+                            $uibModal.open({
+                                templateUrl: './app/order/modals/paymentFail.html'
+                            });
+                        } else if (bank_resp.data.error) {
+                            $uibModal.open({
+                                templateUrl: './app/order/modals/connectionErr.html'
+                            });
+                            console.log('Could not connect to Your bank');
+                        }
                     });
             };
 
+            function saveOrder() {
+                orderService.saveOrderDetails()
+                    .then(function(resp) {
+                        console.log("resp : ", resp);
+                        $uibModal.open({
+                            templateUrl: './app/order/modals/paymentDone.html',
+                            backdrop: 'static',
+                            keyboard: false,
+                            controller: function($uibModalInstance, $scope) {
+                                $scope.next = function() {
+                                    $uibModalInstance.close();
+                                    $location.path('/confirmAddress');
+                                    
+                                };
+                            }
+                        });
+                    });
+            }
         }
     ])
     .controller('HistoryCtrl',['orderService', function(orderService) {

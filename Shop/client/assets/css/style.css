@@ -261,6 +261,10 @@ a:hover  {
   opacity: 0;
 }
 
+.modal-dialog {
+  margin-top: 65px;
+} 
+
 .product_image img{
     width: 100%;
 }
@@ -281,3 +285,48 @@ p.product_price {
     margin: 0px 30px 5px 5px;
 }
 
+.cartQuant{
+  text-align: center;
+}
+
+.cartQuant::-webkit-inner-spin-button {
+  -webkit-appearance: none; 
+  margin: 0;
+}
+
+.plusMinus .btn {
+  width: 100%;
+}
+
+.plusMinus .btn:hover {
+  background-color: lightblue;
+}
+
+.plusMinus .input-group {
+  width: 120px;
+}
+
+.plusMinus .input-group-btn {
+  width: 34px;
+}
+
+.well .table {
+  font-size: 14px;
+}
+
+
+.product_view {
+    padding:0px;
+}
+.product_images {
+    margin:10px 0;
+}
+
+.product_properties {
+
+}
+.product_properties p {
+    padding: 10px;
+    background: #eeeeee;
+    border-bottom: 1px solid #e1e1e1;
+}
