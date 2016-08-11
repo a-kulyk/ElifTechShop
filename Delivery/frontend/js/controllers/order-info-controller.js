@@ -17,7 +17,7 @@ module.exports = function (app) {
                 if (data.success) {
                     spinner.stop();
                     $scope.arrivalTime = moment(data.arrivalTime).format('DD.MM.YY, HH:mm');
-                    let tempTime = moment.duration(data.travelTime, 'seconds');
+                    var tempTime = moment.duration(data.travelTime, 'seconds');
                     console.log(data.travelTime);
                     $scope.travelTime = tempTime.hours() + ' hours ' + tempTime.minutes()+' minutes';
                     $scope.state = orderStates.statesArray[data.state];
