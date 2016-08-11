@@ -17,14 +17,14 @@ exports.post = function (req, res) {
         .catch(function (error) {
             res.send({
                 "success": false,
-                "errorDescription": error
+                "errorDescription": error.message
             });
         });
 
 };
 
 exports.get = function (req, res) {
-    console.log(req.query);
+  // console.log(req.query);
     let date = new Date(req.query.date_year, req.query.date_month - 1, req.query.date_day);
     date = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+1),-21);
     let nextDate = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+2),-21);
@@ -56,7 +56,7 @@ exports.get = function (req, res) {
         .catch(function (error) {
             res.send({
                 "success": false,
-                "errorDescription": error
+                "errorDescription": error.message
             });
         });
 };
