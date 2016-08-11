@@ -20,5 +20,7 @@ module.exports = function (app) {
     app.post('/logout', require('./logout').post);
 
     app.get('/cars', require('./cars').get);
+
+    app.get('/session', require('./session').get);
 }
 
