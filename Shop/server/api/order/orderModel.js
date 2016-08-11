@@ -29,7 +29,8 @@ var Order = new Schema({
         str: String,
         lat: String,
         lng: String
-    }
+    },
+    trackingCode: String
 
 });
 

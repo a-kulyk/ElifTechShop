@@ -5,19 +5,36 @@
             <thead>
                 <tr>
                     <th>Order Number</th>
-                    <th>Created</th>
-                    <th>Grand Total</th>
-                    <th>Status</th>
+                    <th>
+                        <a href="" ng-click="history.sortBy('date.created')">
+                            Created
+                            <span ng-show="history.propertyName == 'date.created' && !history.sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span ng-show="history.propertyName == 'date.created' && history.sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="history.sortBy('total')">
+                            Grand Total
+                            <span ng-show="history.propertyName == 'total' && !history.sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span ng-show="history.propertyName == 'total' && history.sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="" ng-click="history.sortBy('status')">
+                            Status
+                            <span ng-show="history.propertyName == 'status' && !history.sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span ng-show="history.propertyName == 'status' && history.sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+                        </a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat='order in history.allOrders'>
+                <tr ng-repeat="order in history.allOrders | orderBy:history.propertyName:history.sortReverse" ng-hide="order._id === shoppingCart.order._id">
                     <td>
-                        <a ng-href="#/order/cart" ng-if="order._id === shoppingCart.order._id">{{ order._id }}</a>
-                        <a ng-href="#/order/{{order._id}}" ng-if="order._id !== shoppingCart.order._id">{{ order._id }}</a>
+                        <a ng-href="#/order/{{order._id}}">{{ order._id }}</a>
                     </td>
                     <td>{{ order.date.created | moment }}</td>
-                    <td>{{ order.total || shoppingCart.total }}</td>
+                    <td>{{ order.total }}</td>
                     <td>{{ order.status }}</td>
                 </tr>
             </tbody>

@@ -4,8 +4,8 @@ angular.module('app')
             return moment(dateString).format("D MMMM YYYY, HH:mm");
         };
     })
-    .controller('OrderController', ['$rootScope', '$location', '$timeout', '$uibModal', 'orderService',
-        function($rootScope, $location, $timeout, $uibModal, orderService) {
+    .controller('OrderController', ['$rootScope', '$scope', '$location', '$timeout', '$uibModal', 'orderService',
+        function($rootScope, $scope, $location, $timeout, $uibModal, orderService) {
             var order = this;
 
             orderService.getCart()
@@ -13,12 +13,24 @@ angular.module('app')
                     $rootScope.shoppingCart = response.data;
                 });
 
-            order.updQuantity = function(id, quan) {
-                if (quan === 0) { order.removeItem(id); }
+            order.updQuantity = _.debounce(function(id, quan) {
                 orderService.updQuantity(id, quan)
                     .then(function(response) {
                         $rootScope.shoppingCart = response.data;
                     });
+            }, 1000);
+
+            order.increment = function(id, quan) {
+                order.updQuantity(id, ++quan);
+            };
+
+            order.decrement = function(id, quan) {
+                --quan;
+                if (quan === 0) { 
+                    order.removeItem(id);
+                    return;
+                }
+                order.updQuantity(id, quan);
             };
 
             order.removeItem = function(id) {
@@ -54,6 +66,21 @@ angular.module('app')
                                 templateUrl: './app/order/modals/connectionErr.html'
                             });
                             console.log('Could not connect to Your bank');
+                        } else if (bank_resp.data.warning === "No bankAccount") {
+                            $uibModal.open({
+                                templateUrl: './app/order/modals/inputBankAcc.html',
+                                controller: function($uibModalInstance, $scope, AuthService) {
+                                    $scope.next = function(account) {
+                                        AuthService.addBankAccount(account)
+                                            .then(function(resp) {
+                                                console.log('addBankAccount.resp', resp);
+                                                $uibModalInstance.close();
+                                            })
+                                        
+                                                                                
+                                    };
+                                }
+                            });
                         }
                     });
             };
@@ -78,15 +105,20 @@ angular.module('app')
             }
         }
     ])
-    .controller('HistoryCtrl',['orderService', function(orderService) {
+    .controller('HistoryCtrl',['$scope', 'orderService', function($scope, orderService) {
         var history = this;
-        orderService.all()
-            .then(function(resp) {
-                history.allOrders = resp.data;
+        history.propertyName = 'date.created';
+        history.sortReverse = false;
 
-            });
-        }
-    ])
+        history.sortBy = function(propertyName) {
+            history.sortReverse = (history.propertyName === propertyName) ? !history.sortReverse : true;
+            history.propertyName = propertyName;
+          };
+
+        orderService.all().then(function (resp) {
+            history.allOrders = resp.data;
+        });
+    }])
     .controller('OrderDetailController',[ '$route', 'orderService',
         function($route, orderService) {
             var detail = this;

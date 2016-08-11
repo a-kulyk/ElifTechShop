@@ -32,7 +32,7 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                 return $http({
                     method: 'PUT',
                     url: '/order/removeItem',
-                    data: { itemId: itemId }
+                    data: { itemId }
                 });
             },
             pay: function() {

@@ -8,8 +8,8 @@
                     <th>Product</th>
                     <th>Category</th>
                     <th>Quantity</th>
-                    <th>Price, $</th>
-                    <th>Sum, $</th>
+                    <th>Price</th>
+                    <th>Sum</th>
                     <th></th>
                 </tr>
             </thead>
@@ -25,17 +25,17 @@
                         <div class="plusMinus">
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn" ng-click="item.quantity=item.quantity-1;order.updQuantity(item.productId._id,item.quantity)" >-</button>
+                                    <button type="button" class="btn" ng-click="order.decrement(item.productId._id, item.quantity)" >-</button>
                                 </span>
                                 <input class="form-control cartQuant" ng-model="item.quantity" min="1" type="number" onfocus="this.blur()" />
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn" ng-click="item.quantity=item.quantity+1;order.updQuantity(item.productId._id,item.quantity)">+</button>
+                                    <button type="button" class="btn" ng-click="order.increment(item.productId._id, item.quantity)">+</button>
                                 </span>
                             </div>
                         </div>
                     </td>
-                    <td>{{item.productId.price}}</td>
-                    <td>{{item.quantity * item.productId.price}}</td>
+                    <td>{{item.productId.price | currency}}</td>
+                    <td>{{item.quantity * item.productId.price | currency}}</td>
                     <td id="closeButton">
                         <button class="btn btn-default btn-xs" ng-click="order.removeItem(item.productId._id)" data-toggle="tooltip" title="Remove this product from cart">&nbsp x &nbsp</button>
                     </td>

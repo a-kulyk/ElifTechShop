@@ -51,15 +51,9 @@ angular.module('app').controller('registerController',
 
     $scope.register = function () {
 
-      console.log("lat : ", $scope.mylat);
-      console.log("lng : ", $scope.mylng);
-
       // initial values
       $scope.error = false;
       $scope.disabled = true;
-
-      $scope.registerForm.address.lat = $scope.mylat;
-      $scope.registerForm.address.lng = $scope.mylng;
 
       console.log("$scope.registerForm: ", $scope.registerForm);
 

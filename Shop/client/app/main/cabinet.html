@@ -1,0 +1,41 @@
+<div class="well">
+
+    <h4>Your personal information</h4>
+    <p><strong>Username: </strong>{{currentUser.username}}</p>
+    <p><strong>Email: </strong>{{currentUser.email}}</p>
+    <p><strong>Address: </strong>{{currentUser.address.str}}</p>
+    <p><strong>BankAccount: </strong>{{currentUser.bankAccount}}</p>
+    <button class="btn btn-default" ng-click="cabinet.edit = !cabinet.edit">Edit Account</button>
+    <form class="form-horizontal" name="cabinet.form" ng-show="cabinet.edit" ng-submit="cabinet.update(cabinet.user)">
+        <fieldset>
+        <hr>
+            <div class="form-group">
+                <label for="username" class="col-lg-2 control-label">Username</label>
+                <div class="col-lg-10">
+                    <input ng-model="cabinet.user.username" class="form-control" id="username" type="text" name="username" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="col-lg-2 control-label">Email</label>
+                <div class="col-lg-10">
+                    <input ng-model="cabinet.user.email" class="form-control" id="email" type="email" name="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address" class="col-lg-2 control-label">Address</label>
+                <div class="col-lg-10">
+                    <input googleplace ng-model="cabinet.user.address.str" class="form-control" id="address" type="text" lat="cabinet.user.address.lat" lng="cabinet.user.address.lng" name="address" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="bankAccount" class="col-lg-2 control-label">Bank Account</label>
+                <div class="col-lg-10">
+                    <input ng-model="cabinet.user.bankAccount" class="form-control" id="bankAccount" type="text" name="bankAccount" pattern="^[a-z0-9]{24}$" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Update profile</button>
+            </div>
+        </fieldset>
+    </form>
+</div>

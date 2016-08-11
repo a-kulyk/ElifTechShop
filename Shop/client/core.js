@@ -6,6 +6,7 @@
     require("./app/main/mainController.js");
     require("./app/main/mainDirective.js");
     require("./app/main/modalController.js");
+    require("./app/main/cabinetController.js");
     require("./app/order/orderService.js");
     require("./app/order/orderController.js");
     require("./app/order/confirmController.js");

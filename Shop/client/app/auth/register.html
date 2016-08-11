@@ -24,13 +24,13 @@
             <div class="form-group">
                 <label for="inputBankAccount" class="col-lg-2 control-label">Bank Account</label>
                 <div class="col-lg-10">
-                    <input type="bankAccount" class="form-control" id="inputbankAccount" name="bankAccount" ng-model="registerForm.bankAccount" placeholder="Enter Your bank account " required>
+                    <input type="bankAccount" class="form-control" id="inputbankAccount" name="bankAccount" ng-model="registerForm.bankAccount" placeholder="Enter Your bank account ">
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputAddress" class="col-lg-2 control-label">Address</label>
                 <div class="col-lg-10">
-                    <input googleplace ng-model="registerForm.address.str" class="form-control" id="inputAddress" type="text" lat="mylat" lng="mylng" name="address" >
+                    <input googleplace ng-model="registerForm.address.str" class="form-control" id="inputAddress" type="text" lat="registerForm.address.lat" lng="registerForm.address.lng" name="address" >
                 </div>
             </div>
 

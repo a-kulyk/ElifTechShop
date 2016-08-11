@@ -74,4 +74,33 @@ router.get('/status', function(req, res) {
   });
 });
 
+router.put('/addBankAccount', function(req, res, next) {
+  User.findById(req.user._id)
+    .then(user => {
+        user.bankAccount = req.body.bankAccount;
+        return user.save();
+      })
+    .then(user => res.json(user),
+      err => next(err))
+ });
+
+router.put('/updateProfile', function(req, res, next) {
+  User.findById(req.user._id)
+    .then(user => {
+      console.log("req.body: ",req.body);  
+        user.username = req.body.username;
+        user.email = req.body.email;
+        user.address = req.body.address;
+        user.bankAccount = req.body.bankAccount;
+        return user.save();
+      })
+    .then(user => {
+      req.login(user, function(err) {
+          if (err) return next(err)
+          res.json(user)
+      })
+    }, err => next(err))
+ });
+
+
 module.exports = router;

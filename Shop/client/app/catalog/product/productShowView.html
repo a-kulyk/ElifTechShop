@@ -14,7 +14,7 @@
                     <p class="description">{{product.description}}</p>
                 </div>
                 <div class="buy col-md-3 col-xs-12">
-                    <p class="product_price">{{product.price}}$</p>
+                    <p class="product_price">{{product.price | currency}}</p>
                     <div class="buy_button col-md-12 col-xs-6">
                        <p ng-show="product.quantity == 0" class="" >Not avaliable</p>
                         <button type="button" ng-hide="product.quantity == 0" class="buy-btn btn btn-primary" ng-click="addToCart({itemId: product._id, quantity: quan})">Add to Cart</button>
@@ -33,7 +33,7 @@
                           </button>
                       </span>
                         </div>
-                        <p class="total">Total: {{product.price * quan}}$</p>
+                        <p class="total">Total: {{product.price * quan | currency}}</p>
                     </div>
 
                 </div>
