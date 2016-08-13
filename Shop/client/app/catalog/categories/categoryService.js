@@ -7,11 +7,11 @@ angular.module('app').factory('Parameters',['$http', function($http) {
               url: "/catalog/find/all"
             });
         },
-        count: function(object) {
+        countOfCat: function(cat,object) {
               return $http({
               withCredentials: false,
               method: 'GET',
-              url: "/catalog/filter/count/",
+              url: "/catalog/filtration/" + cat,
               params: object,
               headers : {'Content-Type': 'application/json'}
             });

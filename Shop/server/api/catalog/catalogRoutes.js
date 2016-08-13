@@ -6,7 +6,6 @@ var Filters = require("./filterModel.js");
 var Filter = require('./filter.js');
 mongoose.Promise = global.Promise;
 
-
 router.get('/product/:id', function(req, res, next) {
   Products.findById(req.params.id)
   .then(
@@ -85,6 +84,183 @@ router.get('/filter/count/', function(req,res,next) {
 
 
 
+router.get('/filtration/:category', function(req,res,next) {
+    delete req.query.categories;
+
+    if(req.params.category == "_all") {
+        Products.find().distinct('category')
+            .then(
+                result => res.json(result),
+                error =>  next(error)
+            );
+        return;
+    }
+
+    let myFilter = new Filter();
+    let filterQuery = JSON.parse(JSON.stringify(req.query));
+
+    if(req.params.category) {
+        myFilter.setCategories(req.params.category);
+    }
+
+    if(filterQuery.sort) {
+        delete filterQuery.sort
+    }
+
+    if(filterQuery.searchField) {
+        myFilter.setSearchField(filterQuery.searchField);
+        delete filterQuery.searchField
+    }
+
+    if (filterQuery.minprice || filterQuery.maxprice) {
+        myFilter.setPrice(filterQuery.minprice,filterQuery.maxprice);
+        delete filterQuery.minprice;
+        delete filterQuery.maxprice;
+
+    }
+
+    if(filterQuery.company) {
+        delete filterQuery.company;
+    }
+
+    for (var item in filterQuery) {
+        myFilter.setProperties(item,filterQuery[item]);
+    }
+
+
+    Filters.find({'_id' : req.params.category})
+        .then (result => {
+            if(result.length === 0) return res.json([]);
+            let newResult = JSON.parse(JSON.stringify(result[0]))
+            let properties = newResult.properties;
+            let companies = newResult.company;
+
+            forCompany(0);
+            function forCompany(index) {
+                if(index == companies.length) return forProperties(0)
+                let newCompany = {
+                    name :  companies[index],
+                    count : null
+                }
+                let query = myFilter.creatQuery();
+                query.company = companies[index];
+                Products.count(query)
+                .then(
+                    countOfCompany => {
+                        newCompany.count = countOfCompany;
+                        companies[index] = newCompany;
+                        console.log(companies[index]);
+                        forCompany(index+1);
+                    },
+                    error => console.log (error)
+                )
+            }
+
+            function forProperties(index) {
+                if(index == properties.length) return res.json(newResult);
+                if(req.query.company) {
+                    myFilter.setCompany(req.query.company);
+                }
+
+
+                forValue(0);
+                function forValue(valueIndex) {
+                    if(valueIndex == properties[index].value.length)  return forProperties(index+1)
+                    function getCount(index,valueIndex) {
+                        let willWeCallCount = false;
+                        let newValue = {
+                            respond : properties[index].value[valueIndex],
+                            count : null,
+                            state : false
+                        }
+
+                        let newQuery = Object.assign({},myFilter.creatQuery());
+                        let query = [{
+                            'properties.name' : properties[index].name,
+                            'properties.value' : properties[index].value[valueIndex],
+                        }]
+                        newQuery['$and'][1]['$and'] = query
+
+                        let currentQuery = JSON.parse(JSON.stringify(myFilter.creatQuery()));
+                        currentQuery['$and'][2] = newQuery['$and'][2];
+                        currentQuery['$and'][1]['$and'].forEach(function (property) {
+                            if(property['properties.name'] == properties[index].name) {
+                                if(property['$or'] ) {
+                                    property['$or'].push({'properties.value':properties[index].value[valueIndex]})
+                                } else {
+                                        let values =  []
+                                        values.push({'properties.value': property['properties.value']})
+                                        values.push({'properties.value': properties[index].value[valueIndex]})
+                                        property['$or'] = values;
+                                        delete property['properties.value'];
+                                }
+                                newQuery = currentQuery;
+
+                                willWeCallCount = true
+
+                            }
+                        })
+
+
+                        if(willWeCallCount) {
+                            willWeCallCount = !willWeCallCount;
+                            Promise.all([
+                                Products.count(myFilter.creatQuery()),
+                                Products.count(newQuery)
+                            ])
+                            .then (
+                                countOfProperty => {
+                                    console.log(countOfProperty);
+                                    result = countOfProperty[1] - countOfProperty[0]
+                                    if(result > 0) {
+                                        newValue.count = '+' + result;
+                                    }
+                                    properties[index].value[valueIndex] = newValue;
+                                    forValue(valueIndex+1);
+                                },
+                                error => console.log (error)
+                            )
+                        } else {
+                            //if(index == 0) res.json(newQuery);
+
+                            Products.count(newQuery)
+                            .then(
+                                countOfProperty => {
+
+                                    if(countOfProperty > 0) newValue.count = countOfProperty;
+                                    properties[index].value[valueIndex] = newValue;
+                                    forValue(valueIndex+1);
+                                },
+                                error => console.log (error)
+                            )
+                        }
+
+
+
+                    }
+                    getCount(index,valueIndex);
+                }
+            }
+    })
+    .catch(error => {
+        console.log(error);
+        next(error);
+    });
+
+
+
+
+
+
+
+
+
+})
+
+
+
+
+
 router.get('/filter/', function(req,res,next) {
 
     let pagination, myFilter = new Filter();
@@ -122,7 +298,7 @@ router.get('/filter/', function(req,res,next) {
         delete filterQuery.searchField
     }
 
-    if (filterQuery.minprice && filterQuery.maxprice) {
+    if (filterQuery.minprice || filterQuery.maxprice) {
         myFilter.setPrice(filterQuery.minprice,filterQuery.maxprice);
         delete filterQuery.minprice;
         delete filterQuery.maxprice;

@@ -6,25 +6,25 @@
 		<input type="text" class="searchField"   ng-model="data.searchField">
 	</div>
 	<div class="col-md-3 col-xs-3 send_col">
-		<input type="button" class="send_form" ng-click="properties.clickToProperty()" value="OK" >
+		<input type="button" class="send_form" ng-click="clickToProperty()" value="OK" >
 	</div>
 	<div style="clear:both"></div>
 
 
-<div ng-show="properties.isCat" class="sidebar-category" category-items></div>
-<div ng-hide="properties.isCat">
+<div ng-show="isCat" class="sidebar-category" category-items></div>
+<div ng-hide="isCat">
 	<div ng-hide="complete" class="loader"></div>
 	<div ng-show="complete">
 		<div ng-repeat="property in data.properties" class="property_name">{{property.name}} 
 			
 			<div ng-repeat="value in property.value">
-				<input ng-change="properties.clickToProperty()" type="checkbox"  ng-model="value.state"><span class="propert_value">{{value.name}}  <strong>{{value.count}}</strong>  </span>
+				<input ng-change="clickToProperty()" type="checkbox"  ng-model="value.state"><span class="propert_value">{{value.respond}}  <strong>{{value.count}}</strong>  </span>
 				
 			</div>
 		</div>
 
-		<div range-slider  min="0" max="properties.price.max + 10" model-min="data.price.min" model-max="data.price.max" show-values="true"></div>
-		<input type="button" class="send_form" ng-click="properties.clickToProperty()" value="OK" >
+		<div range-slider  min="0" max="price.max + 10" model-min="data.price.min" model-max="data.price.max" show-values="true"></div>
+		<input type="button" class="send_form" ng-click="clickToProperty()" value="OK" >
 	</div>
 </div>
 </form>

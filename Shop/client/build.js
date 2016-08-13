@@ -705,9 +705,11 @@
 	        for (var product in response.data.items) {
 	            response.data.items[product].smallDescription = response.data.items[product].description.slice(0, 105) + "...";
 	        }
+
 	        $scope.items = response.data.items;
+	        console.log($scope.items);
 	        if ($scope.items.length === 0) {
-	            $rootScope.complete.product = true;
+	            $scope.complete = true;
 	            $scope.items.notMatch = true;
 	            return;
 	        }
@@ -785,30 +787,33 @@
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
 	    var that = this;
 	    $scope.complete = false;
+	    var currentCategory = $route.current.params.categories;
+	    $scope.isCat = typeof currentCategory == "undefined";
 	    if ($rootScope.data.price) {
-	        that.price = JSON.parse(JSON.stringify($rootScope.data.price));
+	        $scope.price = JSON.parse(JSON.stringify($rootScope.data.price));
 	    }
 
 	    var defineProperty = function defineProperty() {
+	        if (!$rootScope.data.properties) return;
 	        var currentUrl = JSON.parse(JSON.stringify($route.current.params));
+	        if (currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
 
 	        var _loop = function _loop(item) {
-	            for (var i in $rootScope.data.properties) {
-	                if ($rootScope.data.properties[i].name == item) {
-
-	                    $rootScope.data.properties[i].value.forEach(function (value) {
+	            $rootScope.data.properties.forEach(function (property) {
+	                if (property.name == item) {
+	                    property.value.forEach(function (value) {
 	                        if (Array.isArray(currentUrl[item])) {
-	                            if (currentUrl[item].includes(value.name)) {
+	                            if (item.includes(value.respond)) {
 	                                value.state = true;
 	                            }
 	                        } else {
-	                            if (currentUrl[item] == value.name) {
+	                            if (currentUrl[item] == value.respond) {
 	                                value.state = true;
 	                            }
 	                        }
 	                    });
 	                }
-	            }
+	            });
 	        };
 
 	        for (var item in currentUrl) {
@@ -816,10 +821,12 @@
 	        }
 	    };
 
-	    that.createPropertyScreen = function (data) {
+	    $scope.createPropertyScreen = function (data) {
 	        var propertyScreen = {};
 	        propertyScreen.categories = $route.current.params.categories;
+
 	        if ($rootScope.data.searchField) {
+
 	            var additionalSearchQuery = {
 	                searchField: $rootScope.data.searchField || ''
 	            };
@@ -841,7 +848,7 @@
 	                            if (!propertyScreen[item.name]) {
 	                                propertyScreen[item.name] = [];
 	                            }
-	                            propertyScreen[item.name].push(val.name);
+	                            propertyScreen[item.name].push(val.respond);
 	                        }
 	                    });
 	                }
@@ -850,9 +857,13 @@
 	        return propertyScreen;
 	    };
 
-	    that.clickToProperty = function () {
-	        var urlObj = that.createPropertyScreen($rootScope.data) || {};
+	    $scope.clickToProperty = function () {
+	        var urlObj = $scope.createFilterParams();
+	        $location.url("?" + $httpParamSerializer(urlObj));
+	    };
 
+	    $scope.createFilterParams = function () {
+	        var urlObj = $scope.createPropertyScreen($rootScope.data) || {};
 	        if ($rootScope.data.price && $route.current.params.categories) {
 	            var additionalPriceQuery = {
 	                minprice: $rootScope.data.price.min || 0,
@@ -860,94 +871,20 @@
 	            };
 	            Object.assign(urlObj, additionalPriceQuery);
 	        }
-
-	        $location.url("?" + $httpParamSerializer(urlObj));
+	        return urlObj;
 	    };
 
-	    function creatCountObject(data) {
-	        var object = {};
-	        object.categories = $route.current.params.categories;
-	        if ($route.current.params.searchField) object.searchField = $route.current.params.searchField;
-	        object[data.item] = data.name;
-
-	        return object;
-	    }
-
-	    function addCount() {
-
-	        if (typeof $rootScope.data == 'undefined') return;
-	        var propScr = that.createPropertyScreen($rootScope.data);
-	        var data = $rootScope.data;
-	        for (var property in data.properties) {
-	            var _loop2 = function _loop2() {
-	                var params = JSON.parse(JSON.stringify(propScr));
-
-	                if (params[data.properties[property].name]) {
-	                    params[data.properties[property].name].push(data.properties[property].value[i].name);
-	                    //setAdditionalCount(property,i);
-	                }
-	                if (data.properties[property].name == 'company') {
-	                    if (!params.company) {
-	                        params.company = [];
-	                        params.company.push(data.properties[property].value[i].name);
-	                    } else {
-	                        params.company.push(data.properties[property].value[i].name);
-	                    }
-	                }
-
-	                function setAdditionalCount(property, i) {
-
-	                    if (typeof params == 'undefined') return null;
-	                    var srcCount = 0;
-	                    Parameters.count(propScr).then(function (result) {
-	                        srcCount = result.data;
-	                        return Parameters.count(params);
-	                    }).then(function (result) {
-	                        if (srcCount < result.data) {
-	                            $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) + ')';
-	                        } else {
-	                            var setCount = function setCount(property, i) {
-	                                Parameters.count(countQuery).then(function (result) {
-	                                    $rootScope.data.properties[property].value[i].count = '(' + result.data + ')';
-	                                    if ($rootScope.data.properties[property].value[i].state) {
-	                                        $rootScope.data.properties[property].value[i].count = null;
-	                                    }
-	                                });
-	                            };
-
-	                            var countQuery = creatCountObject(data.properties[property].value[i]);
-
-	                            setCount(property, i);
-	                        }
-	                    }).catch(function (error) {
-	                        $rootScope.data.properties[property].value[i].count = null;
-	                    });
-	                }
-	                setAdditionalCount(property, i);
-	                $scope.complete = false;
-	            };
-
-	            for (var i in data.properties[property].value) {
-	                _loop2();
-	            }
-	        }
-	    }
-
-	    var currentCategory = $route.current.params.categories;
-	    that.isCat = typeof currentCategory == "undefined";
 	    if ($rootScope.category != currentCategory) {
-	        Parameters.paramsOfCat(currentCategory).success(function (result) {
-	            if (result.price) that.price = JSON.parse(JSON.stringify(result.price));
+	        Parameters.paramsOfCat(currentCategory).then(function (result) {
+	            if (result.data.price) $scope.price = JSON.parse(JSON.stringify(result.data.price));
 	            $rootScope.category = currentCategory;
-	            $rootScope.data = result || [];
-
-	            if ($rootScope.data.hasOwnProperty('properties')) {
-	                $rootScope.data.properties.forEach(function (item) {
+	            var newResult = JSON.parse(JSON.stringify(result.data));
+	            if (newResult.hasOwnProperty('properties')) {
+	                newResult.properties.forEach(function (item) {
 	                    if (item.hasOwnProperty('value')) {
-	                        for (var i in item.value) {
+	                        for (var i = 0; i < item.value.length; i++) {
 	                            var newValue = {
-	                                name: item.value[i],
-	                                item: item.name,
+	                                respond: item.value[i],
 	                                state: false,
 	                                count: null
 	                            };
@@ -955,42 +892,27 @@
 	                        }
 	                    }
 	                });
-	                if ($rootScope.data.hasOwnProperty('company')) {
-	                    (function () {
-	                        var ourCompany = [];
-	                        $rootScope.data.company.forEach(function (item) {
-	                            var newValue = {
-	                                name: item,
-	                                item: 'company',
-	                                state: false,
-	                                count: null
-	                            };
-	                            ourCompany.push(newValue);
-	                        });
-
-	                        $rootScope.data.properties.push({
-	                            name: 'company',
-	                            value: ourCompany
-	                        });
-
-	                        console.log($rootScope.data.properties.company);
-	                    })();
-	                }
 	            }
 
+	            $rootScope.data = newResult || [];
+
 	            defineProperty();
-	            var propScr = that.createPropertyScreen($rootScope.data);
-	            addCount();
-	            $rootScope.complete.property = true;
-	        }).error(function (data, status) {
-	            console.log(data, status);
-	            that.categories = [];
-	            $rootScope.complete.property = true;
+	            $scope.complete = true;
+	        }, function (error) {
+	            console.log(error);
+	            $scope.categories = [];
+	            $scope.complete = true;
 	        });
-	    } else {
-	        defineProperty();
-	        addCount();
 	    }
+	    var params = Object.assign({}, $route.current.params);
+	    delete params.per_page;
+	    Parameters.countOfCat(currentCategory, params).then(function (result) {
+	        $rootScope.data = result.data;
+	        defineProperty();
+	    }, function (error) {
+	        console.log(error);
+	    });
+	    defineProperty();
 	}]);
 
 /***/ },
@@ -1042,11 +964,11 @@
 	        url: "/catalog/find/all"
 	      });
 	    },
-	    count: function count(object) {
+	    countOfCat: function countOfCat(cat, object) {
 	      return $http({
 	        withCredentials: false,
 	        method: 'GET',
-	        url: "/catalog/filter/count/",
+	        url: "/catalog/filtration/" + cat,
 	        params: object,
 	        headers: { 'Content-Type': 'application/json' }
 	      });

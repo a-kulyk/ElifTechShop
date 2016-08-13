@@ -22,16 +22,16 @@ angular.module('app')
             .then (response => {
 
             response.data.items.forEach(function (element) {
-           element.smallDescription = element.description.slice(0,105) + "...";
-
-        })
+                element.smallDescription = element.description.slice(0,105) + "...";
+            })
             for (let product in response.data.items) {
             response.data.items[product].smallDescription = response.data.items[product].description.slice(0,105) + "...";
+            }
 
-                    }
-        $scope.items = response.data.items;
+            $scope.items = response.data.items;
+                console.log( $scope.items);
                 if($scope.items.length === 0) {
-                    $rootScope.complete.product = true;
+                   $scope.complete = true;
                     $scope.items.notMatch = true;
                     return;
                 }

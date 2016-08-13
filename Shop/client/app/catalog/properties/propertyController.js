@@ -2,39 +2,44 @@ angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
         let that = this;
         $scope.complete = false;
+        var currentCategory = $route.current.params.categories;
+        $scope.isCat = typeof currentCategory == "undefined";
         if($rootScope.data.price) {
-            that.price = JSON.parse(JSON.stringify($rootScope.data.price));
+            $scope.price = JSON.parse(JSON.stringify($rootScope.data.price));
         }
 
         let defineProperty = function() {
+            if(!$rootScope.data.properties) return;
             let currentUrl = JSON.parse(JSON.stringify($route.current.params));
+            if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField
             for(let item in currentUrl) {
-                for(let i in $rootScope.data.properties) {
-                    if($rootScope.data.properties[i].name == item) {
-
-                        $rootScope.data.properties[i].value.forEach(function (value) {
+                $rootScope.data.properties.forEach(function(property) {
+                    if(property.name == item) {
+                        property.value.forEach(function (value) {
                             if(Array.isArray(currentUrl[item])) {
-                                if(currentUrl[item].includes(value.name)) {
+                                if(item.includes(value.respond)) {
                                     value.state = true;
                                 }
                             } else {
-                                if (currentUrl[item] == value.name) {
+                                if (currentUrl[item] == value.respond) {
                                     value.state = true;
                                 }
                             }
                         })
                     }
-                }
+                })
 
             }
 
         };
 
 
-        that.createPropertyScreen = function (data) {
+        $scope.createPropertyScreen = function (data) {
             var propertyScreen = {};
             propertyScreen.categories = $route.current.params.categories;
+
             if($rootScope.data.searchField) {
+
                 let additionalSearchQuery = {
                     searchField : $rootScope.data.searchField || ''
                 };
@@ -56,7 +61,7 @@ angular.module('app')
                                 if (!propertyScreen[item.name]) {
                                     propertyScreen[item.name] = []
                                 }
-                                propertyScreen[item.name].push(val.name)
+                                propertyScreen[item.name].push(val.respond)
                             }
                         })
                     }
@@ -66,9 +71,13 @@ angular.module('app')
             return propertyScreen;
         };
 
-        that.clickToProperty = function () {
-            let urlObj = that.createPropertyScreen($rootScope.data) || {};
+        $scope.clickToProperty = function () {
+            let urlObj = $scope.createFilterParams()
+            $location.url("?" + $httpParamSerializer(urlObj));
+        };
 
+        $scope.createFilterParams = function () {
+            let urlObj = $scope.createPropertyScreen($rootScope.data) || {};
             if($rootScope.data.price && $route.current.params.categories) {
                 let additionalPriceQuery = {
                     minprice: $rootScope.data.price.min || 0,
@@ -76,154 +85,57 @@ angular.module('app')
                 };
                 Object.assign(urlObj,additionalPriceQuery);
             }
-
-            $location.url("?" + $httpParamSerializer(urlObj));
-        };
-
-        function creatCountObject (data) {
-            let object = {};
-            object.categories = $route.current.params.categories;
-            if($route.current.params.searchField) object.searchField = $route.current.params.searchField;
-            object[data.item] = data.name;
-
-            return object;
-        }
-
-
-        function addCount () {
-
-
-            if(typeof $rootScope.data == 'undefined') return;
-            let propScr = that.createPropertyScreen($rootScope.data);
-            let data = $rootScope.data;
-            for (let property in data.properties) {
-                for (var i in data.properties[property].value) {
-                    let params = JSON.parse(JSON.stringify(propScr));
-
-                    if (params[data.properties[property].name]) {
-                        params[data.properties[property].name].push(data.properties[property].value[i].name)
-                        //setAdditionalCount(property,i);
-                    }
-                    if(data.properties[property].name == 'company') {
-                        if(!params.company) {
-                            params.company = [];
-                            params.company.push(data.properties[property].value[i].name);
-                        } else {
-                            params.company.push(data.properties[property].value[i].name);
-                        }
-
-                    }
-
-
-
-                    function setAdditionalCount(property,i) {
-
-                        if(typeof params == 'undefined') return null;
-                        let srcCount = 0;
-                        Parameters.count(propScr)
-                        .then(
-                            result => {
-                                srcCount = result.data;
-                                return Parameters.count(params)
-                             }
-                        )
-                        .then(
-                                result => {
-                                 if(srcCount < result.data) {
-                                $rootScope.data.properties[property].value[i].count = "(+" + (result.data - srcCount) +')';
-                            } else {
-                                var countQuery = creatCountObject(data.properties[property].value[i]);
-                                function setCount (property,i) {
-                                    Parameters.count(countQuery)
-                                        .then(
-                                            result => {
-                                                $rootScope.data.properties[property].value[i].count = '('+ result.data +')';
-                                                if($rootScope.data.properties[property].value[i].state) {
-                                                    $rootScope.data.properties[property].value[i].count = null;
-                                                }
-                                            }
-                                        )
-                                }
-                                setCount(property,i);
-                            }
-                        }
-                        )
-                    .catch(function(error) {
-                            $rootScope.data.properties[property].value[i].count = null;
-                        })
-
-                    }
-                    setAdditionalCount(property,i);
-                    $scope.complete = false;
-                }
-            }
-
+            return urlObj;
         }
 
 
 
-        var currentCategory = $route.current.params.categories;
-        that.isCat = typeof currentCategory == "undefined";
+
+
+
+
         if($rootScope.category != currentCategory) {
             Parameters.paramsOfCat(currentCategory)
-                .success(function (result) {
-                    if(result.price) that.price= JSON.parse(JSON.stringify(result.price));
+                .then(result => {
+                    if (result.data.price) $scope.price = JSON.parse(JSON.stringify(result.data.price));
                     $rootScope.category = currentCategory;
-                    $rootScope.data = result || [];
-
-                    if($rootScope.data.hasOwnProperty('properties')) {
-                        $rootScope.data.properties.forEach(function (item) {
+                    let newResult = JSON.parse(JSON.stringify(result.data));
+                    if (newResult.hasOwnProperty('properties')) {
+                        newResult.properties.forEach(function (item) {
                             if (item.hasOwnProperty('value')) {
-                                for (var i in item.value) {
-                                    var newValue = {
-                                        name: item.value[i],
-                                        item: item.name,
+                                for (let i = 0; i < item.value.length; i++) {
+                                    let newValue = {
+                                        respond: item.value[i],
                                         state: false,
                                         count: null
                                     };
-                                    item.value[i] = newValue;
-
+                                    item.value[i] = newValue
                                 }
                             }
                         });
-                        if($rootScope.data.hasOwnProperty('company')) {
-                            let ourCompany = [];
-                            $rootScope.data.company.forEach(function (item) {
-                                var newValue = {
-                                    name: item,
-                                    item: 'company',
-                                    state: false,
-                                    count: null
-                                };
-                                ourCompany.push(newValue);
-                            });
-
-                            $rootScope.data.properties.push({
-                                name: 'company',
-                                value : ourCompany
-                            })
-
-
-                            console.log($rootScope.data.properties.company);
-                        }
                     }
 
-
+                    $rootScope.data = newResult || [];
 
                     defineProperty();
-                    let propScr = that.createPropertyScreen($rootScope.data);
-                    addCount();
-                    $rootScope.complete.property = true;
+                    $scope.complete = true;
 
-                })
-                .error(function(data, status){
-                    console.log(data, status);
-                    that.categories = [];
-                    $rootScope.complete.property = true;
+                },
+                error => {
+                    console.log(error);
+                    $scope.categories = [];
+                    $scope.complete = true;
                 });
-        } else {
-            defineProperty();
-            addCount();
         }
-
+        let params = Object.assign({},$route.current.params)
+        delete params.per_page
+        Parameters.countOfCat(currentCategory, params)
+        .then(result => {
+                $rootScope.data = result.data;
+                defineProperty();
+            },
+            error => {
+                console.log(error);
+        })
+        defineProperty();
     }]);

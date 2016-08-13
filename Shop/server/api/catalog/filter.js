@@ -58,6 +58,8 @@ class Filter {
 
     }
 
+
+
     getSort () {
         return this.sort;
     }
@@ -106,13 +108,20 @@ class Filter {
         this.searchField = searchExp;
     }
 
-    setPrice(min,max) {
-        if(min && max) {
+    setPrice() {
+        let min = arguments[0];
+        let max = arguments[1];
+        if(min) {
             min = Math.abs(parseInt(min));
-            max = Math.abs(parseInt(max));
+            this.min_price = min || 0;
         }
-        this.min_price = min || 0;
-        this.max_price = max || Math.pow(10,6);
+
+        if(max) {
+            max = Math.abs(parseInt(max));
+            this.max_price = max || Math.pow(10,6);
+        }
+
+
     }
 
 
@@ -133,28 +142,31 @@ class Filter {
     creatQuery (params) {
         let query = {$and: [{}]};
 
-        if(params) {
-            query.$and.push(params)
-        }
-
-        if(!(this.company.length < 1)) {
-            let companyQuery = {$or : this.company};
-            
-            query.$and.push(companyQuery);
+        if(this.properties) {
+            let propertiesQuery = {$and : this.properties};
+            query.$and.push(propertiesQuery);
         }
 
         if (this.searchField) {
             let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]};
             query.$and.push(searchQuery);
         }
+
+        if(params) {
+            query.$and.push(params)
+        }
+
+        if(!(this.company.length < 1)) {
+            let companyQuery = {$or : this.company};
+            query.$and.push(companyQuery);
+        }
+
+
         if(this.min_price && this.max_price) {
             let priceQuery = {'price': { $gt: (this.min_price - 1), $lt: (this.max_price + 1)}};
             query.$and.push(priceQuery);
         }
-        if(this.properties) {
-            let propertiesQuery = {$and : this.properties};
-            query.$and.push(propertiesQuery);
-        }
+
         if(!(this.categories.length < 1)) {
             let categoriesQuery = {$or : this.categories};
             query.$and.push(categoriesQuery);

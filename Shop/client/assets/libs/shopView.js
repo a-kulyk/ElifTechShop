@@ -1,5 +1,16 @@
 function makeVisualEffects() {
     $('.product').each(function (i, el) {
+        var image = $(this).find('.main_inner img');
+        if(image.prop('naturalHeight') > image.prop('naturalWidth')) {
+            image.css({'width' : '100%'});
+        }
+        if(image.prop('naturalHeight') < image.prop('naturalWidth')) {
+            image.css({'min-height' : '140px','max-height':'160px','width':'100%'});
+        }
+        if(image.prop('naturalHeight') === image.prop('naturalWidth')) {
+            image.css({'width' : '100%','height': '100%'});
+
+        }
 
 
         // Lift card and show stats on Mouseover
