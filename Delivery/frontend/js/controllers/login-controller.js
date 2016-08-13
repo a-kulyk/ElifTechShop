@@ -10,8 +10,8 @@ module.exports = function (app) {
             requestJSON.password = $scope.password;
             console.log(requestJSON.username + " " + requestJSON.password);
             $http.post("/login", requestJSON).success(function (data, status, headers) {
-                console.log(data);
                 if (data.success) {
+                    console.log(data);
                     var admin = {
                         getRoles: function () {
                             return ['admin'];
@@ -20,10 +20,10 @@ module.exports = function (app) {
                     AclService.setUserIdentity(admin);
                     $window.location.href = '#/cars'
                 } else {
-                    console.log(data.message);
+                    console.log(data);
                 }
             }).error(function (data, status, headers) {
-                console.log(status);
+                console.log(status + ' ' + data);
             });
         }
     });

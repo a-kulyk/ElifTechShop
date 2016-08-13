@@ -3,7 +3,16 @@
  */
 "use strict";
 
-module.exports = function (app) {
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.json({
+        "success": false,
+        "role": 'guest'
+    });
+}
+
+module.exports = function (app, passport) {
 
     app.get('/order/:trackingCode', require('./order').get);
 
@@ -15,12 +24,12 @@ module.exports = function (app) {
 
     app.get('/history/:fromUsername/:toUsername', require('./history').get);
 
-    app.post('/login', require('./login').post);
+    app.post('/login', require('./login').login(passport));
 
     app.post('/logout', require('./logout').post);
 
-    app.get('/cars', require('./cars').get);
+    app.get('/cars', isAuthenticated, require('./cars').get);
 
-    app.get('/session', require('./session').get);
+    app.get('/status', isAuthenticated, require('./status').get);
 }
 

@@ -3,6 +3,8 @@
  */
 'use strict';
 exports.post = function (req, res) {
-    req.session.destroy();
-    res.end();
+    req.logout();
+    res.status(200).json({
+        status: 'Bye!'
+    });
 }

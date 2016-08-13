@@ -11,7 +11,6 @@ module.exports = function (app) {
             $scope.isTableVisible = data.cars.length;
             console.log(data);
             $scope.cars = data.cars;
-
             $scope.formatDate = function (date) {
                 return moment(date).format('DD.MM.YY, HH:mm');
             }

@@ -14,13 +14,15 @@ app.use(bodyParser.json());
 
 app.use(cookieParser());
 
-app.use(session({
-    secret: config.get('session:secret'),
-    cookie: config.get('session:cookie'),
-    store: new MongoStore({
-        url: config.get('mongoose:uri')
-    })
-}));
+// Configuring Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var initPassport = require('./lib/passport/init');
+initPassport(passport);
 
 app.use(validator());
 
@@ -30,4 +32,4 @@ app.listen(config.get('port'), function () {
     console.log('Delivery app listening on port' + ' ' + config.get('port'));
 });
 
-require('./routes')(app);
+require('./routes')(app, passport);
