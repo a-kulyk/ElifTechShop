@@ -3,8 +3,10 @@
  */
 'use strict';
 exports.post = function (req, res) {
-    req.logout();
-    res.status(200).json({
-        status: 'Bye!'
-    });
+     req.session.destroy(function () {
+         res.clearCookie('connect.sid');
+         res.status(200).json({
+             status: 'Bye!'
+         });
+     });
 }
