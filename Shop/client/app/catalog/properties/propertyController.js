@@ -1,6 +1,7 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
         let that = this;
+        $scope.displayCount = false;
         $scope.complete = false;
         var currentCategory = $route.current.params.categories;
         $scope.isCat = typeof currentCategory == "undefined";
@@ -133,6 +134,7 @@ angular.module('app')
         Parameters.countOfCat(currentCategory, params)
         .then(result => {
                 $rootScope.data = result.data;
+                $scope.displayCount = true;
                 defineProperty();
             },
             error => {

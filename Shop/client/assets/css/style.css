@@ -24,6 +24,8 @@ body {
 
 #sidebar{
     border-right: 1px solid #eee;
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
 }
 
 .container {
@@ -55,6 +57,11 @@ body {
 #sidebar {
     margin-top:5px;
     margin-bottom: 15px;
+}
+
+.all_product {
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
 }
 .send_form {
     background: #FFF;
@@ -344,6 +351,8 @@ p.product_price {
 }
 
 .property_count {
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
     background: #e3eef6;
     font-size: 9px;
     padding: 3px;
@@ -356,3 +365,11 @@ p.product_price {
 }
 
 
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
