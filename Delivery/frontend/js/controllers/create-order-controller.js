@@ -3,9 +3,6 @@
  */
 module.exports = function (app) {
     app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) {
-        $rootScope.makeOrderActiveClass = 'active';
-        $rootScope.trackOrderActiveClass = '';
-        $rootScope.historyActiveClass = '';
         $scope.createOrder = function () {
             var requestJSON = {};
             requestJSON.title = $scope.title;

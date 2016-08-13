@@ -3,7 +3,8 @@
  */
 "use strict";
 module.exports = function (app) {
-    app.controller('rootCtrl', ['$scope', '$http', 'AclService', function ($scope, $http, AclService) {
+    app.controller('rootCtrl', ['$scope', '$http', 'AclService', '$location',
+        function ($scope, $http, AclService, $location) {
         $scope.can = AclService.can;
         $scope.logout = function () {
             $http.post('/logout', {}).success(function (data, status, headers) {
@@ -15,6 +16,9 @@ module.exports = function (app) {
                     return ['guest'];
                 }
             });
+        }
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
         }
     }])
 }

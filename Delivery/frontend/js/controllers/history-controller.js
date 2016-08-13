@@ -6,10 +6,6 @@ var moment = require('moment');
 
 module.exports = function (app) {
     app.controller('historyCtrl', function ($rootScope, $scope, $http, $window, $routeParams, orderStates) {
-            $rootScope.makeOrderActiveClass = '';
-            $rootScope.trackOrderActiveClass = '';
-            $rootScope.historyActiveClass = 'active';
-
             if ($routeParams.fromUsername && $routeParams.toUsername) {
                 $scope.fromUsername = $routeParams.fromUsername !== 'null' ? $routeParams.fromUsername : '';
                 $scope.toUsername = $routeParams.toUsername !== 'null' ? $routeParams.toUsername : '';

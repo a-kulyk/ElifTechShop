@@ -14,7 +14,6 @@ module.exports = function (app) {
             $scope.formatDate = function (date) {
                 return moment(date).format('DD.MM.YY, HH:mm');
             }
-
             $scope.redirectToOrder = function (order) {
                 $http.get('/order/id/' + order).success(function (data, status, headers) {
                     if(data.success){
