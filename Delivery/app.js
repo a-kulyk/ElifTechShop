@@ -18,7 +18,7 @@ app.use(session({
     secret: config.get('session:secret'),
     cookie: config.get('session:cookie'),
     store: new MongoStore({
-        url: 'mongodb://localhost:27017/delivery'
+        url: config.get('mongoose:uri')
     })
 }));
 

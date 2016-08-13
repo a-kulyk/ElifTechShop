@@ -2,7 +2,7 @@
  * Created by dmytro on 04.08.16.
  */
 "use strict";
-module.exports = function (app, role) {
+module.exports = function (app) {
     app.config(function ($routeProvider) {
         $routeProvider.when('/create_order', {
             templateUrl: '../templates/create-order.html',
@@ -34,7 +34,11 @@ module.exports = function (app, role) {
                     }
                 }]
             }
-        })
+        }).otherwise({
+            redirectTo: '/'
+        });
+        
+        
     }).run(['$rootScope', '$http', 'AclService', function ($rootScope, $http, AclService) {
         AclService.addRole('guest');
         AclService.addRole('admin');
@@ -52,7 +56,7 @@ module.exports = function (app, role) {
 
         AclService.setUserIdentity({
             getRoles: function () {
-                return [role];
+                return ['guest'];
             }
         });
     }]);

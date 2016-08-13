@@ -7,9 +7,8 @@ var ngMessages = require('angular-messages');
 var pagination = require('angular-utils-pagination');
 require('angularjs-acl/dist/acl.js');
 
-$.get("/session", function (data) {
     var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl']);
-    require('./config/app-config')(app, data.role);
+    require('./config/app-config')(app);
     require('./services/order-states-service')(app);
     require('./controllers/root-controller')(app);
     require('./controllers/create-order-controller')(app);
@@ -18,4 +17,3 @@ $.get("/session", function (data) {
     require('./controllers/track-order-controller')(app);
     require('./controllers/login-controller')(app);
     require('./controllers/cars-controller')(app);
-});
