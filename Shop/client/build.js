@@ -67,7 +67,6 @@
 	__webpack_require__(18);
 	__webpack_require__(19);
 	__webpack_require__(20);
-	__webpack_require__(21);
 
 /***/ },
 /* 1 */
@@ -483,26 +482,6 @@
 
 	'use strict';
 
-	angular.module('app').controller('CabinetCtrl', ['$scope', '$rootScope', '$location', 'AuthService', '$uibModal', function ($scope, $rootScope, $location, AuthService, $uibModal) {
-	    var cabinet = this;
-	    cabinet.user = $rootScope.currentUser;
-
-	    cabinet.edit = false;
-
-	    cabinet.update = function (user) {
-	        AuthService.updateProfile(user).then(function (resp) {
-	            $rootScope.currentUser = resp.data;
-	            cabinet.edit = !cabinet.edit;
-	        });
-	    };
-	}]);
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
 	angular.module('app').factory('orderService', ['$q', '$http', '$rootScope', function ($q, $http, $rootScope) {
 	    return {
 	        getCart: function getCart() {
@@ -580,7 +559,7 @@
 	}]);
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -701,7 +680,7 @@
 	}]);
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -742,7 +721,7 @@
 	}]);
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -826,7 +805,7 @@
 	}]);
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -848,7 +827,7 @@
 	}]);
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -975,6 +954,7 @@
 	    }
 	    var params = Object.assign({}, $route.current.params);
 	    delete params.per_page;
+	    delete params.page;
 	    Parameters.countOfCat(currentCategory, params).then(function (result) {
 	        $rootScope.data = result.data;
 	        defineProperty();
@@ -985,13 +965,13 @@
 	}]);
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1019,7 +999,7 @@
 	}]);
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1053,7 +1033,7 @@
 	}]);
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1068,7 +1048,7 @@
 	}]);
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1081,7 +1061,7 @@
 	}]);
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1096,7 +1076,7 @@
 	}]);
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';

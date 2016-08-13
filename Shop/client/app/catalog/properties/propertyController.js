@@ -128,7 +128,8 @@ angular.module('app')
                 });
         }
         let params = Object.assign({},$route.current.params)
-        delete params.per_page
+        delete params.per_page;
+        delete params.page;
         Parameters.countOfCat(currentCategory, params)
         .then(result => {
                 $rootScope.data = result.data;
