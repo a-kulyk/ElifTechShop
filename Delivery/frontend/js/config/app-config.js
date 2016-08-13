@@ -18,7 +18,16 @@ module.exports = function (app) {
             controller: 'historyCtrl',
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
-            controller: 'historyCtrl'
+            controller: 'historyCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('History')) {
+                        return true;
+                    } else {
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         }).when('/login', {
             templateUrl: '../templates/login.html',
             controller: 'loginCtrl'
@@ -46,12 +55,14 @@ module.exports = function (app) {
 
         AclService.addResource('Order');
         AclService.addResource('Cars');
+        AclService.addResource('History');
         AclService.addResource('Login');
         AclService.addResource('Logout');
 
         AclService.allow('guest', 'Order');
         AclService.allow('guest', 'Login');
 
+        AclService.allow('admin', 'History');
         AclService.allow('admin', 'Cars');
         AclService.allow('admin', 'Logout');
 
