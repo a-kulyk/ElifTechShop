@@ -37,9 +37,10 @@ module.exports = function (app) {
         }).otherwise({
             redirectTo: '/'
         });
-        
-        
-    }).run(['$rootScope', '$http', 'AclService', function ($rootScope, $http, AclService) {
+
+
+    }).run(['$rootScope', '$http', 'AclService', 'config', function ($rootScope, $http, AclService, config) {
+        console.log('conf ' + config.role);
         AclService.addRole('guest');
         AclService.addRole('admin');
 
@@ -56,7 +57,7 @@ module.exports = function (app) {
 
         AclService.setUserIdentity({
             getRoles: function () {
-                return ['guest'];
+                return [config.role];
             }
         });
     }]);
