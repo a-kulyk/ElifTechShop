@@ -3,14 +3,15 @@
 }
 
 #track_input {
-    border-tgulpfileop-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
-    border-color: #323131;
+    border-tgulpfileop-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-color: rgba(13, 13, 13, 0.38);
 }
 
 #go_button {
     color: white;
-    background-color:darkslategray;
-    border-color: #323131;
+    background-color: rgba(173, 0, 0, 0.91);
+    background-color: rgba(173, 0, 0, 0.91);
+    border-color: rgba(13, 13, 13, 0.38);
 }
