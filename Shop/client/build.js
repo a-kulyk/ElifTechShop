@@ -834,6 +834,7 @@
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
 	    var that = this;
+	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    var currentCategory = $route.current.params.categories;
 	    $scope.isCat = typeof currentCategory == "undefined";
@@ -957,6 +958,7 @@
 	    delete params.page;
 	    Parameters.countOfCat(currentCategory, params).then(function (result) {
 	        $rootScope.data = result.data;
+	        $scope.displayCount = true;
 	        defineProperty();
 	    }, function (error) {
 	        console.log(error);
