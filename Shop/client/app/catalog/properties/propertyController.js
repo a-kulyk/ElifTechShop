@@ -18,7 +18,8 @@ angular.module('app')
                     if(property.name == item) {
                         property.value.forEach(function (value) {
                             if(Array.isArray(currentUrl[item])) {
-                                if(item.includes(value.respond)) {
+                                if(currentUrl[item].includes(value.respond)) {
+                                    console.log(value.respond,true);
                                     value.state = true;
                                 }
                             } else {
