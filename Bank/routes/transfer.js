@@ -4,12 +4,15 @@ let User = require("../models/user").User;
 
 exports.post = function (req, res) {
     if(req.body.to == req.body.from){
-        throw new Error("Disable");
+        return res.send({
+            success: false,
+            errorDescription: 'Disable'
+        })
     } else {
         Account.findOne({_id: req.body.from, enabled: true})
             .then(function (account) {
                if(account.owner != req.session.user){
-                   throw new Error("Forbidden");
+                   throw new Error('Forbidden');
                }
                 return Transaction.action(req.body.from, req.body.to, req.body.amount);
             })

@@ -7,6 +7,7 @@ import home from './home/auth';
 import login from './home/login';
 import signup from './home/signup';
 import modal from './modals/modal';
+import main from './mainController';
 var bank = angular.module('bank',['ngRoute', 'angularModalService', 'ngTable']);
 
 bank.config(function ($routeProvider) {
@@ -22,21 +23,8 @@ bank.config(function ($routeProvider) {
         })
 });
 
-bank.controller('main', function ($scope, $http, $location) {
-    $scope.title = "Bank";
-    $scope.formData = {};
 
-    $http.get("/user")
-        .success(function (data) {
-            $scope.username = data.username;
-            $scope.id = data.id;
-            $scope.amount = data.amount;
-        })
-        .error(function (error) {
-            console.log(error);
-        });
-});
-
+main(bank);
 cabinet(bank);
 home(bank);
 login(bank);

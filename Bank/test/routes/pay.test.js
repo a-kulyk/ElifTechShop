@@ -43,4 +43,42 @@ describe('Pay route', () => {
                 pay(req, res);
             });
     });
+    it('Forbidden POST', (done) => {
+        let user = new User({
+            username: 'test' + Math.random(),
+            password: 'test'
+        });
+        user.save()
+            .then((user) => {
+                let account = new Account({
+                    owner: 'someone',
+                    name: 'first'
+                });
+                return Promise.all([account.save(), Promise.resolve(user)]);
+            })
+            .then((result) => {
+                let account = result[0];
+                let user = result[1];
+                let spy = sinon.spy();
+                let req = {
+                    body: {
+                        account: account._id,
+                        amount: 1
+                    },
+                    session: {
+                        user: user._id
+                    }
+                };
+                let res = {
+                    send: (object) => {
+                        spy(object);
+                        expect(spy.callCount).to.equal(1);
+                        expect(spy.args[0][0].success).to.equal(false);
+                        expect(spy.args[0][0].errorDescription).to.equal('Forbidden');
+                        done();
+                    }
+                };
+                pay(req, res);
+            });
+    });
 });
