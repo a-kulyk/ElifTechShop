@@ -28,17 +28,17 @@ exports.get = function (req, res) {
     let date = new Date(req.query.date_year, req.query.date_month - 1, req.query.date_day);
     date = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+1),-21);
     let nextDate = new Date(date.getFullYear(),(date.getMonth()),(date.getDate()+2),-21);
-    console.log(date);
-    console.log(nextDate);
+    //console.log(date);
+    //console.log(nextDate);
     Transaction.findOne({
         _id: req.query.id,
         from: req.query.from,
         to: req.query.to,
         amount: req.query.amount,
-        date: {
-            "$gte": date,
-            "$lt": Date.parse(nextDate)
-        }
+        //date: {
+        //    "$gte": date,
+        //    "$lt": Date.parse(nextDate)
+        //}
     })
         .then(function (result) {
             if(result) {

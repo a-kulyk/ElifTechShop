@@ -11,3 +11,5 @@ require('./routes/logout.test');
 require('./routes/pay.test');
 require('./routes/signup.test');
 require('./routes/transaction.test');
+require('./routes/transfer.test');
+require('./routes/user.test');

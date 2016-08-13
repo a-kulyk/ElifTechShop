@@ -109,7 +109,7 @@ describe('Transaction route', () => {
                 };
                 let res = {
                     send: (object) => {
-                        console.log(object);
+                        //console.log(object);
                         spy(object);
                         expect(spy.callCount).to.equal(1);
                         expect(object.success).to.equal(true);
@@ -144,7 +144,6 @@ describe('Transaction route', () => {
                 };
                 let res = {
                     send: (object) => {
-                        console.log(object);
                         spy(object);
                         expect(spy.callCount).to.equal(1);
                         expect(object.success).to.equal(true);

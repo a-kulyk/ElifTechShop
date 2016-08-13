@@ -7,7 +7,8 @@ var User = require('../../models/user').User;
 var mocha = require('mocha');
 //import mocha from 'mocha';
 describe('Database connection', () => {
-    it('Connect to db', (done) => {
+    it('Connect to db', function(done) {
+        this.timeout(4000);
         let Test = mongoose.model('Test',{
             name: {
                 type: String,
