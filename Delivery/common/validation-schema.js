@@ -5,7 +5,7 @@ module.exports = {
     'title': {
         notEmpty: true,
         isLength: {
-            options: [{min:3, max: 16}],
+            options: [{min:3, max: 30}],
             errorMessage: 'Must be between 2 and 16 chars long'
         },
         errorMessage: 'Invalid title'
