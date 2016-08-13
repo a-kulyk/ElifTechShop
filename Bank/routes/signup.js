@@ -21,10 +21,9 @@ exports.post = function (req, res) {
             });
         })
         .catch(function (error) {
-            console.log(error);
             res.send({
                 "success": false,
-                "user": error
+                "errorDescription": error.message
             });
         });
 };

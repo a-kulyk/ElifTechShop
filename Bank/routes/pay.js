@@ -28,7 +28,7 @@ exports.post = function(req, res){
         .catch(function (error) {
             res.send({
                 "success": false,
-                "errorDescription": error
+                "errorDescription": error.message
             });
         })
 

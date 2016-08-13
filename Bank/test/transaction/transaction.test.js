@@ -4,7 +4,7 @@ let Transaction = require('../../models/transaction').Transaction;
 let expect = require('chai').expect;
 
 describe('Transaction', () => {
-   it('Action', (done) => {
+   it('Action transfer', (done) => {
       let user = new User({
           username: 'test' + Math.random(),
           password: 'test'
@@ -38,4 +38,30 @@ describe('Transaction', () => {
                throw new Error(error);
            });
    });
+    it('Action payment', (done) => {
+        let user = new User({
+            username: 'test' + Math.random(),
+            password: 'test'
+        });
+        user.save()
+            .then((user) => {
+                let account = new Account({
+                    owner: user.username,
+                    name: 'test1',
+                });
+                return account.save();
+            })
+            .then((account) => {
+                return Transaction.action(account._id, account._id, 1);
+            })
+            .then((result) => {
+                console.log(result);
+                expect(result.to.amount).to.equal(1);
+                expect(result.amount).to.equal(1);
+                done();
+            })
+            .catch((error) => {
+                throw new Error(error);
+            });
+    });
 });

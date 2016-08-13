@@ -7,7 +7,6 @@ exports.get = function (req, res) {
                 res.send({
                     "success": true,
                     "id": result._id,
-                    "amount": result.amount,
                     "username": result.username
                 });
             })
@@ -18,5 +17,10 @@ exports.get = function (req, res) {
                     "errorDescription": error
                 });
             });
+    } else {
+        return res.send({
+            success: false,
+            errorDescription: 'Not login'
+        });
     }
 };
