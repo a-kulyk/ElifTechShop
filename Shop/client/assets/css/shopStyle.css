@@ -255,19 +255,22 @@ div.make3D.flip180{
 	text-transform:uppercase;
 	font-weight:700;
 	padding:10px 0;
-	opacity:0.5;
+	opacity:0;
 	-webkit-transition: all 200ms ease-out;
 	-moz-transition: all 200ms ease-out;
 	-o-transition: all 200ms ease-out;
 	transition: all 200ms ease-out;
 }
 
-.make3D.animate .add_to_cart{
+.make3D.animate .add_to_cart,.make3D.animate .not_avaliable{
 	opacity:1;	
 	-webkit-transition: all 200ms ease-out; 
        -moz-transition: all 200ms ease-out; 
          -o-transition: all 200ms ease-out; 
             transition: all 200ms ease-out; 		
+}
+.make3D.animate .not_avaliable {
+	opacity: 0.5;
 }
 .view_gallery{	
 	position:absolute;
@@ -522,21 +525,22 @@ div.make3D.flip180{
 
 /* Custom, iPhone Retina */
 @media only screen and (min-width : 320px) {
-	.product, .make3D {
-		width: 310px;
-	}
+
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (min-width : 480px) {
-	.product, .make3D {
-		width: 100%;
+	#sidebar {
+		border: none;
 	}
+
 }
 
 /* Small Devices, Tablets */
 @media only screen and (min-width : 768px) {
-
+	#sidebar {
+		border-right: 1px solid #eee;
+	}
 }
 
 /* Medium Devices, Desktops */

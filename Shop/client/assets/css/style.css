@@ -22,9 +22,10 @@ body {
     color: #47A5DE;
 }
 
-#sidebar.col-md-3 {
+#sidebar{
     border-right: 1px solid #eee;
 }
+
 .container {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
@@ -36,11 +37,13 @@ body {
     padding: 10px 0;
     color: #262626; 
 }
-.propert_value {
+.property_value {
     font-weight: 400;
     text-transform: none;
     color : #676a74;
-    padding-left:10px;
+    font-size: 14px;
+    padding-left:5px;
+
 }
 .send_col {
     padding: 0;
@@ -51,6 +54,7 @@ body {
 
 #sidebar {
     margin-top:5px;
+    margin-bottom: 15px;
 }
 .send_form {
     background: #FFF;
@@ -106,7 +110,7 @@ a:hover  {
 }
 .title {
     padding: 0;
-    line-height: 30px; /* <-- this is what you must define */
+    line-height: 30px;
   vertical-align: middle;
     font-size: 14px;
     color: #262626; 
@@ -177,7 +181,7 @@ a:hover  {
 .loader:before {
   width: 5.2em;
   height: 10.2em;
-  background: #0dc5c1;
+  background: #008cba;
   border-radius: 10.2em 0 0 10.2em;
   top: -0.1em;
   left: -0.1em;
@@ -202,7 +206,7 @@ a:hover  {
 .loader:after {
   width: 5.2em;
   height: 10.2em;
-  background: #0dc5c1;
+  background: #008cba;
   border-radius: 0 10.2em 10.2em 0;
   top: -0.1em;
   left: 5.1em;
@@ -267,6 +271,7 @@ a:hover  {
 
 .product_image img{
     width: 100%;
+    margin-bottom: 10px;
 }
 .product_image,.product_option, .range_button,.buy_button,.buy {
     padding: 0;
@@ -275,9 +280,11 @@ a:hover  {
     text-align:center;
 }
 p.product_price {
-    padding: 0px;
+    padding: 10px 0;
     font-size: 24px;
     font-weight: 600;
+    background: #e3eef6;
+    border-radius: 5px;
 }
 
 .sort {
@@ -320,6 +327,11 @@ p.product_price {
 }
 .product_images {
     margin:10px 0;
+    max-width: 100%;
+    text-align: center;
+}
+.product_images img {
+    max-width: 100%;
 }
 
 .product_properties {
@@ -330,3 +342,17 @@ p.product_price {
     background: #eeeeee;
     border-bottom: 1px solid #e1e1e1;
 }
+
+.property_count {
+    background: #e3eef6;
+    font-size: 9px;
+    padding: 3px;
+    min-width: 20px;
+    font-weight: 800;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+

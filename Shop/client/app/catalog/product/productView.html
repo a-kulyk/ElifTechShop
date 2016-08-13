@@ -1,14 +1,12 @@
 
 
-<div ng-hide="complete" class="loader"></div>
 
-<div ng-show="items.notMatch">There is not nothing to find</div>
-<div ng-show="items.error">Something went wrong.</div>
 <div ng-show="complete" >
-    <sort-items></sort-items>
+
+    <sort-items ng-hide="items.notMatch || items.error"></sort-items>
     <div style="clear:both"></div>
 <div class="col-md-4 col-xs-12 " ng-repeat="item in items">
-    <div class="product" ng-class="{not_active: item.quantity == 0}">
+    <div class="product"  ng-class="{not_active: item.quantity == 0}">
 
         <div class="make3D">
             <div class="product-front">
@@ -28,7 +26,7 @@
                     <div class="stats-container">
                         <div class="visibble-stats">
                             <div class="stats_end"></div>
-                           <span class="product_price">{{item.price}}$</span></a>
+                           <span class="product_price">{{item.price | currency}}</span></a>
                             <a ng-href="#/product/{{item._id}}"><span class="product_name">{{item.name}}</span></a>
                             <p>{{item.smallDescription}}</p>
                         </div>
@@ -73,5 +71,7 @@
 </div>
 
 </div>
-
-
+<div ng-show="items.notMatch">There is not nothing to find</div>
+<div ng-show="items.error">Something went wrong.</div>
+<div ng-hide="complete" class="loader">
+</div>

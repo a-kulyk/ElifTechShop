@@ -17,8 +17,8 @@
 	<div ng-show="complete">
 		<div ng-repeat="property in data.properties" class="property_name">{{property.name}} 
 			
-			<div ng-repeat="value in property.value">
-				<input ng-change="clickToProperty()" type="checkbox"  ng-model="value.state"><span class="propert_value">{{value.respond}}  <strong>{{value.count}}</strong>  </span>
+			<div ng-repeat="value in property.value" style="height: 20px;">
+				<input ng-change="clickToProperty()" type="checkbox"  ng-model="value.state"><span class="property_value">{{value.respond}}  <span ng-class="{property_count: value.count}">{{value.count}}</span>  </span>
 				
 			</div>
 		</div>
