@@ -2,7 +2,7 @@
  * Created by dmytro on 04.08.16.
  */
 "use strict";
-module.exports = function (app) {
+module.exports = function (app, role) {
     app.config(function ($routeProvider) {
         $routeProvider.when('/create_order', {
             templateUrl: '../templates/create-order.html',
@@ -15,26 +15,45 @@ module.exports = function (app) {
             controller: 'timeOutputCtrl'
         }).when('/history', {
             templateUrl: '../templates/history.html',
-            controller: 'historyCtrl'
+            controller: 'historyCtrl',
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl'
         }).when('/login', {
-            templateUrl:'../templates/login.html',
-            controller:'loginCtrl'
-        }).when('/admin', {
-            templateUrl:'../templates/admin.html',
-            controller:'adminCtrl'
+            templateUrl: '../templates/login.html',
+            controller: 'loginCtrl'
+        }).when('/cars', {
+            templateUrl: '../templates/cars.html',
+            controller: 'carsCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('Cars')) {
+                        return true;
+                    } else {
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         })
-    })
-    /*.run(function ($rootScope) {
-     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-     switch (next.templateUrl) {
-     case 'templates/track-order.html':
-     require.ensure([], function () {
-     require('../../css/track-order.css');
-     })
-     }
-     });
-     })*/
+    }).run(['$rootScope', '$http', 'AclService', function ($rootScope, $http, AclService) {
+        AclService.addRole('guest');
+        AclService.addRole('admin');
+
+        AclService.addResource('Order');
+        AclService.addResource('Cars');
+        AclService.addResource('Login');
+        AclService.addResource('Logout');
+
+        AclService.allow('guest', 'Order');
+        AclService.allow('guest', 'Login');
+
+        AclService.allow('admin', 'Cars');
+        AclService.allow('admin', 'Logout');
+
+        AclService.setUserIdentity({
+            getRoles: function () {
+                return [role];
+            }
+        });
+    }]);
 }

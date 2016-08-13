@@ -66,6 +66,7 @@
 	__webpack_require__(18);
 	__webpack_require__(19);
 	__webpack_require__(20);
+	__webpack_require__(21);
 
 /***/ },
 /* 1 */
@@ -78,7 +79,7 @@
 	myApp.config(function ($routeProvider) {
 	    $routeProvider.when('/', {
 	        templateUrl: '/main.html',
-	        access: { restricted: false }
+	        access: { restricted: true }
 	    }).when('/login', {
 	        templateUrl: './app/auth/login.html',
 	        controller: 'loginController',
@@ -94,7 +95,7 @@
 	        templateUrl: './app/catalog/product/productShowView.html',
 	        controller: 'ProductShowController',
 	        controllerAs: 'product',
-	        access: { restricted: false }
+	        access: { restricted: true }
 	    }).when('/order/cart', {
 	        templateUrl: './app/order/shoppingCart.html',
 	        controller: 'OrderController',
@@ -114,6 +115,11 @@
 	        templateUrl: './app/order/orderDetail.html',
 	        controller: 'OrderDetailController',
 	        controllerAs: 'detail',
+	        access: { restricted: true }
+	    }).when('/user/cabinet', {
+	        templateUrl: './app/main/cabinet.html',
+	        controller: 'CabinetCtrl',
+	        controllerAs: 'cabinet',
 	        access: { restricted: true }
 	    }).otherwise({
 	        redirectTo: '/'
@@ -146,7 +152,9 @@
 	    getUserStatus: getUserStatus,
 	    login: login,
 	    logout: logout,
-	    register: register
+	    register: register,
+	    addBankAccount: addBankAccount,
+	    updateProfile: updateProfile
 	  };
 
 	  function isLoggedIn() {
@@ -252,6 +260,22 @@
 	    // return promise object
 	    return deferred.promise;
 	  }
+
+	  function addBankAccount(account) {
+	    return $http({
+	      method: 'PUT',
+	      url: '/user/addBankAccount',
+	      data: { bankAccount: account }
+	    });
+	  }
+
+	  function updateProfile(user) {
+	    return $http({
+	      method: 'PUT',
+	      url: '/user/updateProfile',
+	      data: user
+	    });
+	  }
 	}]);
 
 /***/ },
@@ -302,15 +326,9 @@
 
 	  $scope.register = function () {
 
-	    console.log("lat : ", $scope.mylat);
-	    console.log("lng : ", $scope.mylng);
-
 	    // initial values
 	    $scope.error = false;
 	    $scope.disabled = true;
-
-	    $scope.registerForm.address.lat = $scope.mylat;
-	    $scope.registerForm.address.lng = $scope.mylng;
 
 	    console.log("$scope.registerForm: ", $scope.registerForm);
 
@@ -464,6 +482,26 @@
 
 	'use strict';
 
+	angular.module('app').controller('CabinetCtrl', ['$scope', '$rootScope', '$location', 'AuthService', '$uibModal', function ($scope, $rootScope, $location, AuthService, $uibModal) {
+	    var cabinet = this;
+	    cabinet.user = $rootScope.currentUser;
+
+	    cabinet.edit = false;
+
+	    cabinet.update = function (user) {
+	        AuthService.updateProfile(user).then(function (resp) {
+	            $rootScope.currentUser = resp.data;
+	            cabinet.edit = !cabinet.edit;
+	        });
+	    };
+	}]);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
 	angular.module('app').factory('orderService', ['$q', '$http', '$rootScope', function ($q, $http, $rootScope) {
 	    return {
 	        getCart: function getCart() {
@@ -541,7 +579,7 @@
 	}]);
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -550,20 +588,30 @@
 	    return function (dateString) {
 	        return moment(dateString).format("D MMMM YYYY, HH:mm");
 	    };
-	}).controller('OrderController', ['$rootScope', '$location', '$timeout', '$uibModal', 'orderService', function ($rootScope, $location, $timeout, $uibModal, orderService) {
+	}).controller('OrderController', ['$rootScope', '$scope', '$location', '$timeout', '$uibModal', 'orderService', function ($rootScope, $scope, $location, $timeout, $uibModal, orderService) {
 	    var order = this;
 
 	    orderService.getCart().then(function (response) {
 	        $rootScope.shoppingCart = response.data;
 	    });
 
-	    order.updQuantity = function (id, quan) {
-	        if (quan === 0) {
-	            order.removeItem(id);
-	        }
+	    order.updQuantity = _.debounce(function (id, quan) {
 	        orderService.updQuantity(id, quan).then(function (response) {
 	            $rootScope.shoppingCart = response.data;
 	        });
+	    }, 1000);
+
+	    order.increment = function (id, quan) {
+	        order.updQuantity(id, ++quan);
+	    };
+
+	    order.decrement = function (id, quan) {
+	        --quan;
+	        if (quan === 0) {
+	            order.removeItem(id);
+	            return;
+	        }
+	        order.updQuantity(id, quan);
 	    };
 
 	    order.removeItem = function (id) {
@@ -597,6 +645,18 @@
 	                    templateUrl: './app/order/modals/connectionErr.html'
 	                });
 	                console.log('Could not connect to Your bank');
+	            } else if (bank_resp.data.warning === "No bankAccount") {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/inputBankAcc.html',
+	                    controller: function controller($uibModalInstance, $scope, AuthService) {
+	                        $scope.next = function (account) {
+	                            AuthService.addBankAccount(account).then(function (resp) {
+	                                console.log('addBankAccount.resp', resp);
+	                                $uibModalInstance.close();
+	                            });
+	                        };
+	                    }
+	                });
 	            }
 	        });
 	    };
@@ -617,8 +677,16 @@
 	            });
 	        });
 	    }
-	}]).controller('HistoryCtrl', ['orderService', function (orderService) {
+	}]).controller('HistoryCtrl', ['$scope', 'orderService', function ($scope, orderService) {
 	    var history = this;
+	    history.propertyName = 'date.created';
+	    history.sortReverse = false;
+
+	    history.sortBy = function (propertyName) {
+	        history.sortReverse = history.propertyName === propertyName ? !history.sortReverse : true;
+	        history.propertyName = propertyName;
+	    };
+
 	    orderService.all().then(function (resp) {
 	        history.allOrders = resp.data;
 	    });
@@ -632,7 +700,7 @@
 	}]);
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -673,7 +741,7 @@
 	}]);
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -757,7 +825,7 @@
 	}]);
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -779,7 +847,7 @@
 	}]);
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -916,13 +984,13 @@
 	}]);
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -950,7 +1018,7 @@
 	}]);
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -984,7 +1052,7 @@
 	}]);
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -999,7 +1067,7 @@
 	}]);
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1012,7 +1080,7 @@
 	}]);
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1027,7 +1095,7 @@
 	}]);
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';

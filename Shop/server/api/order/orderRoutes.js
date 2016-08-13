@@ -26,51 +26,55 @@ router.get('/cart', function(req, res, next) {
   });
 
 router.get('/pay', function(req, res, next) {
-  Order.findOne({userId: req.user._id, status: "shoppingCart"})
-  .populate({path: 'itemSet.productId', select: 'price'})
-  .exec()
-  .then(order => {
-    let total = order.findTotal();
-    return total;
-  })
-  .then(total => {
-    console.log("TOTAL",typeof(total));
-    let post_data = querystring.stringify({
-        from: req.user.bankAccount,
-        to: config.shopBankAccount,
-        amount: total,
-        API_KEY: config.API_KEY
-      });
+  if (!req.user.bankAccount) {
+    res.json({warning: "No bankAccount"})
+    res.end();
+  } else {
+    Order.findOne({userId: req.user._id, status: "shoppingCart"})
+    .populate({path: 'itemSet.productId', select: 'price'})
+    .exec()
+    .then(order => {
+      let total = order.findTotal();
+      return total;
+    })
+    .then(total => {
+      let post_data = querystring.stringify({
+          from: req.user.bankAccount,
+          to: config.shopBankAccount,
+          amount: total,
+          API_KEY: config.API_KEY
+        });
 
-    let options = {
-      host: 'localhost',
-      port: 4000,
-      path: '/api/transaction/',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(post_data)
-      }
-    };
+      let options = {
+        host: 'localhost',
+        port: 4000,
+        path: '/api/transaction/',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(post_data)
+        }
+      };
 
-    var httpreq = http.request(options, (response) => {
-      let body = '';
-      response.setEncoding('utf8');
-      response.on('data', (chunk) => {
-        body += chunk;
+      var httpreq = http.request(options, (response) => {
+        let body = '';
+        response.setEncoding('utf8');
+        response.on('data', (chunk) => {
+          body += chunk;
+        });
+        response.on('end', () => {
+          console.log("END OF RESP: " + body);
+          res.send(body);
+        });
       });
-      response.on('end', () => {
-        console.log("END OF RESP: " + body);
-        res.send(body);
-      });
+      httpreq.write(post_data);
+      httpreq.on('error', function(e) {
+          console.log("Got error: " + e.message);
+          next(e);
+        });
+      httpreq.end();
     });
-    httpreq.write(post_data);
-    httpreq.on('error', function(e) {
-        console.log("Got error: " + e.message);
-        next(e);
-      });
-    httpreq.end();
-  });
+  } 
 });
 
 router.get('/:id', function(req, res, next) {
@@ -194,8 +198,68 @@ router.put('/setAddress', function(req, res, next) {
         order.status = "proccessing";
         return order.save();
       })
+    .then(order => {
+      let post_data = querystring.stringify({
+        title: order._id,
+        price: order.total,
+        from: {
+          username: config.shopEmail,
+          lat: config.shopAddress.lat,
+          lng: config.shopAddress.lng
+        },
+        to: {
+          username: req.user.email,
+          lat: req.user.address.lat,
+          lng: req.user.address.lng
+        }
+      });
+
+      let options = {
+        host: 'localhost',
+        port: 5000,
+        path: '/order/',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(post_data)
+        }
+      };
+
+      var httpreq = http.request(options, (response) => {
+        let body = '';
+        response.setEncoding('utf8');
+        response.on('data', (chunk) => {
+          body += chunk;
+        });
+        response.on('end', () => {
+          if (body.success) {
+            order.trackingCode = body.trackingCode;
+          } else {throw new Error('Something went wrong')}          
+        });
+      });
+
+      httpreq.write(post_data);
+      httpreq.on('error', function(e) {
+          console.log("Got error: " + e.message);
+          next(e);
+        });
+      httpreq.end();
+
+      return order.save();
+    })
     .then(order => res.json(order),
-      err => next(err))
+      err => next(err));
+ });
+
+router.put('/delivered/:id', function(req, res, next) {
+  Order.findById(req.params.id)
+    .then(order => {
+      order.status = "completed";
+      order.date.completed = new Date();     
+      return order.save();
+    })    
+    .then(order => res.json(order),
+      err => next(err));
  });
 
 router.delete('/remove', function(req, res, next) {

@@ -7,6 +7,8 @@ module.exports = function (app) {
 
     app.get('/order/:trackingCode', require('./order').get);
 
+    app.get('/order/id/:id', require('./order').getById);
+
     app.post('/order', require('./order').post);
 
     app.post('/delivered', require('./delivered').post);
@@ -14,5 +16,11 @@ module.exports = function (app) {
     app.get('/history/:fromUsername/:toUsername', require('./history').get);
 
     app.post('/login', require('./login').post);
+
+    app.post('/logout', require('./logout').post);
+
+    app.get('/cars', require('./cars').get);
+
+    app.get('/session', require('./session').get);
 }
 

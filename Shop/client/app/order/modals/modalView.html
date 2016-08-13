@@ -5,11 +5,11 @@
 <div class="modal-body">
 	<div class="well">
 	<div><img ng-src="{{modal.item.images[0]}}" width="150px">
-	<strong>{{modal.item.name}}&nbsp</strong> Price: {{modal.item.price}}$</div>
+	<strong>{{modal.item.name}}&nbsp</strong> Price: {{modal.item.price | currency}}</div>
 
 	<div class="text-center"><label for="quantity">Quantity</label>
 	<input type="number" id="quantity" name="number" ng-model="modal.quantity" min="1" onfocus="this.blur()">
-	Total: <strong>{{modal.total()}}$</strong></div>
+	Total: <strong>{{modal.total() | currency}}</strong></div>
   </div>
 	
 </div>

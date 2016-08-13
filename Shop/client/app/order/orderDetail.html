@@ -8,8 +8,8 @@
                     <th>Product</th>
                     <th>Category</th>
                     <th>Quantity</th>
-                    <th>Price, $</th>
-                    <th>Sum, $</th>
+                    <th>Price</th>
+                    <th>Sum</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,8 +21,8 @@
                     </td>
                     <td>{{item.category}}</td>
                     <td>{{item.quantity}}</td>
-                    <td>{{item.price}}</td>
-                    <td>{{item.quantity * item.price}}</td>
+                    <td>{{item.price | currency}}</td>
+                    <td>{{item.quantity * item.price | currency}}</td>
                 </tr>
                 <tr>
                     <td></td>

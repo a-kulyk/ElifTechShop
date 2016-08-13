@@ -11,7 +11,9 @@ angular.module('app').factory('AuthService',
       getUserStatus: getUserStatus,
       login: login,
       logout: logout,
-      register: register
+      register: register,
+      addBankAccount: addBankAccount,
+      updateProfile: updateProfile
     });
 
     function isLoggedIn() {
@@ -118,6 +120,22 @@ angular.module('app').factory('AuthService',
         
       // return promise object
       return deferred.promise;
+    }
+
+    function addBankAccount(account) {
+      return $http({
+        method: 'PUT',
+        url: '/user/addBankAccount',
+        data: {bankAccount: account}
+      })
+    }
+
+    function updateProfile(user) {
+      return $http({
+        method: 'PUT',
+        url: '/user/updateProfile',
+        data: user
+      })
     }
 
 }]);

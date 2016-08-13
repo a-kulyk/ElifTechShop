@@ -1,6 +1,3 @@
-/**
- * Created by dmytro on 04.08.16.
- */
 "use strict";
 const gulp = require('gulp');
 const webpackStream = require('webpack-stream');
@@ -31,7 +28,15 @@ gulp.task('webpack', function () {
                 {
                     test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
                     loader: 'file?name=[path][name].[ext]'
-                }
+                },
+/*                {
+                    test: /\.js$/,
+                    exclude: /(node_modules|bower_components)/,
+                    loader: 'babel',
+                    query: {
+                        presets: ['es2015']
+                    }
+                }*/
             ]
         },
         plugins: [
