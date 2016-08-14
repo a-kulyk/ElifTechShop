@@ -6,7 +6,17 @@ function makeVisualEffects() {
 
         }
         if(image.prop('naturalHeight') < image.prop('naturalWidth')) {
-            image.css({'min-height' : '140px','max-height':'160px','width':'100%'});
+            image.css({'margin':'auto','min-height' : '120px','max-height':'125px','position': 'absolute',
+            'left': '-50%',
+                'right':'-50%',
+
+                'max-width':'none',
+                'z-index':'0'
+
+            });
+           image.parent().css({
+            'position': 'relative',
+            'width': '100%'})
         }
         if(image.prop('naturalHeight') === image.prop('naturalWidth')) {
             console.log('square');

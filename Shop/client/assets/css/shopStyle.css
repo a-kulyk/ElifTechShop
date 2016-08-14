@@ -31,6 +31,11 @@ body {
 	opacity: 0.5;
 }
 
+.main_inner {
+	display: inline-block;
+	position:relative;
+}
+
 .main_inner img {
 	position: relative;
 
