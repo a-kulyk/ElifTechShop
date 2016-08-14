@@ -53,7 +53,6 @@
 	__webpack_require__(5);
 	__webpack_require__(6);
 	__webpack_require__(7);
-	__webpack_require__(21);
 	__webpack_require__(8);
 	__webpack_require__(9);
 	__webpack_require__(10);
@@ -67,6 +66,7 @@
 	__webpack_require__(18);
 	__webpack_require__(19);
 	__webpack_require__(20);
+	__webpack_require__(21);
 
 /***/ },
 /* 1 */
@@ -482,6 +482,26 @@
 
 	'use strict';
 
+	angular.module('app').controller('CabinetCtrl', ['$scope', '$rootScope', '$location', 'AuthService', '$uibModal', function ($scope, $rootScope, $location, AuthService, $uibModal) {
+	    var cabinet = this;
+	    cabinet.user = $rootScope.currentUser;
+
+	    cabinet.edit = false;
+
+	    cabinet.update = function (user) {
+	        AuthService.updateProfile(user).then(function (resp) {
+	            $rootScope.currentUser = resp.data;
+	            cabinet.edit = !cabinet.edit;
+	        });
+	    };
+	}]);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
 	angular.module('app').factory('orderService', ['$q', '$http', '$rootScope', function ($q, $http, $rootScope) {
 	    return {
 	        getCart: function getCart() {
@@ -559,7 +579,7 @@
 	}]);
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -680,7 +700,7 @@
 	}]);
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -721,32 +741,20 @@
 	}]);
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	angular.module('app').controller('CatalogController', ['Items', '$route', '$routeParams', '$httpParamSerializer', '$rootScope', '$location', '$scope', '$timeout', function (Items, $route, $routeParams, $httpParamSerializer, $rootScope, $location, $scope, $timeout) {
-
-	    var that = this;
 	    $scope.complete = false;
-	    if (!$route.current.params.categories) {
-	        for (var property in $rootScope.data.properties) {
-	            for (var i in $rootScope.data.properties[property].value) {
-	                $rootScope.data.properties[property].value.state = false;
-	            }
-	        }
-	    }
-
-	    that.currentSort = $routeParams.sort || '';
-	    that.sort = ['cheap', 'expensive'];
-
-	    that.sortThis = function () {
-	        $routeParams.sort = that.sorted || 'cheap';
+	    $scope.currentSort = $routeParams.sort || '';
+	    $scope.sort = ['cheap', 'expensive'];
+	    $scope.sortThis = function () {
+	        $routeParams.sort = $scope.sorted || 'cheap';
 	        $location.url('?' + $httpParamSerializer($routeParams));
 	    };
 	    Items.all($route.current.params).then(function (response) {
-
 	        response.data.items.forEach(function (element) {
 	            element.smallDescription = element.description.slice(0, 105) + "...";
 	        });
@@ -755,29 +763,29 @@
 	        }
 
 	        $scope.items = response.data.items;
-	        console.log($scope.items);
+
 	        if ($scope.items.length === 0) {
 	            $scope.complete = true;
-	            $scope.items.notMatch = true;
 	            return;
 	        }
+
 	        var pages = response.data.pages || 0;
 	        $scope.pages = [];
+
 	        for (var i = 1; i <= pages; i++) {
-	            var params = $route.current.params;
+	            var params = angular.copy($route.current.params);;
 	            params.page = i;
 	            var page = { number: i, url: $httpParamSerializer(params) };
 	            $scope.pages.push(page);
 	        }
 	        $scope.complete = true;
 	        setTimeout(function () {
-	            //do this after view has loaded :)\
 	            makeVisualEffects();
 	        }, 0);
 	    }, function (error) {
 	        console.log(error);
-	        that.items = [];
-	        that.items.error = true;
+	        $scope.items = [];
+	        $scope.items.error = true;
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
@@ -805,7 +813,7 @@
 	}]);
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -827,13 +835,12 @@
 	}]);
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-	    var that = this;
 	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    var currentCategory = $route.current.params.categories;
@@ -841,7 +848,6 @@
 	    if ($rootScope.data.price) {
 	        $scope.price = JSON.parse(JSON.stringify($rootScope.data.price));
 	    }
-
 	    var defineProperty = function defineProperty() {
 	        if (!$rootScope.data.properties) return;
 	        var currentUrl = JSON.parse(JSON.stringify($route.current.params));
@@ -851,7 +857,7 @@
 	            $rootScope.data.properties.forEach(function (property) {
 	                if (property.name == item) {
 	                    property.value.forEach(function (value) {
-	                        if (Array.isArray(currentUrl[item])) {
+	                        if (angular.isArray(currentUrl[item])) {
 	                            if (currentUrl[item].includes(value.respond)) {
 	                                console.log(value.respond, true);
 	                                value.state = true;
@@ -874,9 +880,7 @@
 	    $scope.createPropertyScreen = function (data) {
 	        var propertyScreen = {};
 	        propertyScreen.categories = $route.current.params.categories;
-
 	        if ($rootScope.data.searchField) {
-
 	            var additionalSearchQuery = {
 	                searchField: $rootScope.data.searchField || ''
 	            };
@@ -904,6 +908,7 @@
 	                }
 	            });
 	        }
+
 	        return propertyScreen;
 	    };
 
@@ -943,9 +948,7 @@
 	                    }
 	                });
 	            }
-
 	            $rootScope.data = newResult || [];
-
 	            defineProperty();
 	            $scope.complete = true;
 	        }, function (error) {
@@ -954,27 +957,29 @@
 	            $scope.complete = true;
 	        });
 	    }
-	    var params = Object.assign({}, $route.current.params);
-	    delete params.per_page;
-	    delete params.page;
-	    Parameters.countOfCat(currentCategory, params).then(function (result) {
-	        $rootScope.data = result.data;
-	        $scope.displayCount = true;
+	    (function () {
+	        var params = JSON.parse(JSON.stringify($route.current.params));
+	        delete params.per_page;
+	        delete params.page;
+	        Parameters.countOfCat(currentCategory, params).then(function (result) {
+	            $rootScope.data = result.data;
+	            $scope.displayCount = true;
+	            defineProperty();
+	        }, function (error) {
+	            console.log(error);
+	        });
 	        defineProperty();
-	    }, function (error) {
-	        console.log(error);
-	    });
-	    defineProperty();
+	    })();
 	}]);
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1002,14 +1007,13 @@
 	}]);
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	angular.module('app').factory('Parameters', ['$http', function ($http) {
 	  return {
-
 	    all: function all() {
 	      return $http({
 	        method: 'GET',
@@ -1036,7 +1040,7 @@
 	}]);
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1051,7 +1055,7 @@
 	}]);
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1064,7 +1068,7 @@
 	}]);
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1079,7 +1083,7 @@
 	}]);
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1091,26 +1095,6 @@
 			controllerAs: 'properties',
 			templateUrl: "./app/catalog/properties/propertyView.html"
 		};
-	}]);
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	angular.module('app').controller('CabinetCtrl', ['$scope', '$rootScope', '$location', 'AuthService', '$uibModal', function ($scope, $rootScope, $location, AuthService, $uibModal) {
-	    var cabinet = this;
-	    cabinet.user = $rootScope.currentUser;
-
-	    cabinet.edit = false;
-
-	    cabinet.update = function (user) {
-	        AuthService.updateProfile(user).then(function (resp) {
-	            $rootScope.currentUser = resp.data;
-	            cabinet.edit = !cabinet.edit;
-	        });
-	    };
 	}]);
 
 /***/ }

@@ -1,7 +1,6 @@
 
 
 <form name="myForm" >
-
 	<div class="col-md-9 col-xs-9 search_col">
 		<input type="text" class="searchField"   ng-model="data.searchField">
 	</div>
@@ -9,19 +8,18 @@
 		<input type="button" class="send_form" ng-click="clickToProperty()" value="OK" >
 	</div>
 	<div style="clear:both"></div>
-
-
 <div ng-show="isCat" class="sidebar-category" category-items></div>
 <div ng-hide="isCat">
 	<div ng-hide="complete" class="loader"></div>
 	<div ng-show="complete">
-		<div ng-repeat="property in data.properties" class="property_name">{{property.name}} 
+		<div ng-repeat="property in data.properties" class="property_name col-xs-6 col-sm-3 col-md-12">{{property.name}}
 			
 			<div ng-repeat="value in property.value" style="height: 20px;">
 				<input ng-change="clickToProperty()" type="checkbox"  ng-model="value.state"><span class="property_value">{{value.respond}}  <span ng-show="displayCount" ng-class="{property_count: value.count}">{{value.count}}</span>  </span>
 				
 			</div>
 		</div>
+		<div style="clear: both;"></div>
 
 		<div range-slider  min="0" max="price.max + 10" model-min="data.price.min" model-max="data.price.max" show-values="true"></div>
 		<input type="button" class="send_form" ng-click="clickToProperty()" value="OK" >

@@ -3,34 +3,36 @@
 
 <div ng-show="complete" >
 
-    <sort-items ng-hide="items.notMatch || items.error"></sort-items>
+    <sort-items ng-hide="items.length == 0 || items.error"></sort-items>
     <div style="clear:both"></div>
-<div class="col-md-4 col-xs-12 all_product" ng-repeat="item in items">
+<div class="col-md-4 col-xs-6  col-sm-4 all_product" ng-repeat="item in items">
     <div class="product"  ng-class="{not_active: item.quantity == 0}">
 
         <div class="make3D">
             <div class="product-front">
                 <div class="shadow">
                 </div>
-               </a>
+                <a ng-href="#/product/{{item._id}}">
                 <div class="main_inner">
                     <img ng-src="{{item.images[0]}}" alt="{{item.name}}" />
                 </div>
 
+                </a>
+                <a ng-href="#/product/{{item._id}}"><div class="image_overlay"></div></a>
 
-                <a ng-href="#/product/{{item._id}}"> <div class="image_overlay"></div></a>
                 <div class="add_to_cart" ng-hide="{{item.quantity == 0}}" ng-click="main.addToCart(item)">Add to cart </div>
                 <div class="not_avaliable" ng-show="{{item.quantity == 0}}" >Not avaliable </div>
                 <div class="view_gallery">View gallery</div>
+
                 <div class="stats">
                     <div class="stats-container">
                         <div class="visibble-stats">
                             <div class="stats_end"></div>
                            <span class="product_price">{{item.price | currency}}</span></a>
                             <a ng-href="#/product/{{item._id}}"><span class="product_name">{{item.name}}</span></a>
-                            <p>{{item.smallDescription}}</p>
+                            <p class="small_description">{{item.smallDescription}}</p>
                         </div>
-                        <p>Company: <strong>{{item.company}}</strong></p>
+                        <p >Company: <strong>{{item.company}}</strong></p>
 
                     </div>
                 </div>
@@ -66,12 +68,12 @@
 
 </div>
 <div style="clear:both"></div>
-<div ng-repeat="i in pages" class="pages">
-    <a ng-href="#/?{{i.url}}" class="page">{{i.number}}</a>
+<div ng-repeat="page in pages" class="pages">
+    <a ng-href="#/?{{pae.url}}" class="page">{{page.number}}</a>
 </div>
 
 </div>
-<div ng-show="items.notMatch">There is not nothing to find</div>
-<div ng-show="items.error">Something went wrong.</div>
+<div ng-show="items.length == 0" class="empty">There is not nothing to find</div>
+<div ng-show="items.error" class="empty find_error">Something went wrong.</div>
 <div ng-hide="complete" class="loader">
 </div>

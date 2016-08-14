@@ -1,7 +1,7 @@
 {
   "name": "elifTechSop",
   "scripts": {
-    "start": "nodemon ./index.js"
+    "start": "node ./app.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -19,6 +19,7 @@
     "passport-local-mongoose": "^4.0.0",
     "promise": "^7.1.1",
     "q": "~1.2.0",
+    "strict-mode": "^0.7.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {

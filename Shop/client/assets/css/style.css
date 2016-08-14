@@ -296,7 +296,7 @@ p.product_price {
 
 .sort {
     float: right;
-    margin: 0px 30px 5px 5px;
+    margin: 0px 15px 10px 5px;
 }
 
 .cartQuant{
@@ -362,6 +362,18 @@ p.product_price {
     display: inline-block;
     text-align: center;
     vertical-align: middle;
+}
+
+.empty {
+    background: #e3eef6;
+    color: #2B2922;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.find_error {
+    color: #880000;
 }
 
 
