@@ -6,10 +6,10 @@ function makeVisualEffects() {
 
         }
         if(image.prop('naturalHeight') < image.prop('naturalWidth')) {
-            image.css({'margin':'auto','min-height' : '120px','max-height':'125px','position': 'absolute',
+            image.css({'margin':'auto','min-height' : '120px','max-height':'140px','position': 'absolute',
             'left': '-50%',
                 'right':'-50%',
-
+                'margin-top':'-15px',
                 'max-width':'none',
                 'z-index':'0'
 
