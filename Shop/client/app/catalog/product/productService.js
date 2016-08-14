@@ -14,7 +14,7 @@ angular.module('app').factory('Items', ['$http', function ProductFactory($http){
        item : function(id) {
          return $http({
            method: 'GET',
-           url : "/catalog/product/"+id
+           url : "/catalog/product/" + id
          });
        }
   };

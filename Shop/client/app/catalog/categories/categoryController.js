@@ -8,9 +8,7 @@ angular.module('app')
           url.categories = data[i];
           var categoryInfo = {name : data[i], url : $httpParamSerializer(url)};
           that.data.push(categoryInfo);
-          
         }
-        
       }).error(function(data, status){
         console.log(data, status);
         that.categories = [];

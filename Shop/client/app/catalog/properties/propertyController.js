@@ -1,6 +1,5 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
-        let that = this;
         $scope.displayCount = false;
         $scope.complete = false;
         var currentCategory = $route.current.params.categories;
@@ -8,7 +7,6 @@ angular.module('app')
         if($rootScope.data.price) {
             $scope.price = JSON.parse(JSON.stringify($rootScope.data.price));
         }
-
         let defineProperty = function() {
             if(!$rootScope.data.properties) return;
             let currentUrl = JSON.parse(JSON.stringify($route.current.params));
@@ -17,7 +15,7 @@ angular.module('app')
                 $rootScope.data.properties.forEach(function(property) {
                     if(property.name == item) {
                         property.value.forEach(function (value) {
-                            if(Array.isArray(currentUrl[item])) {
+                            if(angular.isArray(currentUrl[item])) {
                                 if(currentUrl[item].includes(value.respond)) {
                                     console.log(value.respond,true);
                                     value.state = true;
@@ -39,9 +37,7 @@ angular.module('app')
         $scope.createPropertyScreen = function (data) {
             var propertyScreen = {};
             propertyScreen.categories = $route.current.params.categories;
-
             if($rootScope.data.searchField) {
-
                 let additionalSearchQuery = {
                     searchField : $rootScope.data.searchField || ''
                 };
@@ -70,6 +66,7 @@ angular.module('app')
 
                 })
             }
+
             return propertyScreen;
         };
 
@@ -89,12 +86,6 @@ angular.module('app')
             }
             return urlObj;
         }
-
-
-
-
-
-
 
         if($rootScope.category != currentCategory) {
             Parameters.paramsOfCat(currentCategory)
@@ -116,9 +107,7 @@ angular.module('app')
                             }
                         });
                     }
-
                     $rootScope.data = newResult || [];
-
                     defineProperty();
                     $scope.complete = true;
 
@@ -129,17 +118,20 @@ angular.module('app')
                     $scope.complete = true;
                 });
         }
-        let params = Object.assign({},$route.current.params)
-        delete params.per_page;
-        delete params.page;
-        Parameters.countOfCat(currentCategory, params)
-        .then(result => {
-                $rootScope.data = result.data;
-                $scope.displayCount = true;
-                defineProperty();
-            },
-            error => {
-                console.log(error);
-        })
-        defineProperty();
+        (function() {
+            let params = JSON.parse(JSON.stringify($route.current.params));
+            delete params.per_page;
+            delete params.page;
+            Parameters.countOfCat(currentCategory, params)
+                .then(result => {
+                        $rootScope.data = result.data;
+                        $scope.displayCount = true;
+                        defineProperty();
+                    },
+                    error => {
+                        console.log(error);
+                    })
+            defineProperty();
+        })()
+
     }]);

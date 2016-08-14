@@ -1,6 +1,5 @@
 angular.module('app').factory('Parameters',['$http', function($http) {
       return {
-        
         all: function() {
             return $http({
               method: 'GET', 
