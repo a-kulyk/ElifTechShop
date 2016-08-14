@@ -5,9 +5,10 @@
 let Car = require('../models/car');
 //var Order = require('../models/order');
 let orderStates = require('../common/enums/order-states').orderStates;
+let mongoose = require('../lib/mongoose');
 
 exports.loadOrderOnCar = function (order) {
-    Car.findOne({isAvailable: true}, function (err, car) {
+    Car.findOne({isAvailable: true, isActive: true}, function (err, car) {
         if (!err && car != null) {
             car._order = order._id;
             car.isAvailable = false;
@@ -38,4 +39,16 @@ exports.findAll = function () {
             resolve(cars);
         })
     });
+}
+exports.deactivateById = function (id) {
+    return new Promise((resolve, reject)=> {
+        Car.update({_id: id}, {$set: {isActive: false}}, function (err) {
+                if (!err) {
+                    resolve();
+                } else {
+                    reject(err);
+                }
+            }
+        )
+    })
 }

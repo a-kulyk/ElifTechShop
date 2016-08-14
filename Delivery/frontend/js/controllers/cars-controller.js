@@ -16,9 +16,14 @@ module.exports = function (app) {
             }
             $scope.redirectToOrder = function (order) {
                 $http.get('/order/id/' + order).success(function (data, status, headers) {
-                    if(data.success){
+                    if (data.success) {
                         $window.location.href = '#/order_info/' + data.trackingCode;
                     }
+                });
+            };
+            $scope.deactivateCar = function (car) {
+                $http.post("/deactivate_car", {"id": car._id}).success(function (data, status, headers) {
+                    console.log("deactivated: "+data.success);
                 });
             }
         });

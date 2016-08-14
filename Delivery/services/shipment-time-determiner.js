@@ -23,7 +23,7 @@ module.exports = function () {
 }
 function getCarsTravelTime() {
     return new Promise((resolve, reject)=> {
-        Car.find({}).select('arrivalTime').exec(function (err, cars) {
+        Car.find({'isActive': true}).select('arrivalTime').exec(function (err, cars) {
             if (err) {
                 reject(err);
             }
@@ -59,7 +59,7 @@ function getArrivalTime(orders, cars) {
         let index = carsTime.indexOf(minCarTime);
         carsTime[index] += orders[i].travelTime * 1000;
         if (i == orders.length - 1) {
-            return  Sugar.Array.min(carsTime);
+            return Sugar.Array.min(carsTime);
         }
     }
 }

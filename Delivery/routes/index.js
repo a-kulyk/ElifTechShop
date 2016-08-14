@@ -30,6 +30,8 @@ module.exports = function (app, passport) {
 
     app.get('/cars', isAuthenticated, require('./cars').get);
 
+    app.post('/deactivate_car', isAuthenticated, require('./cars').deactivateCar);
+
     app.get('/status', isAuthenticated, require('./status').get);
 }
 
