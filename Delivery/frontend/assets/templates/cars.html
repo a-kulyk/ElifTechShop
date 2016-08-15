@@ -43,7 +43,7 @@
                         <span ng-show="car.isAvailable">-</span></td>
                     <td><span><button ng-class={'btn-danger':car.isActive,'btn-success':!car.isActive}
                                       class="btn btn-sm"
-                                      ng-click="deactivateCar(car)">{{car.isActive?'stop':'start'}}</button></span>
+                                      ng-click="car.isActive?deactivateCar(car):activateCar(car)">{{car.isActive?'stop':'start'}}</button></span>
                     </td>
                 </tr>
                 </tbody>
