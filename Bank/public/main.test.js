@@ -1,9 +1,6 @@
-////var angular = requie('angular');
-//var main = require('./mainController');
-//var expect = require('chai').expect;
 describe('Main controller',function (){
     var $httpBackend, $rootScope, createController, authRequestHandler;
-    beforeEach(angular.module('bank'));
+    beforeEach(module('bank'));
     beforeEach(inject( function($injector) {
         $httpBackend = $injector.get('$httpBackend');
         authRequestHandler = $httpBackend.when('GET', '/user')

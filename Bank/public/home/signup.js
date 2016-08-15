@@ -1,5 +1,5 @@
 //var bank = require("../app");
-export default (app) => {
+module.exports = function(app) {
     app.controller('signup', function ($scope, $http, $location) {
         $scope.signup = function () {
             if ($scope.password != $scope.repeat) {

@@ -24,11 +24,11 @@ module.exports = function (config) {
         //  'public/**/*.test.js'
         //],
         files: [
-            entry,
-            'public/*.test.js',
-            'public/**/*.test.js',
+            'public/assets/app.build.js',
             'node_modules/angular/angular.js',
-            {pattern: 'node_modules/angular-mocks/angular-mocks.js', read: false}
+            'node_modules/angular-mocks/angular-mocks.js',
+            'public/*.test.js',
+            'public/**/*.test.js'
         ],
         webpack: webpackConfig,
 
@@ -38,7 +38,7 @@ module.exports = function (config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: preprocessors,
+        preprocessors:{},
 
 
         // test results reporter to use
@@ -53,7 +53,7 @@ module.exports = function (config) {
 
         // enable / disable colors in the output (reporters and logs)
         colors: true,
-
+        browserNoActivityTimeout: 100000,
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
@@ -66,23 +66,21 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
         plugins: [
-            require('karma-mocha'),
-            require('karma-phantomjs-launcher'),
-            require('karma-jasmine'),
-            require('karma-chai'),
-            require('karma-webpack'),
-            require('karma-angular'),
-            require('angular-mocks')
+            'karma-mocha',
+            'karma-chrome-launcher',
+            'karma-chai',
+            'karma-webpack',
+            'karma-angular'
         ],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous
-        concurrency: Infinity
+        concurrency: 1
     })
-}
+};

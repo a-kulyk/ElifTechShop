@@ -1,13 +1,16 @@
+require('jquery/src/jquery');
+require('bootstrap-webpack');
+require("./stylesheets/style.css");
 var angular = require('angular');
 var ngRoute = require('angular-route');
 var angularModalService = require('angular-modal-service');
 var ngTable = require('ng-table');
-import cabinet from './cabinet/cabinet';
-import home from './home/auth';
-import login from './home/login';
-import signup from './home/signup';
-import modal from './modals/modal';
-import main from './mainController';
+var cabinet = require('./cabinet/cabinet');
+var home = require('./home/auth');
+var login = require('./home/login');
+var signup = require('./home/signup');
+var modal = require('./modals/modal');
+var main = require('./mainController');
 var bank = angular.module('bank',['ngRoute', 'angularModalService', 'ngTable']);
 
 bank.config(function ($routeProvider) {
@@ -30,5 +33,3 @@ home(bank);
 login(bank);
 signup(bank);
 modal(bank);
-
-module.exports = bank;
