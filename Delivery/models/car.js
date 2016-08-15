@@ -23,6 +23,11 @@ var schema = new Schema({
         arrivalTime: {
             type: Date,
             default: null
+        },
+        isActive: {
+            type: Boolean,
+            required: true,
+            default: true
         }
     })
     ;

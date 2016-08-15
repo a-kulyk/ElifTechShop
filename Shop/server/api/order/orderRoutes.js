@@ -1,3 +1,4 @@
+"use-strict";
 var router = require('express').Router();
 var querystring = require('querystring');
 var bodyParser = require('body-parser');

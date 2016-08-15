@@ -12,13 +12,13 @@
             <div class="product-front">
                 <div class="shadow">
                 </div>
-               </a>
+                <a ng-href="#/product/{{item._id}}">
                 <div class="main_inner">
                     <img ng-src="{{item.images[0]}}" alt="{{item.name}}" />
                 </div>
 
-
-                <a ng-href="#/product/{{item._id}}"> <div class="image_overlay"></div></a>
+                </a>
+                <a ng-href="#/product/{{item._id}}"><div class="image_overlay"></div></a>
 
                 <div class="add_to_cart" ng-hide="{{item.quantity == 0}}" ng-click="main.addToCart(item)">Add to cart </div>
                 <div class="not_avaliable" ng-show="{{item.quantity == 0}}" >Not avaliable </div>
