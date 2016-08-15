@@ -10,11 +10,13 @@ let config = require('../config');
 exports.post = function (req, res) {
     let successMsg = {"success": true};
     let failedMsg = {"success": false};
-    let ordersArray = req.body;
-    eachLimit(ordersArray, config.get('email-sender:send-at-once'), function (order, callback) {
-        let servicePromise = orderService.findById(order);
+    let ordersIdArray = req.body;
+    eachLimit(ordersIdArray, config.get('email-sender:send-at-once'), function (orderId, callback) {
+        let servicePromise = orderService.findById(orderId);
         servicePromise.then((order)=> {
-            return deliveryNotifier.notifyAboutDelivery(order.to.username, order.trackingCode);
+            return deliveryNotifier.sendEmail(order.to.username, order.trackingCode);
+        }).then((trackingCode)=> {
+            return deliveryNotifier.notifyShop(trackingCode);
         }).then(()=> {
             callback();
         }).catch((error=> {

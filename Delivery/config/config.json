@@ -22,5 +22,8 @@
       "httpOnly": true,
       "maxAge": null
     }
+  },
+  "shop":{
+    "url":"http://requestb.in/18aqibo1"
   }
 }
