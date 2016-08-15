@@ -728,6 +728,7 @@
 	        $scope.items = response.data.items;
 
 	        if ($scope.items.length === 0) {
+	            $scope.items.not = true;
 	            $scope.complete = true;
 	            return;
 	        }
@@ -742,6 +743,7 @@
 	            $scope.pages.push(page);
 	        }
 	        $scope.complete = true;
+
 	        setTimeout(function () {
 	            makeVisualEffects();
 	        }, 0);
