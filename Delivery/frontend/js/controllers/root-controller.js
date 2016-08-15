@@ -11,7 +11,7 @@ module.exports = function (app) {
                     console.log('logout complete');
                 });
                 console.log('logout');
-                config.role='guest';//for otherwise routing
+                config.role = 'guest';//for otherwise routing
                 AclService.setUserIdentity({
                     getRoles: function () {
                         return ['guest'];
@@ -19,7 +19,7 @@ module.exports = function (app) {
                 });
             }
             $scope.isActive = function (viewLocation) {
-                return viewLocation === $location.path();
+                return $location.path().startsWith(viewLocation);
             }
         }])
 }
