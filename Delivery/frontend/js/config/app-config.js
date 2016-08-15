@@ -3,13 +3,22 @@
  */
 "use strict";
 module.exports = function (app) {
-    app.config(function ($routeProvider) {
+    app.config(function ($routeProvider, config) {
         $routeProvider.when('/create_order', {
             templateUrl: '../templates/create-order.html',
             controller: 'createOrderCtrl'
         }).when('/', {
             templateUrl: '../templates/track-order.html',
-            controller: 'trackOrderCtrl'
+            controller: 'trackOrderCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('Track')) {
+                        return true;
+                    } else {
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         }).when('/order_info/:trackingCode', {
             templateUrl: '../templates/order-info.html',
             controller: 'timeOutputCtrl'
@@ -44,15 +53,17 @@ module.exports = function (app) {
                 }]
             }
         }).otherwise({
-            redirectTo: '/'
+            redirectTo: config.role == 'admin' ? '/cars' : '/'
         });
 
 
     }).run(['$rootScope', '$http', 'AclService', 'config', function ($rootScope, $http, AclService, config) {
         console.log('conf ' + config.role);
+        console.log(AclService.hasRole('admin'));
         AclService.addRole('guest');
         AclService.addRole('admin');
 
+        AclService.addResource('Track');
         AclService.addResource('Order');
         AclService.addResource('Cars');
         AclService.addResource('History');
@@ -61,6 +72,7 @@ module.exports = function (app) {
 
         AclService.allow('guest', 'Order');
         AclService.allow('guest', 'Login');
+        AclService.allow('guest', 'Track');
 
         AclService.allow('admin', 'History');
         AclService.allow('admin', 'Cars');

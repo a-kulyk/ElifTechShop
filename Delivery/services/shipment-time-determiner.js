@@ -4,7 +4,7 @@
 'use strict';
 let Order = require('../models/order');
 let Car = require('../models/car');
-var Sugar = require('sugar');
+let Sugar = require('sugar');
 
 module.exports = function () {
     return new Promise((resolve, reject)=> {

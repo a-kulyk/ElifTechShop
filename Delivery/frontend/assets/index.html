@@ -17,12 +17,12 @@
             <a class="navbar-brand" href="#/">ElifTechDelivery</a>
         </div>
         <ul class="nav navbar-nav">
-            <li ng-class="{active: isActive('/')}" ng-cloak><a href="#/">Track order</a></li>
+            <li ng-class="{active: isActive('/')}" ng-cloak ng-show="can('Track')"><a href="#/">Track order</a></li>
             <li ng-class="{active: isActive('/create_order')}" ng-cloak ng-show="can('Order')"><a href="#/create_order">Make
                 order</a></li>
+            <li ng-class="{active: isActive('/cars')}" ng-cloak ng-show="can('Cars')"><a href="#/cars">Cars</a></li>
             <li ng-class="{active: isActive('/history')}" ng-cloak ng-show="can('History')"><a
                     href="#/history">History</a></li>
-            <li ng-class="{active: isActive('/cars')}" ng-cloak ng-show="can('Cars')"><a href="#/cars">Cars</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li ng-show="can('Login')" ng-cloak><a href="#/login"><span class=""></span> Log in</a></li>

@@ -3,7 +3,7 @@
  */
 "use strict";
 module.exports = function (app) {
-    app.controller('loginCtrl', function ($rootScope, $scope, $http, $window, AclService) {
+    app.controller('loginCtrl', function ($rootScope, $scope, $http, $window, AclService, config) {
         $scope.login = function () {
             var requestJSON = {};
             requestJSON.username = $scope.username;
@@ -12,6 +12,7 @@ module.exports = function (app) {
             $http.post("/login", requestJSON).success(function (data, status, headers) {
                 if (data.success) {
                     console.log(data);
+                    config.role = 'admin';//for otherwise routing
                     var admin = {
                         getRoles: function () {
                             return ['admin'];
