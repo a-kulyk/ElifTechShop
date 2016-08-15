@@ -5,17 +5,17 @@
                 <button type="button" class="close" ng-click="close()" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
                 <form>
-                    <select class="form-control" name="account" ng-model="formData.from" required>
+                    <select class="form-control" name="account" ng-model="from" required>
                         <option value="">Account</option>
                         <option ng-repeat="account in accounts" value="{{ account._id }}">
                             {{ account.name }}
                         </option>
                     </select>
                     <input class="form-control" placeholder="Amount" name="amount" type="number"
-                           ng-model="formData.amount" min="0" max="{{ amount }}"
+                           ng-model="amount" min="0" max="{{ amount }}"
                            required>
                     <input class="form-control" placeholder="Receiver" name="receiver" type="text"
-                           ng-model="formData.receiver"
+                           ng-model="receiver"
                            required>
                     <div class="modal-footer">
                         <button class="btn btn-success" ng-click="transfer()">Pay</button>

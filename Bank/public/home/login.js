@@ -1,6 +1,6 @@
 //var bank = require("../app");
 
-export default (app) => {
+module.exports  = function(app) {
     app.controller('login', function ($scope, $location, $http) {
         $scope.login = function () {
             $http.post("/login",{
@@ -26,7 +26,7 @@ export default (app) => {
                     $scope.loginError = err;
                     console.log(err);
                 });
-            $scope.history();
+          //  $scope.history();
         };
     });
 }

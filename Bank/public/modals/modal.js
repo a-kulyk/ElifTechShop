@@ -1,6 +1,6 @@
 //var bank = require("../app");
 var shared = require("../cabinet/shared");
-export default (app) => {
+module.exports =  function(app) {
     app.controller('modal', function ($scope, close, $http, ModalService, shared) {
 
         $scope.accounts = shared.getAccounts();
@@ -12,7 +12,7 @@ export default (app) => {
         $scope.pay = function () {
             $http.post("/pay",{
                     "account": $scope.focusAccount,
-                    "amount": $scope.formData.amount
+                    "amount": $scope.amount
                 })
                 .success(function (data) {
                     if(data.success){
@@ -49,16 +49,15 @@ export default (app) => {
 
         $scope.transfer = function () {
             $http.post("/transfer", {
-                    "from": $scope.formData.from,
-                    "to": $scope.formData.receiver,
-                    "amount": $scope.formData.amount
+                    "from": $scope.from,
+                    "to": $scope.receiver,
+                    "amount": $scope.amount
                 })
                 .success(function (data) {
                     if(data.success){
                         $('.modal').modal('hide');
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
-                        console.log(data);
                         close({
                             "id": data.id,
                             "senderAmount": data.senderAmount,
@@ -95,5 +94,5 @@ export default (app) => {
                 });
         }
     });
-}
+};
 

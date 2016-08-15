@@ -1,10 +1,9 @@
-//var bank = require("../app");
-var shared = require("./shared");
 var moment = require('moment');
 var ngTable = require('ng-table');
-export default (app) => {
+module.exports =  function(app) {
+    var shared = require("./shared")(app);
     app.controller('cabinet', function ($scope, $http, $location, ModalService, shared, NgTableParams) {
-
+        $scope.history = [];
         $http.get("/islogin")
             .success(function (result) {
                 if (!result.success) {
@@ -15,7 +14,6 @@ export default (app) => {
                 console.log(error);
                 $location.path("/");
             });
-
         $http.get("/user")
             .success(function (data) {
                 $scope.username = data.username;
@@ -25,7 +23,6 @@ export default (app) => {
             .error(function (error) {
                 console.log(error);
             });
-
         $http.get("/account")
             .success(function (result) {
                 $scope.accounts = [];
@@ -36,18 +33,6 @@ export default (app) => {
             .error(function (error) {
                 console.log(error);
             });
-
-
-        // $http.get("/history")
-        //     .success(function (data) {
-        //         $scope.length = data.history.length;
-        //         $scope.history = data.history;
-        //
-        //
-        //     })
-        //     .error(function (err) {
-        //         console.log(err.message);
-        //     });
         $scope.tableParams = new NgTableParams(
             {
                 page: 1,
@@ -188,4 +173,4 @@ export default (app) => {
 
 
     });
-}
+};
