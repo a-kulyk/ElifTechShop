@@ -34,11 +34,11 @@ var Order = new Schema({
 
 });
 
-Order.methods.findTotal = function total () {
+Order.methods.findTotal = function total() {
     return this.itemSet
         .map(function(item) {
-                return item.productId.price * item.quantity;
-             })
+            return item.productId.price * item.quantity;
+        })
         .reduce(function(prev, curr) {
             return prev + curr;
         });

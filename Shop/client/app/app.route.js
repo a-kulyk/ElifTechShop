@@ -27,8 +27,6 @@ myApp.config(function($routeProvider) {
             controllerAs: 'product',
             access: { restricted: true }
         })
-       
-
         .when('/order/cart', {
             templateUrl: './app/order/shoppingCart.html',
             controller: 'OrderController',
@@ -70,8 +68,8 @@ myApp.config(function($routeProvider) {
                     .then(function() {
                         if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()) {
                             $location.path('/login');
-                            $route.reload();
                         }
+                        $route.reload();
                     });
             });
     });

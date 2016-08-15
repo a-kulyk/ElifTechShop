@@ -1,5 +1,4 @@
 <div class="well">
-
     <h4>Your personal information</h4>
     <p><strong>Username: </strong>{{currentUser.username}}</p>
     <p><strong>Email: </strong>{{currentUser.email}}</p>
@@ -8,7 +7,7 @@
     <button class="btn btn-default" ng-click="cabinet.edit = !cabinet.edit">Edit Account</button>
     <form class="form-horizontal" name="cabinet.form" ng-show="cabinet.edit" ng-submit="cabinet.update(cabinet.user)">
         <fieldset>
-        <hr>
+            <hr>
             <div class="form-group">
                 <label for="username" class="col-lg-2 control-label">Username</label>
                 <div class="col-lg-10">
@@ -18,7 +17,7 @@
             <div class="form-group">
                 <label for="email" class="col-lg-2 control-label">Email</label>
                 <div class="col-lg-10">
-                    <input ng-model="cabinet.user.email" class="form-control" id="email" type="email" name="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                    <input ng-model="cabinet.user.email" class="form-control" id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
                 </div>
             </div>
             <div class="form-group">

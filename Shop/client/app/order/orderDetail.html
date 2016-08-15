@@ -16,8 +16,8 @@
                 <tr ng-repeat='item in detail.order.itemSet'>
                     <td>
                         <a ng-href="#/product/{{item.productId._id}}">
-                        	<img ng-src="{{item.images[0]}}" style="width:100px">
-                        {{item.name}}</a>
+                            <img ng-src="{{item.images[0]}}" style="width:100px"> {{item.name}}
+                        </a>
                     </td>
                     <td>{{item.category}}</td>
                     <td>{{item.quantity}}</td>
@@ -34,7 +34,20 @@
             </tbody>
         </table>
     </div>
-    <p>Created: {{detail.order.date.created  | moment}}</p>
+    <p ng-show="detail.order.trackingCode && !detail.order.date.completed">
+        Order's tracking code: <strong>{{detail.order.trackingCode}}</strong>
+        <br> Checkout arrival time
+        <a href="" ng-click="detail.check(detail.order.trackingCode)"><strong>CHECK</strong></a>
+    </p>
+    <p>Created: {{detail.order.date.created | moment}}</p>
     <p ng-show="detail.order.date.paid">Paid: {{detail.order.date.paid | moment}}</p>
     <p ng-show="detail.order.date.completed">Completed: {{detail.order.date.completed | moment}}</p>
+    <div class="panel panel-success" ng-show="detail.arrivalTime">
+        <div class="panel-heading">
+            <h3 class="panel-title">Estimated delivery time: </h3>
+        </div>
+        <div class="panel-body">
+            <strong>{{detail.arrivalTime | moment}}</strong>
+        </div>
+    </div>
 </div>

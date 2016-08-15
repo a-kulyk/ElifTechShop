@@ -19,6 +19,7 @@ angular.module('app')
                 $scope.items = response.data.items;
 
                 if($scope.items.length === 0) {
+                    $scope.items.not = true;
                    $scope.complete = true;
                     return;
                 }
@@ -33,6 +34,7 @@ angular.module('app')
                     $scope.pages.push(page);
                 }
                 $scope.complete = true;
+
                 setTimeout(function(){
                     makeVisualEffects();
                 }, 0);

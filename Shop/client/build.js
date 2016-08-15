@@ -129,8 +129,8 @@
 	        AuthService.getUserStatus().then(function () {
 	            if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()) {
 	                $location.path('/login');
-	                $route.reload();
 	            }
+	            $route.reload();
 	        });
 	    });
 	});
@@ -143,139 +143,90 @@
 
 	angular.module('app').factory('AuthService', ['$rootScope', '$q', '$http', 'orderService', function ($rootScope, $q, $http, orderService) {
 
-	  // create user variable
-	  var user = null;
+	    var user = null;
 
-	  // return available functions for use in the controllers
-	  return {
-	    isLoggedIn: isLoggedIn,
-	    getUserStatus: getUserStatus,
-	    login: login,
-	    logout: logout,
-	    register: register,
-	    addBankAccount: addBankAccount,
-	    updateProfile: updateProfile
-	  };
+	    return {
+	        isLoggedIn: isLoggedIn,
+	        getUserStatus: getUserStatus,
+	        login: login,
+	        logout: logout,
+	        register: register,
+	        addBankAccount: addBankAccount,
+	        updateProfile: updateProfile
+	    };
 
-	  function isLoggedIn() {
-	    if (user) {
-	      return true;
-	    } else {
-	      return false;
+	    function isLoggedIn() {
+	        if (user) {
+	            return true;
+	        } else {
+	            return false;
+	        }
 	    }
-	  }
 
-	  function getUserStatus() {
-	    return $http.get('/user/status')
-	    // handle success
-	    .success(function (data) {
-	      if (data.status) {
-	        user = true;
-	        $rootScope.currentUser = data.user;
-	        orderService.getCart().then(function (resp) {
-	          $rootScope.shoppingCart = resp.data;
+	    function getUserStatus() {
+	        return $http.get('/user/status').success(function (data) {
+	            if (data.status) {
+	                user = true;
+	                $rootScope.currentUser = data.user;
+	                orderService.getCart().then(function (resp) {
+	                    $rootScope.shoppingCart = resp.data;
+	                });
+	            } else {
+	                user = false;
+	            }
+	        }).error(function (data) {
+	            user = false;
 	        });
-	      } else {
-	        user = false;
-	      }
-	    })
-	    // handle error
-	    .error(function (data) {
-	      user = false;
-	    });
-	  }
+	    }
 
-	  function login(username, password) {
+	    function login(username, password) {
 
-	    // create a new instance of deferred
-	    var deferred = $q.defer();
+	        return $http.post('/user/login', { username: username, password: password }).success(function (data, status) {
+	            if (status === 200 && data.status) {
+	                user = true;
+	            } else {
+	                user = false;
+	            }
+	        }).error(function (data) {
+	            user = false;
+	        });
+	    }
 
-	    // send a post request to the server
-	    $http.post('/user/login', { username: username, password: password })
-	    // handle success
-	    .success(function (data, status) {
-	      if (status === 200 && data.status) {
-	        user = true;
-	        deferred.resolve();
-	      } else {
-	        user = false;
-	        deferred.reject();
-	      }
-	    })
-	    // handle error
-	    .error(function (data) {
-	      user = false;
-	      deferred.reject();
-	    });
+	    function logout() {
 
-	    // return promise object
-	    return deferred.promise;
-	  }
+	        return $http.get('/user/logout').success(function (data) {
+	            user = false;
+	        }).error(function (data) {
+	            user = false;
+	        });
+	    }
 
-	  function logout() {
+	    function register(formData) {
 
-	    // create a new instance of deferred
-	    var deferred = $q.defer();
+	        return $http.post('/user/register', {
+	            username: formData.username,
+	            password: formData.password,
+	            email: formData.email,
+	            bankAccount: formData.bankAccount,
+	            address: formData.address
+	        });
+	    }
 
-	    // send a get request to the server
-	    $http.get('/user/logout')
-	    // handle success
-	    .success(function (data) {
-	      user = false;
-	      deferred.resolve();
-	    })
-	    // handle error
-	    .error(function (data) {
-	      user = false;
-	      deferred.reject();
-	    });
+	    function addBankAccount(account) {
+	        return $http({
+	            method: 'PUT',
+	            url: '/user/addBankAccount',
+	            data: { bankAccount: account }
+	        });
+	    }
 
-	    // return promise object
-	    return deferred.promise;
-	  }
-
-	  function register(formData) {
-
-	    // create a new instance of deferred
-	    var deferred = $q.defer();
-
-	    // send a post request to the server
-	    $http.post('/user/register', {
-	      username: formData.username,
-	      password: formData.password,
-	      email: formData.email,
-	      bankAccount: formData.bankAccount,
-	      address: formData.address
-	    })
-	    // handle success
-	    .success(function (data, status) {
-	      if (status === 200 && data.status) {
-	        deferred.resolve();
-	      } else {
-	        console.log(data);
-	        deferred.reject(data.message);
-	      }
-	    });
-
-	    // return promise object
-	    return deferred.promise;
-	  }
-
-	  function addBankAccount(account) {
-	    return $http({
-	      method: 'PUT',
-	      url: '/user/addBankAccount',
-	      data: { bankAccount: account }
-	    });
-	  }
-
-	  function updateProfile(user) {
-	    return $http({
-	      method: 'PUT',
-	      url: '/user/updateProfile',
-	      data: user
-	    });
-	  }
+	    function updateProfile(user) {
+	        return $http({
+	            method: 'PUT',
+	            url: '/user/updateProfile',
+	            data: user
+	        });
+	    }
 	}]);
 
 /***/ },
@@ -286,72 +237,59 @@
 
 	angular.module('app').controller('loginController', ['$scope', '$location', 'AuthService', function ($scope, $location, AuthService) {
 
-	  $scope.login = function () {
+	    $scope.login = function () {
 
-	    // initial values
-	    $scope.error = false;
-	    $scope.disabled = true;
+	        $scope.error = false;
+	        $scope.disabled = true;
 
-	    // call login from service
-	    AuthService.login($scope.loginForm.username, $scope.loginForm.password)
-	    // handle success
-	    .then(function (data) {
-	      $scope.disabled = false;
-	      $scope.loginForm = {};
-	      $location.path('/');
-	    })
-	    // handle error
-	    .catch(function () {
-	      $scope.error = true;
-	      $scope.errorMessage = "Invalid username and/or password";
-	      $scope.disabled = false;
-	      $scope.loginForm = {};
-	    });
-	  };
+	        AuthService.login($scope.loginForm.username, $scope.loginForm.password).then(function (data) {
+	            $scope.disabled = false;
+	            $scope.loginForm = {};
+	            $location.path('/');
+	        }).catch(function () {
+	            $scope.error = true;
+	            $scope.errorMessage = "Invalid username and/or password";
+	            $scope.disabled = false;
+	            $scope.loginForm = {};
+	        });
+	    };
 	}]);
 
 	angular.module('app').controller('logoutController', ['$rootScope', '$scope', '$location', 'AuthService', function ($rootScope, $scope, $location, AuthService) {
 
-	  $scope.logout = function () {
+	    $scope.logout = function () {
 
-	    // call logout from service
-	    AuthService.logout().then(function () {
-	      $rootScope.currentUser = null;
-	      $location.path('/login');
-	    });
-	  };
+	        AuthService.logout().then(function () {
+	            $rootScope.currentUser = null;
+	            $location.path('/login');
+	        });
+	    };
 	}]);
 
 	angular.module('app').controller('registerController', ['$scope', '$location', 'AuthService', function ($scope, $location, AuthService) {
 
-	  $scope.register = function () {
+	    $scope.register = function () {
 
-	    // initial values
-	    $scope.error = false;
-	    $scope.disabled = true;
+	        $scope.error = false;
+	        $scope.disabled = true;
 
-	    console.log("$scope.registerForm: ", $scope.registerForm);
+	        AuthService.register($scope.registerForm).then(function (resp) {
+	            if (resp.status === 200 && resp.data.status) {
+	                $location.path('/');
+	                $scope.disabled = false;
+	                $scope.registerForm = {};
+	            } else {
+	                $scope.error = true;
+	                $scope.errorMessage = "Something went wrong!";
+	                $scope.disabled = false;
+	                $scope.registerForm = {};
+	            }
+	        });
+	    };
 
-	    // call register from service
-	    AuthService.register($scope.registerForm)
-	    // handle success
-	    .then(function () {
-	      $location.path('/login');
-	      $scope.disabled = false;
-	      $scope.registerForm = {};
-	    })
-	    // handle error
-	    .catch(function () {
-	      $scope.error = true;
-	      $scope.errorMessage = "Something went wrong!";
-	      $scope.disabled = false;
-	      $scope.registerForm = {};
-	    });
-	  };
-
-	  $scope.login = function () {
-	    $location.path('/login');
-	  };
+	    $scope.login = function () {
+	        $location.path('/login');
+	    };
 	}]);
 
 /***/ },
@@ -402,7 +340,6 @@
 	    $rootScope.complete.product = false;
 
 	    main.logout = function () {
-	        // call logout from service
 	        AuthService.logout().then(function () {
 	            $rootScope.currentUser = null;
 	            $rootScope.shoppingCart = null;
@@ -431,13 +368,13 @@
 	'use strict';
 
 	angular.module('app').directive('navbar', [function () {
-		return {
-			restrict: "E",
-			controller: 'mainController',
-			controllerAs: 'main',
-			templateUrl: "./app/main/navbar.html",
-			replace: true
-		};
+	    return {
+	        restrict: "E",
+	        controller: 'mainController',
+	        controllerAs: 'main',
+	        templateUrl: "./app/main/navbar.html",
+	        replace: true
+	    };
 	}]);
 
 /***/ },
@@ -459,12 +396,10 @@
 	    modal.ok = function (cart) {
 	        if (!$rootScope.shoppingCart) {
 	            orderService.createCart(cart).then(function (response) {
-	                console.log("create response :  ", response.data);
 	                $rootScope.shoppingCart = response.data;
 	            });
 	        } else {
 	            orderService.addToCart(cart).then(function (response) {
-	                console.log("addItem response :  ", response.data);
 	                $rootScope.shoppingCart = response.data;
 	            });
 	        }
@@ -540,7 +475,7 @@
 	        },
 	        pay: function pay() {
 	            return $http({
-	                method: 'GET',
+	                method: 'POST',
 	                url: '/order/pay'
 	            });
 	        },
@@ -567,6 +502,12 @@
 	            return $http({
 	                method: 'GET',
 	                url: "/order/" + id
+	            });
+	        },
+	        getDeliveryTime: function getDeliveryTime(track) {
+	            return $http({
+	                method: 'GET',
+	                url: "/order/info/" + track
 	            });
 	        },
 	        delete: function _delete() {
@@ -599,7 +540,7 @@
 	        orderService.updQuantity(id, quan).then(function (response) {
 	            $rootScope.shoppingCart = response.data;
 	        });
-	    }, 1000);
+	    }, 500);
 
 	    order.increment = function (id, quan) {
 	        order.updQuantity(id, ++quan);
@@ -616,7 +557,6 @@
 
 	    order.removeItem = function (id) {
 	        orderService.removeItem(id).then(function (response) {
-	            console.log(response.data);
 	            $rootScope.shoppingCart = response.data;
 	            if ($rootScope.shoppingCart.order.itemSet.length === 0) {
 	                orderService.delete();
@@ -631,39 +571,30 @@
 	    };
 
 	    order.pay = function () {
-	        orderService.pay().then(function (bank_resp) {
-	            console.log("bank_resp : ", bank_resp.data);
-	            if (bank_resp.data.success === true) {
-	                saveOrder();
-	            } else if (bank_resp.data.success === false) {
-	                console.log("Insufficient funds on Your bank account");
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/paymentFail.html'
-	                });
-	            } else if (bank_resp.data.error) {
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/connectionErr.html'
-	                });
-	                console.log('Could not connect to Your bank');
-	            } else if (bank_resp.data.warning === "No bankAccount") {
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/inputBankAcc.html',
-	                    controller: function controller($uibModalInstance, $scope, AuthService) {
-	                        $scope.next = function (account) {
-	                            AuthService.addBankAccount(account).then(function (resp) {
-	                                console.log('addBankAccount.resp', resp);
-	                                $uibModalInstance.close();
-	                            });
-	                        };
-	                    }
-	                });
-	            }
-	        });
+	        saveOrder();
+	        // orderService.pay()
+	        //     .then(function(bank_resp) {
+	        //         console.log("bank_resp : ", bank_resp.data);
+	        //         if (bank_resp.data.success === true) {
+	        //             saveOrder();
+	        //         } else if (bank_resp.data.success === false) {
+	        //             console.log("Insufficient funds on Your bank account");
+	        //             $uibModal.open({
+	        //                 templateUrl: './app/order/modals/paymentFail.html'
+	        //             });
+	        //         } else if (bank_resp.data.error) {
+	        //             $uibModal.open({
+	        //                 templateUrl: './app/order/modals/connectionErr.html'
+	        //             });
+	        //             console.log('Could not connect to Your bank');
+	        //         } else if (bank_resp.data.warning === "No bankAccount") {
+	        //            openInputModal();
+	        //         }
+	        //     });
 	    };
 
 	    function saveOrder() {
 	        orderService.saveOrderDetails().then(function (resp) {
-	            console.log("resp : ", resp);
 	            $uibModal.open({
 	                templateUrl: './app/order/modals/paymentDone.html',
 	                backdrop: 'static',
@@ -677,13 +608,26 @@
 	            });
 	        });
 	    }
+
+	    function openInputModal() {
+	        $uibModal.open({
+	            templateUrl: './app/order/modals/inputBankAcc.html',
+	            controller: function controller($uibModalInstance, $scope, AuthService) {
+	                $scope.next = function (account) {
+	                    AuthService.addBankAccount(account).then(function (resp) {
+	                        $uibModalInstance.close();
+	                    });
+	                };
+	            }
+	        });
+	    }
 	}]).controller('HistoryCtrl', ['$scope', 'orderService', function ($scope, orderService) {
 	    var history = this;
 	    history.propertyName = 'date.created';
-	    history.sortReverse = false;
+	    history.sortReverse = true;
 
 	    history.sortBy = function (propertyName) {
-	        history.sortReverse = history.propertyName === propertyName ? !history.sortReverse : true;
+	        history.sortReverse = history.propertyName === propertyName ? !history.sortReverse : false;
 	        history.propertyName = propertyName;
 	    };
 
@@ -695,8 +639,13 @@
 
 	    orderService.getOne($route.current.params.id).then(function (resp) {
 	        detail.order = resp.data;
-	        console.log('resp: ', resp);
 	    });
+
+	    detail.check = function (track) {
+	        orderService.getDeliveryTime(track).then(function (resp) {
+	            detail.arrivalTime = resp.data.arrivalTime;
+	        });
+	    };
 	}]);
 
 /***/ },
@@ -722,11 +671,20 @@
 	        }
 
 	        orderService.setAddress({ str: confirm.address, lat: lat, lng: lng }).then(function (resp) {
-	            console.log(resp.data);
+	            confirm.track = resp.data.trackingCode;
 	            $rootScope.shoppingCart = null;
+	            return confirm.track;
+	        }).then(function (track) {
+	            return orderService.getDeliveryTime(track);
+	        }).then(function (resp) {
+	            if (resp.data.success) {
+	                var _arrivalTime = resp.data.arrivalTime;
+	            }
 	            $uibModal.open({
 	                templateUrl: './app/order/modals/finalPage.html',
-	                controller: function controller($uibModalInstance, $scope) {
+	                controller: function controller($uibModalInstance, $scope, arrivalTime) {
+	                    $scope.track = confirm.track;
+	                    $scope.arrivalTime = arrivalTime;
 	                    $scope.close = function () {
 	                        $location.path('/');
 	                        $uibModalInstance.close();
@@ -734,6 +692,11 @@
 	                    $scope.$on('modal.closing', function () {
 	                        $location.path('/');
 	                    });
+	                },
+	                resolve: {
+	                    arrivalTime: function arrivalTime() {
+	                        return _arrivalTime;
+	                    }
 	                }
 	            });
 	        });
@@ -765,6 +728,7 @@
 	        $scope.items = response.data.items;
 
 	        if ($scope.items.length === 0) {
+	            $scope.items.not = true;
 	            $scope.complete = true;
 	            return;
 	        }
@@ -779,6 +743,7 @@
 	            $scope.pages.push(page);
 	        }
 	        $scope.complete = true;
+
 	        setTimeout(function () {
 	            makeVisualEffects();
 	        }, 0);

@@ -2,7 +2,9 @@
     <h4 class="modal-title">Thanks for Your purchase!</h4>
 </div>
 <div class="modal-body text-center">
-    <p>You'll get an email with order's details and estimated delivery time</p>
+    <p>You can checkout order's status with tracking code:</p>
+    <p class="text-success"><strong>{{track}}</strong></p>
+    <p>Estimated delivery time: <strong>{{arrivalTime | moment}}</strong></p>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="close()">Close</button>
