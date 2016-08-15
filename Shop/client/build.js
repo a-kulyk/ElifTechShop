@@ -542,17 +542,17 @@
 	        });
 	    }, 500);
 
-	    order.increment = function (id, quan) {
-	        order.updQuantity(id, ++quan);
+	    order.increment = function (id) {
+	        order.updQuantity(id, 1);
 	    };
 
 	    order.decrement = function (id, quan) {
 	        --quan;
-	        if (quan === 0) {
+	        if (quan !== 0) {
+	            order.updQuantity(id, -1);
+	        } else {
 	            order.removeItem(id);
-	            return;
 	        }
-	        order.updQuantity(id, quan);
 	    };
 
 	    order.removeItem = function (id) {
