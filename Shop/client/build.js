@@ -735,8 +735,9 @@
 	        $scope.pages = [];
 
 	        for (var i = 1; i <= pages; i++) {
-	            var params = angular.copy($route.current.params);;
+	            var params = $route.current.params;
 	            params.page = i;
+	            console.log(params);
 	            var page = { number: i, url: $httpParamSerializer(params) };
 	            $scope.pages.push(page);
 	        }
