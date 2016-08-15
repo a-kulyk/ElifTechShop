@@ -21,8 +21,17 @@ exports.get = function (req, res) {
 exports.deactivateCar = function (req, res) {
     let successMsg = {"success": true};
     let failedMsg = {"success": false};
-    console.log(req.body.id);
     carService.deactivateById(req.body.id).then(()=> {
+        res.json(successMsg);
+    }).catch(err=> {
+        console.log(err);
+        res.json(failedMsg);
+    })
+}
+exports.activateCar = function (req, res) {
+    let successMsg = {"success": true};
+    let failedMsg = {"success": false};
+    carService.activateById(req.body.id).then(()=> {
         res.json(successMsg);
     }).catch(err=> {
         console.log(err);

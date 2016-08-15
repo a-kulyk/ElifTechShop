@@ -52,3 +52,15 @@ exports.deactivateById = function (id) {
         )
     })
 }
+exports.activateById = function (id) {
+    return new Promise((resolve, reject)=> {
+        Car.update({_id: id}, {$set: {isActive: true}}, function (err) {
+                if (!err) {
+                    resolve();
+                } else {
+                    reject(err);
+                }
+            }
+        )
+    })
+}

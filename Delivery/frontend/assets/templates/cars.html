@@ -35,7 +35,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr dir-paginate="car in cars|orderBy:sortKey:reverse|filter:search|itemsPerPage:7">
+                <tr dir-paginate="car in cars|orderBy:sortKey:reverse|filter:search|itemsPerPage:8">
                     <td>{{car.arrivalTime?formatDate(car.arrivalTime):'-'}}</td>
                     <td>{{car.isAvailable}}</td>
                     <td>{{car.isActive}}</td>
@@ -43,7 +43,7 @@
                         <span ng-show="car.isAvailable">-</span></td>
                     <td><span><button ng-class={'btn-danger':car.isActive,'btn-success':!car.isActive}
                                       class="btn btn-sm"
-                                      ng-click="deactivateCar(car)">{{car.isActive?'stop':'start'}}</button></span>
+                                      ng-click="car.isActive?deactivateCar(car):activateCar(car)">{{car.isActive?'stop':'start'}}</button></span>
                     </td>
                 </tr>
                 </tbody>
@@ -54,12 +54,6 @@
                     boundary-links="true">
             </dir-pagination-controls>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <button class="btn btn-primary">Add car</button>
     </div>
 </div>
 </div>
