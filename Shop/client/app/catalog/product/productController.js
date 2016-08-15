@@ -28,8 +28,9 @@ angular.module('app')
                 $scope.pages = [];
 
                 for (let i = 1; i <= pages;i++){
-                    let params = angular.copy($route.current.params);;
+                    let params = $route.current.params;
                     params.page = i;
+                    console.log(params);
                     let page = {number: i, url: $httpParamSerializer(params)};
                     $scope.pages.push(page);
                 }

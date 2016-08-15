@@ -68,8 +68,8 @@ myApp.config(function($routeProvider) {
                     .then(function() {
                         if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()) {
                             $location.path('/login');
+                            $route.reload();
                         }
-                        $route.reload();
                     });
             });
     });
