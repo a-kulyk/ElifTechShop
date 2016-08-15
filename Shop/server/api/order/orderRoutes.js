@@ -6,6 +6,7 @@ var http = require('http');
 var config = require('../../config');
 
 var Order = require('./orderModel.js');
+var Product = require('../catalog/catalogModel');
 
 router.get('/all', function(req, res, next) {
     Order.find({ userId: req.user._id })
@@ -63,20 +64,35 @@ router.get('/info/:track', function(req, res, next) {
 });
 
 router.post('/create', function(req, res, next) {
-    Order.create({
-            userId: req.user._id.toString(),
-            itemSet: [{
-                productId: req.body.itemId,
-                quantity: req.body.quantity
-            }],
-            email: req.user.email,
-            status: 'shoppingCart',
-            date: {
-                created: new Date(),
-                paid: '',
-                completed: ''
+    Product.findById(req.body.itemId)
+        .then(product => {
+            if (product.quantity >= req.body.quantity) {
+                product.quantity -= req.body.quantity;
+            } else {
+                req.body.quantity = product.quantity;
+                product.quantity = 0;
+                console.log('req.body.quantity: ',req.body.quantity);
             }
+            
+            console.log('product.quantity: ',product.quantity);
+            product.save();
         })
+        .then(() => {
+            return Order.create({
+                userId: req.user._id.toString(),
+                itemSet: [{
+                    productId: req.body.itemId,
+                    quantity: req.body.quantity
+                }],
+                email: req.user.email,
+                status: 'shoppingCart',
+                date: {
+                    created: new Date(),
+                    paid: '',
+                    completed: ''
+                }
+            });
+        })    
         .then(order => Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' }))
         .then(
             order => res.json({ order: order, total: order.findTotal() }),
@@ -137,7 +153,22 @@ router.post('/pay', function(req, res, next) {
 });
 
 router.put('/addToCart', function(req, res, next) {
-    Order.findOne({ userId: req.user._id, status: "shoppingCart" })
+    Product.findById(req.body.itemId)
+        .then(product => {
+            if (product.quantity >= req.body.quantity) {
+                product.quantity -= req.body.quantity;
+            } else {
+                req.body.quantity = product.quantity;
+                product.quantity = 0;
+                console.log('req.body.quantity: ',req.body.quantity);
+            }
+            
+            console.log('product.quantity: ',product.quantity);
+            product.save();
+        })
+        .then(() => {
+            return Order.findOne({ userId: req.user._id, status: "shoppingCart" });
+        })
         .then(order => {
             var arr = order.itemSet;
             var item = arr.find(function(i) {
@@ -158,12 +189,23 @@ router.put('/addToCart', function(req, res, next) {
 });
 
 router.put('/updateQuantity', function(req, res, next) {
-    Order.findOne({ userId: req.user._id, status: "shoppingCart" })
+    Product.findById(req.body.itemId)
+        .then(product => {
+            if (product.quantity === 0 && req.body.quantity === 1) {
+                req.body.quantity = 0;
+            }
+            product.quantity -= req.body.quantity;
+            console.log('product.quantity: ',product.quantity);
+            product.save();
+        })
+        .then(() => {
+            return Order.findOne({ userId: req.user._id, status: "shoppingCart" })
+        })    
         .then(order => {
             var item = order.itemSet.find(function(i) {
                 return i.productId.toString() === req.body.itemId;
             });
-            item.quantity = req.body.quantity;
+            item.quantity += req.body.quantity;
             return order.save();
         })
         .then(order => Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' }))
@@ -171,27 +213,38 @@ router.put('/updateQuantity', function(req, res, next) {
             order => res.json({ order: order, total: order.findTotal() }),
             err => next(err)
         );
+    
 });
 
 router.put('/removeItem', function(req, res, next) {
+    let itemQuan = null;
     Order.findOne({ userId: req.user._id, status: "shoppingCart" })
         .then(order => {
             var arr = order.itemSet;
-            var index = arr.find(function(i) {
+            var index = arr.findIndex(function(i) {
                 return i.productId.toString() === req.body.itemId;
             });
+            itemQuan = arr[index].quantity;
+            console.log("itemQuan: ", itemQuan);
             arr.splice(index, 1);
             return order.save();
         })
         .then(order => {
             if (order.itemSet.length) {
                 return Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' });
-            } else { res.json({ order: order }) }
+            } else { res.json({ order: order }); }
         })
-        .then(
-            order => res.json({ order: order, total: order.findTotal() }),
-            err => next(err)
-        );
+        .then( order => {
+            Product.findById(req.body.itemId)
+                .then(product => {
+                    product.quantity += itemQuan;
+                    console.log('product.quantity: ',product.quantity);
+                    product.save();
+                });
+            res.json({ order: order, total: order.findTotal() });
+
+        },
+        err => next(err));    
 });
 
 
