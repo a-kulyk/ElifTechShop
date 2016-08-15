@@ -1,23 +1,21 @@
-angular.module('app').controller('mainController',
-  ['$rootScope', '$location', 'AuthService', '$uibModal',
-  function ( $rootScope, $location, AuthService, $uibModal) {
-    var main = this;
-    $rootScope.complete = {};
-    $rootScope.data = {};
-    $rootScope.complete.property = false;
-    $rootScope.complete.product = false;
-     
-    main.logout = function () {
-      // call logout from service
-      AuthService.logout()
-        .then(function () {
-          $rootScope.currentUser = null;
-          $rootScope.shoppingCart = null;
-          $location.path('/login');          
-        });
-    };
+angular.module('app').controller('mainController', ['$rootScope', '$location', 'AuthService', '$uibModal',
+    function($rootScope, $location, AuthService, $uibModal) {
+        var main = this;
+        $rootScope.complete = {};
+        $rootScope.data = {};
+        $rootScope.complete.property = false;
+        $rootScope.complete.product = false;
 
-    main.addToCart = function(item) {
+        main.logout = function() {
+            AuthService.logout()
+                .then(function() {
+                    $rootScope.currentUser = null;
+                    $rootScope.shoppingCart = null;
+                    $location.path('/login');
+                });
+        };
+
+        main.addToCart = function(item) {
             $uibModal.open({
                 templateUrl: './app/order/modals/modalView.html',
                 controller: 'ModalCtrl',
@@ -29,5 +27,5 @@ angular.module('app').controller('mainController',
                 }
             });
         };
-    
-}]);
+    }
+]);

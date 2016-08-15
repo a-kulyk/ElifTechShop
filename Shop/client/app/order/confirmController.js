@@ -1,5 +1,4 @@
-angular.module('app').controller('ConfirmCtrl',
-    ['$scope', '$rootScope', '$location', 'orderService', '$uibModal',
+angular.module('app').controller('ConfirmCtrl', ['$scope', '$rootScope', '$location', 'orderService', '$uibModal',
     function($scope, $rootScope, $location, orderService, $uibModal) {
         var confirm = this;
         var user = $rootScope.currentUser;
@@ -7,7 +6,7 @@ angular.module('app').controller('ConfirmCtrl',
         confirm.address = user.address.str;
 
         confirm.ok = function() {
-            var lat,lng;
+            var lat, lng;
             if (confirm.mylat) {
                 lat = confirm.mylat;
                 lng = confirm.mylng;
@@ -16,13 +15,24 @@ angular.module('app').controller('ConfirmCtrl',
                 lng = user.address.lng;
             }
 
-            orderService.setAddress({str: confirm.address, lat: lat, lng: lng})
+            orderService.setAddress({ str: confirm.address, lat: lat, lng: lng })
                 .then(function(resp) {
-                    console.log(resp.data);
+                    confirm.track = resp.data.trackingCode;
                     $rootScope.shoppingCart = null;
+                    return confirm.track;
+                })
+                .then(function(track) {
+                    return orderService.getDeliveryTime(track);
+                })
+                .then(function(resp) {
+                    if (resp.data.success) {
+                        var arrivalTime = resp.data.arrivalTime;
+                    }
                     $uibModal.open({
                         templateUrl: './app/order/modals/finalPage.html',
-                        controller: function($uibModalInstance, $scope) {
+                        controller: function($uibModalInstance, $scope, arrivalTime) {
+                            $scope.track = confirm.track;
+                            $scope.arrivalTime = arrivalTime;
                             $scope.close = function() {
                                 $location.path('/');
                                 $uibModalInstance.close();
@@ -30,6 +40,11 @@ angular.module('app').controller('ConfirmCtrl',
                             $scope.$on('modal.closing', function() {
                                 $location.path('/');
                             });
+                        },
+                        resolve: {
+                            arrivalTime: function() {
+                                return arrivalTime;
+                            }
                         }
                     });
                 });

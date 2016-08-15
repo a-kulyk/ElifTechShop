@@ -37,7 +37,7 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
             },
             pay: function() {
                 return $http({
-                    method: 'GET',
+                    method: 'POST',
                     url: '/order/pay'
                 });
             },
@@ -64,6 +64,12 @@ angular.module('app').factory('orderService', ['$q', '$http', '$rootScope',
                 return $http({
                     method: 'GET',
                     url: "/order/" + id
+                });
+            },
+            getDeliveryTime: function(track) {
+                return $http({
+                    method: 'GET',
+                    url: "/order/info/" + track
                 });
             },
             delete: function() {

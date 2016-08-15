@@ -5,10 +5,10 @@
     <p>There is no bank account number in Your profile</p>
     <p>Please enter it</p>
     <form class="form" ng-submit="next(account)">
-    	<input type="text" ng-model="account" pattern="^[a-z0-9]{24}$" style="width:220px">
+        <input type="text" ng-model="account" pattern="^[a-z0-9]{24}$" style="width:220px">
     </form>
 </div>
 <div class="modal-footer">
-		<a href="http://localhost:4000/" class="pull-left" target="_blanc">Create Bank Account</a>
+    <a href="http://localhost:4000/" class="pull-left" target="_blanc">Create Bank Account</a>
     <button type="button" class="btn btn-success" ng-click="next(account)">OK</button>
 </div>
