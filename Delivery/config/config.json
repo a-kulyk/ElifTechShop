@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "port": 3000,
+  "port": 5000,
   "mongoose": {
     "uri": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd"
   },
@@ -24,6 +24,6 @@
     }
   },
   "shop":{
-    "url":"http://requestb.in/18aqibo1"
+    "url":"http://localhost:3000/order/delivered"
   }
 }

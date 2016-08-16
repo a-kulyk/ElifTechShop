@@ -60,35 +60,45 @@ exports.deactivateById = function (id) {
 }
 exports.activateByIdAsAvailable = function (id) {
     return new Promise((resolve, reject)=> {
-        orderService.pollOrderFromQueue().then((topOrder)=> {
-            console.log(topOrder);
-            Car.update({_id: id}, {
-                    $set: {
-                        isActive: true,
-                        isAvailable: false,
-                        _order: topOrder._id,
-                        arrivalTime: new Date(Date.now() + topOrder.travelTime * 1000)
-                    }
-                },
-                function (err) {
-                    if (!err) {
-                        topOrder.arrivalTime = new Date(Date.now() + topOrder.travelTime * 1000);
-                        topOrder.state = orderStates.TRANS;
-                        topOrder.save(function (err, order) {
-                            if (err) {
-                                console.log(err);
-                            } else {
-                                resolve();
+            orderService.pollOrderFromQueue().then((topOrder)=> {
+                if (topOrder) {
+                    Car.update({_id: id}, {
+                            $set: {
+                                isActive: true,
+                                isAvailable: false,
+                                _order: topOrder._id,
+                                arrivalTime: new Date(Date.now() + topOrder.travelTime * 1000)
                             }
-                        });
-                    } else {
-                        reject(err);
-                    }
+                        },
+                        function (err) {
+                            if (!err) {
+                                topOrder.arrivalTime = new Date(Date.now() + topOrder.travelTime * 1000);
+                                topOrder.state = orderStates.TRANS;
+                                topOrder.save(function (err, order) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        resolve();
+                                    }
+                                });
+                            } else {
+                                reject(err);
+                            }
+                        }
+                    )
+                } else {
+                    Car.update({_id: id}, {$set:{isActive: true}}, function (err) {
+                        if (!err) {
+                            resolve();
+                        } else {
+                            reject(err);
+                        }
+                    })
                 }
-            )
-        })
+            })
 
-    })
+        }
+    )
 }
 exports.findById = function (id) {
     return new Promise((resolve, reject)=> {
