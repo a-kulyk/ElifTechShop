@@ -1,2 +1,5 @@
-<div ng-show="categories.data.length == 0" class="empty">Not category</div>
-<li ng-repeat="category in categories.data"><a ng-href="#/?{{category.url}}">{{category.name}}</a></li>
+<div ng-show="complete" class="categories">
+    <div ng-show="categories.data.length == 0" class="empty">Not category</div>
+    <li ng-repeat="category in categories.data"><a ng-href="#/?{{category.url}}">{{category.name}}</a></li>
+</div>
+<div ng-hide="complete" class="loader"></div>
