@@ -3,32 +3,38 @@
  */
 "use strict";
 let Car = require('../models/car');
-//var Order = require('../models/order');
 let orderStates = require('../common/enums/order-states').orderStates;
-let mongoose = require('../lib/mongoose');
+let orderService = require('./order-service');
+let _ = require("underscore");
 
 exports.loadOrderOnCar = function (order) {
-    Car.findOne({isAvailable: true, isActive: true}, function (err, car) {
-        if (!err && car != null) {
-            car._order = order._id;
-            car.isAvailable = false;
-            car.arrivalTime = new Date(Date.now() + order.travelTime * 1000);
-            car.save(function (err, car) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    order.state = orderStates.TRANS;
-                    order.save(function (err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    });
-                }
-            });
-        } else if (car == null) {
-            console.log('there is no free car');
+    orderService.pollOrderFromQueue().then(topOrder=> {
+            if (topOrder.trackingCode == order.trackingCode) {
+                Car.findOne({isAvailable: true, isActive: true}, function (err, car) {
+                    if (!err && car != null) {
+                        car._order = order._id;
+                        car.isAvailable = false;
+                        car.arrivalTime = new Date(Date.now() + order.travelTime * 1000);
+                        car.save(function (err, car) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                order.state = orderStates.TRANS;
+                                order.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                });
+                            }
+                        });
+                    } else if (car == null) {
+                        console.log('there is no free car');
+                    }
+                });
+            }
         }
-    });
+    );
+
 }
 exports.findAll = function () {
     return new Promise((resolve, reject)=> {
@@ -54,13 +60,44 @@ exports.deactivateById = function (id) {
 }
 exports.activateById = function (id) {
     return new Promise((resolve, reject)=> {
-        Car.update({_id: id}, {$set: {isActive: true}}, function (err) {
-                if (!err) {
-                    resolve();
-                } else {
-                    reject(err);
+        orderService.pollOrderFromQueue().then((topOrder)=> {
+            console.log(topOrder);
+            Car.update({_id: id}, {
+                    $set: {
+                        isActive: true,
+                        isAvailable: false,
+                        _order: topOrder._id,
+                        arrivalTime: new Date(Date.now() + topOrder.travelTime * 1000)
+                    }
+                },
+                function (err) {
+                    if (!err) {
+                        topOrder.arrivalTime = new Date(Date.now() + topOrder.travelTime * 1000);
+                        topOrder.state = orderStates.TRANS;
+                        topOrder.save(function (err, order) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        reject(err);
+                    }
                 }
-            }
-        )
+            )
+        })
+
     })
+}
+exports.findById = function (id) {
+    return new Promise((resolve, reject)=> {
+        Car.findById(id, function (err, doc) {
+            if (!err) {
+                resolve(doc);
+            } else {
+                reject(err);
+            }
+        });
+    });
 }

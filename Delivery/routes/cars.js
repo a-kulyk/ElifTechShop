@@ -31,10 +31,21 @@ exports.deactivateCar = function (req, res) {
 exports.activateCar = function (req, res) {
     let successMsg = {"success": true};
     let failedMsg = {"success": false};
-    carService.activateById(req.body.id).then(()=> {
-        res.json(successMsg);
+    carService.findById(req.body.id).then(car=> {
+        console.log('avail: '+car.isAvailable)
+        if (car.isAvailable) {
+            carService.activateById(req.body.id).then(()=> {
+                res.json(successMsg);
+            }).catch(err=> {
+                console.log(err);
+                res.json(failedMsg);
+            })
+        } else {
+            res.json(successMsg);
+        }
     }).catch(err=> {
         console.log(err);
         res.json(failedMsg);
     })
+
 }
