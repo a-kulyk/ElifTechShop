@@ -181,3 +181,26 @@ function makeVisualEffects() {
         });
     }
 }
+
+
+function addGalleryView() {
+    var currentImage = $('.main_photo').find('img');
+    var size = $('.main_photo').parent().width();
+    var percent = currentImage.width()/size;
+    var active = $('.thumbnails img').first()
+    var activeStyle  = {
+        on: {'opacity':'1'},
+        off : {'opacity':'0.7'}
+    }
+    active.css(activeStyle.on);
+    $('.main_photo').css({'height':currentImage.height() * percent});
+    $('.thumbnails').each(function () {
+        $(this).on('click', function () {
+            active.css(activeStyle.off);
+            active = $(this);
+            currentImage.attr('src', ($(this).children().attr('src')))
+            $(this).children().css({'opacity':'1'});
+            active.css(activeStyle.on);
+        })
+    })
+}

@@ -277,9 +277,37 @@ a:hover  {
 } 
 
 .product_image img{
-    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+    max-height: 100%;
+}
+.main_photo {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.thumbnails {
+    height: 80px;
+    text-align: center;
+}
+
+ .thumbnails img {
+     max-height: 100%;
+     max-width: 100%;
+     opacity: 0.8;
+}
+.product_image .thumbnails img:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.product_image .thumbnails {
+    padding: 3px;
+    overflow: hidden;
+    max-height: 100px;
     margin-bottom: 10px;
 }
+
 .product_image,.product_option, .range_button,.buy_button,.buy {
     padding: 0;
 }

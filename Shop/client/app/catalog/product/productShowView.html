@@ -3,10 +3,16 @@
 </div>
 <div ng-show="complete" class="product_show_view col-md-9 col-xs-12">
         <div class="product_view col-md-12 col-xs-12">
-            <div class="product_image col-md-3 col-xs-12">
-                        <img  ng-src="{{product.images[0]}}" />
+            <div class="product_image col-md-4 col-sm-4 col-xs-12">
+                <div class="main_photo">
+                    <img  ng-src="{{product.images[0]}}" />
+                </div>
+                <div class="thumbnails col-md-4  col-xs-4" ng-repeat="image in product.images">
+                    <img  ng-src="{{image}}" />
+                </div>
+
             </div>
-            <div class="product_option col-md-9 col-xs-12">
+            <div class="product_option col-md-8 col-sm-8 col-xs-12">
                 <div class="description col-md-9 col-xs-12">
 
                     <div class="title">{{product.name}}</div>
@@ -43,7 +49,7 @@
             <uib-tabset active="active">
                 <uib-tab index="0" heading="Properties">
                     <div style="margin-top: 15px;">
-                        <div class="product_properties col-md-6 col-xs-12" ng-repeat="property in product.properties">
+                        <div class="product_properties col-md-4 col-sm-6 col-xs-12" ng-repeat="property in product.properties">
                             <p>{{property.name}} : {{property.value}}</p>
                         </div>
                     </div>
