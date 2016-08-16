@@ -101,3 +101,14 @@ exports.findById = function (id) {
         });
     });
 }
+exports.findAllActive = function () {
+    return new Promise((resolve, reject)=> {
+        Car.find({isActive: true}, function (err, docs) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(docs);
+            }
+        })
+    })
+}
