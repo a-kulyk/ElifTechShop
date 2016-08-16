@@ -3,9 +3,18 @@ body {
 }
 #brand{
     height: 33px;
-    width: 150px;
+    width: 300px;
 }
 #navigationBar{
     font-family: "Bitstream Charter", "Times New Roman", Times, serif;
     font-size: 15px;
+}
+.navbar {
+
+}
+.navbar-brand {
+    position: absolute;
+    left: 50%;
+    margin-left: -180px !important;  /* 50% of logo width */
+    display: block;
 }

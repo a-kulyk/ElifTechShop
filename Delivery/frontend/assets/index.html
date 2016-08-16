@@ -13,22 +13,25 @@
 <body ng-controller="rootCtrl">
 <nav id="navigationBar" class="navbar navbar-inverse">
     <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/#/"><img id="brand" src="../images/brand2.png">
-            </a>
-        </div>
         <ul class="nav navbar-nav">
-            <!--<li><img id="brand" src="../images/brand.png"></a></li>-->
-            <li ng-class="{active: isActive('/')}" ng-cloak ng-show="can('Track')"><a href="#/">Track order</a></li>
+            <li ng-class="{active: isActive('/')}" ng-cloak ng-show="can('Track')"><a href="#/">Track order <span
+                    class="glyphicon glyphicon-globe"></span></a></li>
             <li ng-class="{active: isActive('create_order')}" ng-cloak ng-show="can('Order')"><a href="#/create_order">Make
-                order</a></li>
-            <li ng-class="{active: isActive('cars')}" ng-cloak ng-show="can('Cars')"><a href="#/cars">Cars</a></li>
+                order <span
+                        class="glyphicon glyphicon-search"></span></a></li>
+            <li ng-class="{active: isActive('cars')}" ng-cloak ng-show="can('Cars')"><a href="#/cars">Cars <span
+                    class="glyphicon glyphicon-transfer"></span></a></li>
             <li ng-class="{active: isActive('history')}" ng-cloak ng-show="can('History')"><a
-                    href="#/history">History</a></li>
+                    href="#/history">History <span
+                    class="glyphicon glyphicon-sunglasses"></span></a></li>
         </ul>
+            <a class="navbar-brand" href="/#/"><img id="brand" src="../images/brand3.png">
+            </a>
         <ul class="nav navbar-nav navbar-right">
-            <li ng-class="{active: isActive('login')}" ng-show="can('Login')" ng-cloak><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
-            <li ng-show="can('Logout')" ng-cloak><a href="#/" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+            <li ng-class="{active: isActive('login')}" ng-show="can('Login')" ng-cloak><a href="#/login"><span
+                    class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+            <li ng-show="can('Logout')" ng-cloak><a href="#/" ng-click="logout()"><span
+                    class="glyphicon glyphicon-log-out"></span> Log out</a>
             </li>
         </ul>
     </div>
