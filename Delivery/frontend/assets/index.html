@@ -11,12 +11,14 @@
     </script>
 </head>
 <body ng-controller="rootCtrl">
-<nav class="navbar navbar-inverse">
+<nav id="navigationBar" class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#/">ElifTechDelivery</a>
+            <a class="navbar-brand" href="/#/"><img id="brand" src="../images/brand2.png">
+            </a>
         </div>
         <ul class="nav navbar-nav">
+            <!--<li><img id="brand" src="../images/brand.png"></a></li>-->
             <li ng-class="{active: isActive('/')}" ng-cloak ng-show="can('Track')"><a href="#/">Track order</a></li>
             <li ng-class="{active: isActive('create_order')}" ng-cloak ng-show="can('Order')"><a href="#/create_order">Make
                 order</a></li>
@@ -25,7 +27,7 @@
                     href="#/history">History</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li ng-show="can('Login')" ng-cloak><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+            <li ng-class="{active: isActive('login')}" ng-show="can('Login')" ng-cloak><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
             <li ng-show="can('Logout')" ng-cloak><a href="#/" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
             </li>
         </ul>
