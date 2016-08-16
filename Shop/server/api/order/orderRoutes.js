@@ -189,10 +189,12 @@ router.put('/addToCart', function(req, res, next) {
 });
 
 router.put('/updateQuantity', function(req, res, next) {
+    let outOfStock = false;
     Product.findById(req.body.itemId)
         .then(product => {
             if (product.quantity === 0 && req.body.quantity === 1) {
                 req.body.quantity = 0;
+                outOfStock = true;
             }
             product.quantity -= req.body.quantity;
             console.log('product.quantity: ',product.quantity);
@@ -210,7 +212,7 @@ router.put('/updateQuantity', function(req, res, next) {
         })
         .then(order => Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' }))
         .then(
-            order => res.json({ order: order, total: order.findTotal() }),
+            order => res.json({ order: order, total: order.findTotal(), outOfStock: outOfStock }),
             err => next(err)
         );
     
