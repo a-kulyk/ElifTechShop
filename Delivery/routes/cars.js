@@ -21,20 +21,46 @@ exports.get = function (req, res) {
 exports.deactivateCar = function (req, res) {
     let successMsg = {"success": true};
     let failedMsg = {"success": false};
-    carService.deactivateById(req.body.id).then(()=> {
-        res.json(successMsg);
-    }).catch(err=> {
-        console.log(err);
-        res.json(failedMsg);
+    carService.findAllActive().then(cars=> {
+        if (cars.length == 1) {
+            throw new Error('cannot deactivate last car');
+        }
+        else {
+            carService.deactivateById(req.body.id).then(()=> {
+                res.json(successMsg);
+            }).catch(err=> {
+                throw err;
+            })
+        }
     })
+        .catch(err=> {
+            console.log(err);
+            res.json(failedMsg);
+        })
 }
 exports.activateCar = function (req, res) {
     let successMsg = {"success": true};
     let failedMsg = {"success": false};
-    carService.activateById(req.body.id).then(()=> {
-        res.json(successMsg);
+    carService.findById(req.body.id).then(car=> {
+        console.log('avail: ' + car.isAvailable)
+        if (car.isAvailable) {
+            carService.activateByIdAsAvailable(req.body.id).then(()=> {
+                res.json(successMsg);
+            }).catch(err=> {
+                throw err;
+                //res.json(failedMsg);
+            })
+        } else {
+            carService.activateByIdAsNotAvailable(req.body.id).then(()=> {
+                res.json(successMsg);
+            }).catch(err=> {
+                throw err;
+            })
+
+        }
     }).catch(err=> {
         console.log(err);
         res.json(failedMsg);
     })
+
 }

@@ -2,11 +2,12 @@
  * Created by dmytro on 09.07.16.
  */
 "use strict";
-var Order = require('../models/order');
-var googleConnector = require('../lib/distance-determiner');
-var uuid = require('uuid');
-var carService = require('./car-service');
-var shipmentTimeDeterminer = require('./shipment-time-determiner');
+let Order = require('../models/order');
+let googleConnector = require('../lib/distance-determiner');
+let uuid = require('uuid');
+let carService = require('./car-service');
+let shipmentTimeDeterminer = require('./shipment-time-determiner');
+let orderStates = require('../common/enums/order-states').orderStates;
 
 exports.createOrder = function (order) {
     return new Promise((resolve, reject)=> {
@@ -77,4 +78,14 @@ exports.findByCriteria = function (queryOb) {
             }
         })
     });
+}
+exports.pollOrderFromQueue = function () {
+    return new Promise((resolve, reject)=> {
+        Order.find({"state": orderStates.SHIPMENT}).sort({'created': 1}).limit(1).exec(function (err, docs) {
+            if (err) {
+                reject(err);
+            }
+            resolve(docs[0]);
+        })
+    })
 }
