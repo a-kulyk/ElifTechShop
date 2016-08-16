@@ -1,10 +1,10 @@
 var webpack = require("webpack");
 module.exports = {
-    entry: "./app",
+    entry: "./public/app",
     context: __dirname,
     output: {
-        publicPath: 'assets/',
-        path: 'assets',
+        publicPath: 'public/assets/',
+        path: 'public/assets',
         filename: "app.build.js"
     },
     module: {
@@ -18,6 +18,6 @@ module.exports = {
     },
     resolve: {
         modulesDirectories: ["node_modules"]
-    },
-    watch: true
+    }
+  //  watch: true
 };

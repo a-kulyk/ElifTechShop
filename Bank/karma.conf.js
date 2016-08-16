@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Sat Aug 13 2016 17:41:53 GMT+0300 (EEST)
 var path = require('path');
-var webpackConfig = require('./public/webpack.config');
+var webpackConfig = require('./webpack.config');
 var entry = path.resolve(webpackConfig.context, webpackConfig.entry);
 var preprocessors = {};
 preprocessors[entry] = ['webpack'];
