@@ -16,7 +16,7 @@ angular.module('app')
         that.categories = [];
         $scope.complete = true;
       });
-     }]);
+  }]);
 
     
  	

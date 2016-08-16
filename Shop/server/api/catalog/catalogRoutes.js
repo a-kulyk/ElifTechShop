@@ -14,8 +14,6 @@ router.get('/product/:id', function(req, res, next) {
     )
 });
 
-
-
 router.get('/find/:distinct', function(req, res, next) {
   if(req.params.distinct == "all") {
     Products.find().distinct('category')

@@ -32,8 +32,6 @@ angular.module('app')
             }
 
         };
-
-
         $scope.createPropertyScreen = function (data) {
             var propertyScreen = {};
             propertyScreen.categories = $route.current.params.categories;

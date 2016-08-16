@@ -378,7 +378,6 @@ p.product_price {
     color: #880000;
 }
 
-
 @-webkit-keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

@@ -60,7 +60,6 @@
 	__webpack_require__(12);
 	__webpack_require__(13);
 	__webpack_require__(14);
-	__webpack_require__(15);
 	__webpack_require__(16);
 	__webpack_require__(17);
 	__webpack_require__(18);
@@ -850,7 +849,6 @@
 	            _loop(item);
 	        }
 	    };
-
 	    $scope.createPropertyScreen = function (data) {
 	        var propertyScreen = {};
 	        propertyScreen.categories = $route.current.params.categories;
@@ -947,12 +945,7 @@
 	}]);
 
 /***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-/***/ },
+/* 15 */,
 /* 16 */
 /***/ function(module, exports) {
 

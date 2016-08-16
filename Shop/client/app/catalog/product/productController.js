@@ -51,6 +51,7 @@ angular.module('app')
 
 
     }])
+
     .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
         $scope.complete = false;
         Items.item($route.current.params.id).then(respone => {
