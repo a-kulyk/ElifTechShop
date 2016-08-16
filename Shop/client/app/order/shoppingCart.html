@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container shop-cart">
     <h3>My Shopping Cart</h3>
     <p>Created {{shoppingCart.order.date.created | moment}}</p>
     <div class="col-xs-12">
@@ -18,7 +18,7 @@
                     <tr ng-repeat='item in shoppingCart.order.itemSet'>
                         <td>
                             <a ng-href="#/product/{{item.productId._id}}">
-                                <img ng-src="{{item.productId.images[0]}}" style="width:100px">&nbsp {{item.productId.name}}
+                                <img ng-src="{{item.productId.images[0]}}">&nbsp {{item.productId.name}}
                             </a>
                         </td>
                         <td>{{item.productId.category}}</td>
@@ -30,7 +30,7 @@
                                         </span>
                                     <input class="form-control cartQuant" ng-model="item.quantity" min="1" type="number" onfocus="this.blur()" />
                                     <span class="input-group-btn">
-                                            <button type="button" class="btn" ng-click="order.increment(item.productId._id)">+</button>
+                                            <button type="button" class="btn" ng-click="order.updQuantity(item.productId._id, 1)">+</button>
                                         </span>
                                 </div>
                             </div>

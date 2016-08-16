@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ngRoute','ui-rangeSlider', 'ngAnimate', 'ui.bootstrap','ui.select2','angular-carousel']);
+var myApp = angular.module('app', ['ngRoute','ui-rangeSlider', 'ngAnimate', 'ui.bootstrap','ui.select2']);
 
 
 myApp.config(function($routeProvider) {

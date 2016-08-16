@@ -16,13 +16,14 @@ angular.module('app')
             order.updQuantity = _.debounce(function(id, quan) {
                 orderService.updQuantity(id, quan)
                     .then(function(response) {
-                        $rootScope.shoppingCart = response.data;
+                        $rootScope.shoppingCart = {order: response.data.order, total: response.data.total};
+                        if (response.data.outOfStock) {
+                            $uibModal.open({
+                                templateUrl: './app/order/modals/outOfStock.html'
+                            });
+                        }
                     });
             }, 500);
-
-            order.increment = function(id) {
-                order.updQuantity(id, 1);
-            };
 
             order.decrement = function(id, quan) {
                 --quan;
