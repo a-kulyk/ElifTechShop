@@ -3,10 +3,11 @@
  */
 'use strict'
 let carService = require('../services/car-service');
+let responseFactory = require('../common/response-factory');
 
 exports.get = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
+    let successMsg = responseFactory.successMessage();
+    let failedMsg = responseFactory.failedMessage();
     carService.findAll()
         .then((cars)=> {
             successMsg.cars = cars;
@@ -19,15 +20,13 @@ exports.get = function (req, res) {
 }
 
 exports.deactivateCar = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
     carService.findAllActive().then(cars=> {
         if (cars.length == 1) {
             throw new Error('cannot deactivate last car');
         }
         else {
             carService.deactivateById(req.body.id).then(()=> {
-                res.json(successMsg);
+                res.json(responseFactory.successMessage());
             }).catch(err=> {
                 throw err;
             })
@@ -35,23 +34,21 @@ exports.deactivateCar = function (req, res) {
     })
         .catch(err=> {
             console.log(err);
-            res.json(failedMsg);
+            res.json(responseFactory.failedMessage());
         })
 }
 exports.activateCar = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
     carService.findById(req.body.id).then(car=> {
         console.log('avail: ' + car.isAvailable)
         if (car.isAvailable) {
             carService.activateByIdAsAvailable(req.body.id).then(()=> {
-                res.json(successMsg);
+                res.json(responseFactory.successMessage());
             }).catch(err=> {
                 throw err;
             })
         } else {
             carService.activateByIdAsNotAvailable(req.body.id).then(()=> {
-                res.json(successMsg);
+                res.json(responseFactory.successMessage());
             }).catch(err=> {
                 throw err;
             })
@@ -59,7 +56,7 @@ exports.activateCar = function (req, res) {
         }
     }).catch(err=> {
         console.log(err);
-        res.json(failedMsg);
+        res.json(responseFactory.failedMessage());
     })
 
 }

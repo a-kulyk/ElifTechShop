@@ -6,10 +6,11 @@
 let orderService = require('../services/order-service');
 let validationSchema = require('../common/validation-schema');
 let ValidationError = require('../common/errors/validation-error');
+let responseFactory = require('../common/response-factory');
 
 exports.get = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
+    let successMsg = responseFactory.successMessage();
+    let failedMsg = responseFactory.failedMessage();
     let servicePromise = orderService.findByTrackingCode(req.params.trackingCode);
     servicePromise.then((order)=> {
         if (order != null) {
@@ -30,8 +31,8 @@ exports.get = function (req, res) {
     });
 }
 exports.post = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
+    let successMsg = responseFactory.successMessage();
+    let failedMsg = responseFactory.failedMessage();
     req.checkBody(validationSchema);
     let errors = req.validationErrors();
     if (errors) {
@@ -53,8 +54,8 @@ exports.post = function (req, res) {
 }
 
 exports.getById = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
+    let successMsg = responseFactory.successMessage();
+    let failedMsg = responseFactory.failedMessage();
     orderService.findById(req.params.id)
         .then((order)=> {
             if (order != null) {

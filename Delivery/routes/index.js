@@ -2,15 +2,7 @@
  * Created by dmytro on 29.06.16.
  */
 "use strict";
-
-var isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated())
-        return next();
-    res.json({
-        "success": false,
-        "role": 'guest'
-    });
-}
+let isAuthenticated = require('../lib/passport/authentication-check');
 
 module.exports = function (app, passport) {
 
@@ -22,7 +14,7 @@ module.exports = function (app, passport) {
 
     app.post('/delivered', require('./delivered').post);
 
-    app.get('/history/:fromUsername/:toUsername', require('./history').get);
+    app.get('/history/:fromUsername/:toUsername', isAuthenticated, require('./history').get);
 
     app.post('/login', require('./login').login(passport));
 

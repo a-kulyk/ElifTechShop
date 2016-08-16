@@ -3,10 +3,11 @@
  */
 'use strict';
 let historyService = require('../services/history-service');
+let responseFactory = require('../common/response-factory');
 
 exports.get = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
+    let successMsg = responseFactory.successMessage();
+    let failedMsg = responseFactory.failedMessage();
     let servicePromise = historyService.fetchHistoryByReqParams(req.params);
     servicePromise.then((orders)=> {
         successMsg.orders = orders;

@@ -6,10 +6,9 @@ let orderService = require('../services/order-service');
 let deliveryNotifier = require('../lib/delivery-notifier');
 let eachLimit = require('async/eachLimit');
 let config = require('../config');
+let responseFactory = require('../common/response-factory');
 
 exports.post = function (req, res) {
-    let successMsg = {"success": true};
-    let failedMsg = {"success": false};
     let ordersIdArray = req.body;
     eachLimit(ordersIdArray, config.get('email-sender:send-at-once'), function (orderId, callback) {
         let servicePromise = orderService.findById(orderId);
@@ -27,5 +26,5 @@ exports.post = function (req, res) {
             console.log(err);
         }
     })
-    res.json(successMsg);
+    res.json(responseFactory.successMessage());
 }
