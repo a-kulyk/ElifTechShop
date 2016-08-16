@@ -17,13 +17,12 @@ let transporter = nodemailer.createTransport({
 exports.sendEmail = function (username, trackingCode) {
     return new Promise((resolve, reject)=> {
         let subject = 'Delivery service notification';
-        let text = 'Your order has been successfully delivered\nYou can check its status\n' + '<a href="'
-            + config.get('host') + ':' + config.get('port') + '/#/order_info/' + trackingCode + '">here</a>';
         let mailOptions = {
             from: config.get("email-sender:user"),
             to: username,
             subject: subject,
-            html: text
+            html: `<h2>Your order has been successfully delivered</h2>` +
+           `<a href="http://localhost:3000/#/order_info/${trackingCode}">Check its status here</a>`
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
