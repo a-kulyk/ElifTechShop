@@ -1,11 +1,10 @@
-    <div class="col-md-3 col-xs-12" id="sidebar">
-        <property-items></property-items>
-    </div>
-
-<div  class="product_show_view col-md-9 col-xs-12">
+<div class="col-md-3 col-xs-12" id="sidebar">
+    <property-items></property-items>
+</div>
+<div ng-show="complete" class="product_show_view col-md-9 col-xs-12">
         <div class="product_view col-md-12 col-xs-12">
             <div class="product_image col-md-3 col-xs-12">
-                        <img  ng-src="{{product.images[0]}}" /></a>
+                        <img  ng-src="{{product.images[0]}}" />
             </div>
             <div class="product_option col-md-9 col-xs-12">
                 <div class="description col-md-9 col-xs-12">
@@ -60,5 +59,7 @@
 
         </div>
     </div>
-    <div style="clear:both;"></div>
-
+<div style="clear:both;"></div>
+<div ng-show="items.not" class="empty">There is not nothing to find</div>
+<div ng-show="items.error" class="empty find_error">Something went wrong.</div>
+<div ng-hide="complete" class="loader"></div>

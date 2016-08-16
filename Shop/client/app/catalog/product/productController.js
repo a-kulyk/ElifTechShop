@@ -4,14 +4,15 @@ angular.module('app')
         $scope.currentSort = $routeParams.sort || '';
         $scope.sort = ['cheap','expensive'];
         $scope.sortThis = function() {
+            /** @namespace $scope.sorted */
             $routeParams.sort = $scope.sorted || 'cheap';
             $location.url('?'+$httpParamSerializer($routeParams));
-        }
+        };
         Items.all($route.current.params)
             .then (response => {
                 response.data.items.forEach(function (element) {
                 element.smallDescription = element.description.slice(0,105) + "...";
-                })
+                });
                 for (let product in response.data.items) {
                     response.data.items[product].smallDescription = response.data.items[product].description.slice(0,105) + "...";
                 }
@@ -50,9 +51,11 @@ angular.module('app')
 
 
     }])
+
     .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
-        Items.item($route.current.params.id).success(function(data) {
-            $scope.product = data;
+        $scope.complete = false;
+        Items.item($route.current.params.id).then(respone => {
+            $scope.product = respone.data;
 
             $scope.addToCart = function(cart) {
                 if (!$rootScope.shoppingCart) {
@@ -69,11 +72,16 @@ angular.module('app')
                         });
                 }
             };
-            
             $scope.doTheBack = function() {
                 window.history.back();
             };
+            $scope.complete = true;
 
+        },error => {
+                console.log(error);
+                $scope.items  = [];
+                $scope.items.error = true;
+                $scope.complete = true;
         });
     }]);
     

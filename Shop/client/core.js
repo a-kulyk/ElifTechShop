@@ -13,7 +13,6 @@
     require("./app/catalog/product/productController.js");
     require("./app/catalog/categories/categoryController.js");
     require("./app/catalog/properties/propertyController.js");
-    require("./app/catalog/properties/filterController.js");
     require("./app/catalog/product/productService.js");
     require("./app/catalog/categories/categoryService.js");
     require("./app/catalog/product/productDirective.js");

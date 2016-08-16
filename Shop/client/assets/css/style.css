@@ -59,10 +59,11 @@ body {
     margin-bottom: 15px;
 }
 
-.all_product {
+.all_product,.product_show_view,.properties,.categories{
     -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
 }
+
 .send_form {
     background: #FFF;
     width: 100%;
@@ -137,6 +138,7 @@ a:hover  {
 
 .sidebar-category {
     margin-top: 10px;
+
 }
 
 .sidebar-category li {
@@ -375,7 +377,6 @@ p.product_price {
 .find_error {
     color: #880000;
 }
-
 
 @-webkit-keyframes fadeIn {
     from { opacity: 0; }

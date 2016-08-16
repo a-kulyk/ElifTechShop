@@ -60,7 +60,6 @@
 	__webpack_require__(12);
 	__webpack_require__(13);
 	__webpack_require__(14);
-	__webpack_require__(15);
 	__webpack_require__(16);
 	__webpack_require__(17);
 	__webpack_require__(18);
@@ -74,7 +73,7 @@
 
 	'use strict';
 
-	var myApp = angular.module('app', ['ngRoute', 'ui-rangeSlider', 'ngAnimate', 'ui.bootstrap', 'ui.select2']);
+	var myApp = angular.module('app', ['ngRoute', 'ui-rangeSlider', 'ngAnimate', 'ui.bootstrap', 'ui.select2', 'angular-carousel']);
 
 	myApp.config(function ($routeProvider) {
 	    $routeProvider.when('/', {
@@ -712,6 +711,7 @@
 	    $scope.currentSort = $routeParams.sort || '';
 	    $scope.sort = ['cheap', 'expensive'];
 	    $scope.sortThis = function () {
+	        /** @namespace $scope.sorted */
 	        $routeParams.sort = $scope.sorted || 'cheap';
 	        $location.url('?' + $httpParamSerializer($routeParams));
 	    };
@@ -753,8 +753,9 @@
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
-	    Items.item($route.current.params.id).success(function (data) {
-	        $scope.product = data;
+	    $scope.complete = false;
+	    Items.item($route.current.params.id).then(function (respone) {
+	        $scope.product = respone.data;
 
 	        $scope.addToCart = function (cart) {
 	            if (!$rootScope.shoppingCart) {
@@ -769,10 +770,15 @@
 	                });
 	            }
 	        };
-
 	        $scope.doTheBack = function () {
 	            window.history.back();
 	        };
+	        $scope.complete = true;
+	    }, function (error) {
+	        console.log(error);
+	        $scope.items = [];
+	        $scope.items.error = true;
+	        $scope.complete = true;
 	    });
 	}]);
 
@@ -784,6 +790,7 @@
 
 	angular.module('app').controller('CategoriesController', ['$scope', 'Parameters', '$routeParams', '$httpParamSerializer', function ($scope, Parameters, $routeParams, $httpParamSerializer) {
 	  var that = this;
+	  $scope.complete = false;
 	  Parameters.all().success(function (data) {
 	    that.data = [];
 	    for (var i in data) {
@@ -792,9 +799,11 @@
 	      var categoryInfo = { name: data[i], url: $httpParamSerializer(url) };
 	      that.data.push(categoryInfo);
 	    }
+	    $scope.complete = true;
 	  }).error(function (data, status) {
 	    console.log(data, status);
 	    that.categories = [];
+	    $scope.complete = true;
 	  });
 	}]);
 
@@ -840,7 +849,6 @@
 	            _loop(item);
 	        }
 	    };
-
 	    $scope.createPropertyScreen = function (data) {
 	        var propertyScreen = {};
 	        propertyScreen.categories = $route.current.params.categories;
@@ -937,12 +945,7 @@
 	}]);
 
 /***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-/***/ },
+/* 15 */,
 /* 16 */
 /***/ function(module, exports) {
 

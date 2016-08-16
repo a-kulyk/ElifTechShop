@@ -1,4 +1,3 @@
-"use-strict";
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -14,8 +13,6 @@ router.get('/product/:id', function(req, res, next) {
     error => next(error)
     )
 });
-
-
 
 router.get('/find/:distinct', function(req, res, next) {
   if(req.params.distinct == "all") {
@@ -38,51 +35,6 @@ router.get('/find/:distinct', function(req, res, next) {
       }
     
   });
-
-router.get('/filter/count/', function(req,res,next) {
-
-    let myFilter = new Filter();
-    let filterQuery = JSON.parse(JSON.stringify(req.query));
-
-    if(filterQuery.categories) {
-        myFilter.setCategories(filterQuery.categories);
-        delete filterQuery.categories
-    }
-
-    if(filterQuery.company) {
-        myFilter.setCompany(filterQuery.company);
-        delete filterQuery.company
-    }
-
-    if(filterQuery.sort) {
-        delete filterQuery.sort
-    }
-
-    if(filterQuery.searchField) {
-        myFilter.setSearchField(filterQuery.searchField);
-        delete filterQuery.searchField
-    }
-
-    if (filterQuery.minprice && filterQuery.maxprice) {
-        myFilter.setPrice(filterQuery.minprice,filterQuery.maxprice);
-        delete filterQuery.minprice;
-        delete filterQuery.maxprice;
-    }
-
-    for (var item in filterQuery) {
-        myFilter.setProperties(item,filterQuery[item]);
-    }
-    Products.find(myFilter.creatQuery()).count()
-        .then(
-            result => {
-                res.json(result);
-                console.log(result);
-            },
-                    error => next(error)
-
-        )
-})
-
 
 
 router.get('/filtration/:category', function(req,res,next) {
@@ -222,8 +174,6 @@ router.get('/filtration/:category', function(req,res,next) {
                                 error => console.log (error)
                             )
                         } else {
-                            //if(index == 0) res.json(newQuery);
-
                             Products.count(newQuery)
                             .then(
                                 countOfProperty => {
@@ -247,19 +197,7 @@ router.get('/filtration/:category', function(req,res,next) {
         console.log(error);
         next(error);
     });
-
-
-
-
-
-
-
-
-
 })
-
-
-
 
 
 router.get('/filter/', function(req,res,next) {
