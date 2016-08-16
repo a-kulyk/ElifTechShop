@@ -19,7 +19,11 @@ module.exports = function (app) {
                 });
             }
             $scope.isActive = function (viewLocation) {
-                return $location.path().startsWith(viewLocation);
+                if ($location.path().length == 1) {
+                    return viewLocation=='/';
+                } else {
+                    return $location.path().slice(1).startsWith(viewLocation);
+                }
             }
         }])
 }

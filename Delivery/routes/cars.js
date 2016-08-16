@@ -48,7 +48,6 @@ exports.activateCar = function (req, res) {
                 res.json(successMsg);
             }).catch(err=> {
                 throw err;
-                //res.json(failedMsg);
             })
         } else {
             carService.activateByIdAsNotAvailable(req.body.id).then(()=> {
