@@ -181,3 +181,16 @@ function makeVisualEffects() {
         });
     }
 }
+
+
+function addGalleryView() {
+    var currentImage = $('.main_photo').find('img');
+    var size = $('.main_photo').parent().width();
+    var percent = currentImage.width()/size
+    $('.main_photo').css({'height':currentImage.height() * percent});
+    $('.thumbnails').each(function () {
+        $(this).on('click', function () {
+            currentImage.attr('src', ($(this).children().attr('src')))
+        })
+    })
+}

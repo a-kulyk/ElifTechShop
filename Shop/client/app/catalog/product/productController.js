@@ -76,6 +76,9 @@ angular.module('app')
                 window.history.back();
             };
             $scope.complete = true;
+            setTimeout(function(){
+               addGalleryView();
+            }, 0);
 
         },error => {
                 console.log(error);

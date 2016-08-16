@@ -60,12 +60,12 @@
 	__webpack_require__(12);
 	__webpack_require__(13);
 	__webpack_require__(14);
-	__webpack_require__(15);
 	__webpack_require__(16);
 	__webpack_require__(17);
 	__webpack_require__(18);
 	__webpack_require__(19);
 	__webpack_require__(20);
+	__webpack_require__(21);
 
 /***/ },
 /* 1 */
@@ -543,7 +543,6 @@
 	                    templateUrl: './app/order/modals/outOfStock.html'
 	                });
 	            }
-	            console.log("$rootScope.shoppingCart: ", $rootScope.shoppingCart);
 	        });
 	    }, 500);
 
@@ -776,6 +775,9 @@
 	            window.history.back();
 	        };
 	        $scope.complete = true;
+	        setTimeout(function () {
+	            addGalleryView();
+	        }, 0);
 	    }, function (error) {
 	        console.log(error);
 	        $scope.items = [];
@@ -947,7 +949,8 @@
 	}]);
 
 /***/ },
-/* 15 */
+/* 15 */,
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -975,7 +978,7 @@
 	}]);
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1008,7 +1011,7 @@
 	}]);
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1023,7 +1026,7 @@
 	}]);
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1036,7 +1039,7 @@
 	}]);
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1051,7 +1054,7 @@
 	}]);
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
