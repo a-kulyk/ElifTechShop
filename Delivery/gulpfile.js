@@ -23,20 +23,41 @@ gulp.task('webpack', function () {
             loaders: [
                 {
                     test: /\.css$/,
-                    loader: 'style!css'
+                    loader: "style-loader!css-loader"
                 },
                 {
-                    test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
-                    loader: 'file?name=[path][name].[ext]'
+                    test: /\.png$/,
+                    loader: "url-loader?limit=100000"
                 },
-/*                {
-                    test: /\.js$/,
-                    exclude: /(node_modules|bower_components)/,
-                    loader: 'babel',
-                    query: {
-                        presets: ['es2015']
-                    }
-                }*/
+                {
+                    test: /\.jpg$/,
+                    loader: "file-loader"
+                },
+                {
+                    test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'url?limit=10000&mimetype=application/font-woff'
+                },
+                {
+                    test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'url?limit=10000&mimetype=application/octet-stream'
+                },
+                {
+                    test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'file'
+                },
+                {
+                    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                    loader: 'url?limit=10000&mimetype=image/svg+xml'
+                }
+                
+                /*                {
+                 test: /\.js$/,
+                 exclude: /(node_modules|bower_components)/,
+                 loader: 'babel',
+                 query: {
+                 presets: ['es2015']
+                 }
+                 }*/
             ]
         },
         plugins: [
@@ -52,7 +73,7 @@ gulp.task('webpack', function () {
         }))
         .pipe(named())
         .pipe(webpackStream(options))
-        .pipe(gulp.dest('public/js'))
+        .pipe(gulp.dest('public'))
 })
 
 gulp.task('build', gulp.series('clean', 'assets', 'webpack'));
