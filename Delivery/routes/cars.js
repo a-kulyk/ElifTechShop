@@ -44,14 +44,19 @@ exports.activateCar = function (req, res) {
     carService.findById(req.body.id).then(car=> {
         console.log('avail: ' + car.isAvailable)
         if (car.isAvailable) {
-            carService.activateById(req.body.id).then(()=> {
+            carService.activateByIdAsAvailable(req.body.id).then(()=> {
                 res.json(successMsg);
             }).catch(err=> {
-                console.log(err);
-                res.json(failedMsg);
+                throw err;
+                //res.json(failedMsg);
             })
         } else {
-            res.json(successMsg);
+            carService.activateByIdAsNotAvailable(req.body.id).then(()=> {
+                res.json(successMsg);
+            }).catch(err=> {
+                throw err;
+            })
+
         }
     }).catch(err=> {
         console.log(err);

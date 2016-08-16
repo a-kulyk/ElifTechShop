@@ -58,7 +58,7 @@ exports.deactivateById = function (id) {
         )
     })
 }
-exports.activateById = function (id) {
+exports.activateByIdAsAvailable = function (id) {
     return new Promise((resolve, reject)=> {
         orderService.pollOrderFromQueue().then((topOrder)=> {
             console.log(topOrder);
@@ -100,6 +100,18 @@ exports.findById = function (id) {
             }
         });
     });
+}
+exports.activateByIdAsNotAvailable = function (id) {
+    return new Promise((resolve, reject)=> {
+        Car.update({_id: id}, {$set: {isActive: true}}, function (err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        })
+    })
+
 }
 exports.findAllActive = function () {
     return new Promise((resolve, reject)=> {
