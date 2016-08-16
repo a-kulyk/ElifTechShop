@@ -1,22 +1,22 @@
-describe('Auth controller',function (){
+describe('Login controller',function (){
     var $httpBackend, $rootScope, createController, authRequestHandler, $location;
     beforeEach(module('bank'));
     beforeEach(inject( function($injector) {
         $httpBackend = $injector.get('$httpBackend');
         $location = $injector.get('$location');
-        authRequestHandler = $httpBackend.when('GET', '/islogin')
+        authRequestHandler = $httpBackend.whenPOST('/login')
             .respond({'success': true});
         $rootScope = $injector.get('$rootScope');
         var $controller = $injector.get('$controller');
         createController = function() {
-            return $controller('auth', { $scope: $rootScope});
+            return $controller('login', { $scope: $rootScope});
         }
     }));
-    it('HTTP GET auth', function() {
-        $httpBackend.expectGET('/islogin');
+    it('HTTP POST login', function() {
+        $httpBackend.expect('POST', '/login');
         var controller = createController();
+        $rootScope.login();
         $httpBackend.flush();
-        expect($rootScope.logined).to.equal(true);
-        expect($location.$$path).to.equal('/cabinet')
+        expect($location.$$path).to.equal('/cabinet');
     })
 });

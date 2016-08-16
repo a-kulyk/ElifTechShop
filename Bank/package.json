@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app.js",
-    "test": "export NODE_ENV=test && karma start"
+    "test": "export NODE_ENV=test && karma start && mocha --reporter spec"
   },
   "dependencies": {
     "angular": "^1.5.8",

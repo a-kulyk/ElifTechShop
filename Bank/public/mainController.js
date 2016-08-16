@@ -1,5 +1,5 @@
 
-export default (app) => {
+module.exports =  function(app) {
     app.controller('main', function ($scope, $http, $location) {
         $scope.title = "Bank";
         $scope.formData = {};
