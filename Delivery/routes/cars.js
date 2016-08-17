@@ -28,7 +28,8 @@ exports.deactivateCar = function (req, res) {
             carService.deactivateById(req.body.id).then(()=> {
                 res.json(responseFactory.successMessage());
             }).catch(err=> {
-                throw err;
+                console.log(err);
+                res.json(responseFactory.failedMessage());
             })
         }
     })
@@ -44,15 +45,16 @@ exports.activateCar = function (req, res) {
             carService.activateByIdAsAvailable(req.body.id).then(()=> {
                 res.json(responseFactory.successMessage());
             }).catch(err=> {
-                throw err;
+                console.log(err);
+                res.json(responseFactory.failedMessage());
             })
         } else {
             carService.activateByIdAsNotAvailable(req.body.id).then(()=> {
                 res.json(responseFactory.successMessage());
             }).catch(err=> {
-                throw err;
+                console.log(err);
+                res.json(responseFactory.failedMessage());
             })
-
         }
     }).catch(err=> {
         console.log(err);
