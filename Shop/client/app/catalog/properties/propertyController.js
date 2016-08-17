@@ -1,15 +1,16 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
+        debugger;
         $scope.displayCount = false;
         $scope.complete = false;
         var currentCategory = $route.current.params.categories;
         $scope.isCat = typeof currentCategory == "undefined";
         if($rootScope.data.price) {
-            $scope.price = JSON.parse(JSON.stringify($rootScope.data.price));
+            $scope.price = _.cloneDeep($rootScope.data.price);
         }
         let defineProperty = function() {
             if(!$rootScope.data.properties) return;
-            let currentUrl = JSON.parse(JSON.stringify($route.current.params));
+            let currentUrl = _.cloneDeep($route.current.params);
             if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField
             for(let item in currentUrl) {
                 $rootScope.data.properties.forEach(function(property) {
@@ -32,6 +33,7 @@ angular.module('app')
             }
 
         };
+        defineProperty();
         $scope.createPropertyScreen = function (data) {
             var propertyScreen = {};
             propertyScreen.categories = $route.current.params.categories;
@@ -88,9 +90,9 @@ angular.module('app')
         if($rootScope.category != currentCategory) {
             Parameters.paramsOfCat(currentCategory)
                 .then(result => {
-                    if (result.data.price) $scope.price = JSON.parse(JSON.stringify(result.data.price));
+                    if (result.data.price) $scope.price =_.cloneDeep(result.data.price);
                     $rootScope.category = currentCategory;
-                    let newResult = JSON.parse(JSON.stringify(result.data));
+                    let newResult = _.cloneDeep(result.data);
                     if (newResult.hasOwnProperty('properties')) {
                         newResult.properties.forEach(function (item) {
                             if (item.hasOwnProperty('value')) {
@@ -117,9 +119,10 @@ angular.module('app')
                 });
         }
         (function() {
-            let params = JSON.parse(JSON.stringify($route.current.params));
+            let params = _.cloneDeep($route.current.params);
             delete params.per_page;
             delete params.page;
+            if(!currentCategory) return;
             Parameters.countOfCat(currentCategory, params)
                 .then(result => {
                         $rootScope.data = result.data;

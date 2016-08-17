@@ -1,4 +1,5 @@
 function makeVisualEffects() {
+    var galleryActive = false;
     $('.product').each(function (i, el) {
         var image = $(this).find('.main_inner img');
         if(image.prop('naturalHeight') > image.prop('naturalWidth')) {
@@ -34,11 +35,15 @@ function makeVisualEffects() {
             $(this).removeClass('animate');
             $(this).parent().css('z-index', "1");
             $(this).find('div.carouselNext, div.carouselPrev').removeClass('visible');
+        },function () {
+            if(galleryActive) {
+                flipBack();
+            }
         });
 
         // Flip card to the back side
         $(el).find('.view_gallery').click(function () {
-
+            galleryActive = true;
             $(el).find('div.carouselNext, div.carouselPrev').removeClass('visible');
             $(el).find('.make3D').addClass('flip-10');
             setTimeout(function () {
@@ -65,11 +70,41 @@ function makeVisualEffects() {
                     }, 100);
                 }, 100);
             }, 150);
+
         });
 
-        // Flip card back to the front side
-        $(el).find('.flip-back').click(function () {
+        $(el).hover(function () {
 
+        },function () {
+            if(galleryActive) {
+                galleryActive = false;
+                $(el).find('.make3D').removeClass('flip180').addClass('flip190');
+                setTimeout(function () {
+                    $(el).find('.make3D').removeClass('flip190').addClass('flip90');
+
+                    $(el).find('.product-back div.shadow').css('opacity', 0).fadeTo(100, 1, function () {
+                        $(el).find('.product-back, .product-back div.shadow').hide();
+                        $(el).find('.product-front, .product-front div.shadow').show();
+                    });
+                }, 50);
+
+                setTimeout(function () {
+                    $(el).find('.make3D').removeClass('flip90').addClass('flip-10');
+                    $(el).find('.product-front div.shadow').show().fadeTo(100, 0);
+                    setTimeout(function () {
+                        $(el).find('.product-front div.shadow').hide();
+                        $(el).find('.make3D').removeClass('flip-10').css('transition', '100ms ease-out');
+                        $(el).find('.cx, .cy').removeClass('s1 s2 s3');
+                    }, 100);
+                }, 150);
+
+            }
+        })
+
+
+
+        $(el).find('.flip-back').click( function flipBack() {
+            galleryActive = false;
             $(el).find('.make3D').removeClass('flip180').addClass('flip190');
             setTimeout(function () {
                 $(el).find('.make3D').removeClass('flip190').addClass('flip90');
@@ -89,6 +124,7 @@ function makeVisualEffects() {
                     $(el).find('.cx, .cy').removeClass('s1 s2 s3');
                 }, 100);
             }, 150);
+
 
         });
 

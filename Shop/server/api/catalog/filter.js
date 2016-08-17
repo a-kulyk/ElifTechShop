@@ -1,21 +1,21 @@
-"use-strict";
+var _ = require('lodash');
 class Filter {
     constructor() {
         this.properties = [{}];
         this.searchField = "";
         this.categories = [];
         this.min_price = 0;
-        this.max_price = Math.pow(10,6);
+        this.max_price = Math.pow(10, 6);
         this.pages = 1;
         this.perPage = 1000;
         this.company = [];
-        this.sort =  {
+        this.sort = {
             'price': 1
         }
     }
 
-    setPerPage (perpage) {
-        if(perpage) {
+    setPerPage(perpage) {
+        if (perpage) {
             try {
                 this.perPage = parseInt(perpage)
             } catch (err) {
@@ -24,10 +24,10 @@ class Filter {
         }
     }
 
-    setProperties(name,value) {
-        if(name && value) {
+    setProperties(name, value) {
+        if (name && value) {
             let property = {};
-            if(Array.isArray(value)) {
+            if (Array.isArray(value)) {
                 let propertyArray = [];
                 value.forEach(function (element) {
                     if (!("" == element)) {
@@ -35,75 +35,72 @@ class Filter {
                         propertyArray.push(valueObject);
                     }
                 });
-                property= {'properties.name' : name, $or : propertyArray};
+                property = {'properties.name': name, $or: propertyArray};
             } else {
-                property= {'properties.name' : name, 'properties.value': value};
+                property = {'properties.name': name, 'properties.value': value};
             }
             this.properties.push(property);
         }
     }
 
-    setCompany (companies) {
+    setCompany(companies) {
         let self = this;
-        if(companies) {
-            if(Array.isArray(companies)) {
+        if (companies) {
+            if (Array.isArray(companies)) {
                 companies.forEach(function (company) {
                     console.log(this);
-                    self.company.push({"company" : company});
+                    self.company.push({"company": company});
                 });
                 return
             }
-            //console.log('asd');
-            this.company.push({"company" : companies});
+            this.company.push({"company": companies});
         }
 
     }
 
 
-
-    getSort () {
+    getSort() {
         return this.sort;
     }
 
-    setSort (by) {
-        if(typeof by == "undefined") return;
-        switch(by) {
-            case 'cheap' : {
-                this.sort.price = 1;
-                break;
-            }
-            case 'expensive' : {
-                this.sort.price = -1;
-                break;
-            }
-            default : {
-                this.sort.price = 1;
-            }
+    setSort() {
 
+        if (!arguments[0]) return;
+        arguments[0] = _.lowerCase(arguments[0]);
+        if(arguments[0] != 'price' && arguments[0] != 'name') return;
+        if(parseInt(arguments[1]) != -1 && parseInt(arguments[1]) != 1) {
+            arguments[1] = 1;
         }
+        let sortQuery = {};
+        sortQuery[arguments[0]] = parseInt(arguments[1]);
+        this.sort = sortQuery;
+        console.log(this.sort)
     }
 
 
-    definePage (number) {
+    definePage(number) {
         this.pages = Math.abs(parseInt(number)) || 1;
-        console.log("pages",this.pages);
         let per_page = this.perPage;
-        let skip = per_page > 0 ? (this.pages-1)*per_page : 0;
+        let skip = per_page > 0 ? (this.pages - 1) * per_page : 0;
         return {
-            skip : function () {return skip},
-            per_page: function() {return per_page;}
+            skip: function () {
+                return skip
+            },
+            per_page: function () {
+                return per_page;
+            }
         }
     }
 
     setSearchField(text) {
         let searchExp = {};
-        if(text) {
+        if (text) {
             let words = text.split(" ");
-            for(let i=0;i < words.length;i++) {
-                words[i]  = '?=.*' + words[i];
+            for (let i = 0; i < words.length; i++) {
+                words[i] = '?=.*' + words[i];
             }
             var searchExpe = "(" + words.join(')(') + ')';
-            searchExp = new RegExp(searchExpe,"i");
+            searchExp = new RegExp(searchExpe, "i");
 
         }
         this.searchField = searchExp;
@@ -112,72 +109,70 @@ class Filter {
     setPrice() {
         let min = arguments[0];
         let max = arguments[1];
-        if(min) {
+        if (min) {
             min = Math.abs(parseInt(min));
             this.min_price = min || 0;
         }
 
-        if(max) {
+        if (max) {
             max = Math.abs(parseInt(max));
-            this.max_price = max || Math.pow(10,6);
+            this.max_price = max || Math.pow(10, 6);
         }
 
 
     }
-
 
 
     setCategories(categories) {
         let self = this;
-        if(categories) {
-            if(Array.isArray(categories)) {
+        if (categories) {
+            if (Array.isArray(categories)) {
                 categories.forEach(function (category) {
-                    self.categories.push({"category" : category});
+                    self.categories.push({"category": category});
                 });
                 return
             }
-            this.categories.push({"category" : categories});
+            this.categories.push({"category": categories});
         }
     }
 
-    creatQuery (params) {
+    creatQuery(params) {
         let query = {$and: [{}]};
 
-        if(this.properties) {
-            let propertiesQuery = {$and : this.properties};
+        if (this.properties) {
+            let propertiesQuery = {$and: this.properties};
             query.$and.push(propertiesQuery);
         }
 
         if (this.searchField) {
-            let searchQuery = {$or:[{name: this.searchField},{description: this.searchField}]};
+            let searchQuery = {$or: [{name: this.searchField}, {description: this.searchField}]};
             query.$and.push(searchQuery);
         }
 
-        if(params) {
+        if (params) {
             query.$and.push(params)
         }
 
-        if(!(this.company.length < 1)) {
-            let companyQuery = {$or : this.company};
+        if (!(this.company.length < 1)) {
+            let companyQuery = {$or: this.company};
             query.$and.push(companyQuery);
         }
 
 
-        if(this.min_price && this.max_price) {
-            let priceQuery = {'price': { $gt: (this.min_price - 1), $lt: (this.max_price + 1)}};
+        if (this.min_price && this.max_price) {
+            let priceQuery = {'price': {$gt: (this.min_price - 1), $lt: (this.max_price + 1)}};
             query.$and.push(priceQuery);
         }
 
-        if(!(this.categories.length < 1)) {
-            let categoriesQuery = {$or : this.categories};
+        if (!(this.categories.length < 1)) {
+            let categoriesQuery = {$or: this.categories};
             query.$and.push(categoriesQuery);
         }
-
 
 
         return query;
     }
 
 }
-
 module.exports = Filter;
+

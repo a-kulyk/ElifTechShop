@@ -1,7 +1,8 @@
 <div class="sort">
+	<button class="sortBy"  ng-click="sortThis()" ng-model="sortBy"> </button>
 	<select ui-select2="{minimumResultsForSearch: -1}" ng-change="sortThis()" data-placeholder="Pleas Select" ng-model="sorted" class="sort" ng-init="sorted = currentSort">
 		<option value="" ng-selected="true"></option>
-		<option  ng-repeat="value in sort"  value="{{value}}" >{{value}}</option>
+		<option  ng-repeat="value in sort"  value="{{value}}" ><span class="firstLetter">{{value}}</span></option>
 	</select>
 </div>
 

@@ -1,4 +1,4 @@
-
+    var _ = require('lodash');
     require("./app/app.route.js");
     require("./app/auth/authServices.js");
     require("./app/auth/authControllers.js");
