@@ -1,11 +1,21 @@
 angular.module('app')
     .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location','$scope','$timeout' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location,$scope,$timeout) {
         $scope.complete = false;
-        $scope.currentSort = $routeParams.sort || '';
-        $scope.sort = ['cheap','expensive'];
+        let capitalizeFirstLetter = function(string) {
+            return string[0].toUpperCase() + string.slice(1);
+        }
+        let sort = _.lowerCase($routeParams.sort);
+        if(sort != 'price' && sort != 'name') {
+            $scope.currentSort = ''
+        } else {
+            $scope.currentSort = capitalizeFirstLetter($routeParams.sort);
+        }
+        $scope.sort = ['Name','Price'];
+        $scope.sortBy = $routeParams.sortBy < 0 ? 1 : -1;
         $scope.sortThis = function() {
             /** @namespace $scope.sorted */
-            $routeParams.sort = $scope.sorted || 'cheap';
+            $routeParams.sort = $scope.sorted || 'name';
+            $routeParams.sortBy =  $scope.sortBy || 1;
             $location.url('?'+$httpParamSerializer($routeParams));
         };
         Items.all($route.current.params)
@@ -13,28 +23,34 @@ angular.module('app')
                 response.data.items.forEach(function (element) {
                 element.smallDescription = element.description.slice(0,105) + "...";
                 });
-                for (let product in response.data.items) {
-                    response.data.items[product].smallDescription = response.data.items[product].description.slice(0,105) + "...";
-                }
 
-                $scope.items = response.data.items;
-
-                if($scope.items.length === 0) {
-                    $scope.items.not = true;
-                   $scope.complete = true;
+                if(response.data.items.length == 0) {
+                    $scope.notItems = true;
+                    $scope.complete = true;
                     return;
                 }
 
-                let pages = response.data.pages || 0;
-                $scope.pages = [];
+                _(response.data.items).forEach(function (value) {
+                    value.smallDescription = value.description.slice(0,105) + "...";
+                })
 
-                for (let i = 1; i <= pages;i++){
+
+                $scope.items = response.data.items;
+
+
+
+                let pages = _.range(1,response.data.pages+1) || 0;
+                $scope.pages = [];
+                console.log(response.data.pages);
+                _(pages).forEach(function(pageNumber) {
                     let params = $route.current.params;
-                    params.page = i;
-                    console.log(params);
-                    let page = {number: i, url: $httpParamSerializer(params)};
+                    params.page = pageNumber;
+                    let page = {number: pageNumber, url: $httpParamSerializer(params)};
                     $scope.pages.push(page);
-                }
+                })
+
+
+
                 $scope.complete = true;
 
                 setTimeout(function(){

@@ -1,15 +1,18 @@
 {
   "name": "elifTechSop",
   "scripts": {
-    "start": "nodemon ./app.js"
+    "start": "nodemon ./app.js",
+    "test" : "mocha ./server/api/catalog/tests/*.js --recursive --watch"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
+    "chai": "^3.5.0",
     "cookie-parser": "^1.4.1",
     "debug": "^2.2.0",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "lodash": "^4.15.0",
     "moment": "^2.14.1",
     "mongoose": "^4.4.5",
     "morgan": "^1.7.0",

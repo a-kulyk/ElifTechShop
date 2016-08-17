@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var filterSchema = new mongoose.Schema({
     _id: String,
+    company:['String'],
     properties: [
         {
             "name": String,

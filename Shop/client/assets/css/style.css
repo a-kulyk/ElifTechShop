@@ -423,3 +423,19 @@ p.product_price {
   max-width: 60px;
   max-height: 60px;
 }
+
+.select2-chosen::first-letter,.select2-result-label::first-letter {
+    text-transform: uppercase;
+}
+
+.sortBy {
+    background: url("../img/sort.svg") center no-repeat;
+    float: right;
+    margin-left: 10px;
+    background-size: contain;
+    width: 30px;
+    height: 26px;
+    border:1px solid #eee;
+    border-radius: 4px;
+
+}
