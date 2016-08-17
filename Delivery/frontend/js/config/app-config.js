@@ -25,6 +25,15 @@ module.exports = function (app) {
         }).when('/history', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('History')) {
+                        return true;
+                    } else {
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         }).when('/history/:fromUsername/:toUsername', {
             templateUrl: '../templates/history.html',
             controller: 'historyCtrl',
@@ -39,7 +48,16 @@ module.exports = function (app) {
             }
         }).when('/login', {
             templateUrl: '../templates/login.html',
-            controller: 'loginCtrl'
+            controller: 'loginCtrl',
+            resolve: {
+                'acl': ['$q', 'AclService', function ($q, AclService) {
+                    if (AclService.can('Login')) {
+                        return true;
+                    } else {
+                        return $q.reject('Unauthorized');
+                    }
+                }]
+            }
         }).when('/cars', {
             templateUrl: '../templates/cars.html',
             controller: 'carsCtrl',
