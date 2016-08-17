@@ -4,15 +4,9 @@ node_js:
   - "node"
 before_install:
   - cd Bank/
-  - echo $'{\n  "port" : 3000,\n  "key" : "d6911f567ef734f18ea176481638cc8a",\n  "mongoose" : {\n    "uri" : "mongodb://banker:baguwix16@ds021994.mlab.com:21994/eliftechbank"\n  },\n  "session" : {\n    "secret" : "bankSecret",\n    "key" : "sid",\n    "resave": true,\n    "saveUninitialized": true,\n    "cookie" : {\n      "path" : "/",\n      "httpOnly" : true,\n      "maxAge" : null\n    }\n  }\n}' > config/config.json
-  - export CHROME_BIN=/usr/bin/google-chrome
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sudo apt-get update
-  - sudo apt-get install -y libappindicator1 fonts-liberation
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome*.deb
+  - openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv -in config/config.json.enc -out config/config.json -d
 install:
+  - npm install phantomjs -g
   - npm install webpack -g
   - npm install
   - webpack

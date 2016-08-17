@@ -26,7 +26,7 @@ module.exports =  function(app) {
         $http.get("/account")
             .success(function (result) {
                 $scope.accounts = [];
-                for (let account in result.accounts) {
+                for (var account in result.accounts) {
                     $scope.accounts.push(result.accounts[account]);
                 }
             })
@@ -82,7 +82,7 @@ module.exports =  function(app) {
                 modal.close.then(function (result) {
                     if (result) {
                         //  console.log(result);
-                        for (let i = 0; i < $scope.accounts.length; i++) {
+                        for (var i = 0; i < $scope.accounts.length; i++) {
                             if ($scope.accounts[i]._id == result.accountId) {
                                 $scope.accounts[i].amount = result.accountAmount;
                             }
@@ -106,9 +106,10 @@ module.exports =  function(app) {
                 controller: "modal"
             }).then(function (modal) {
                 modal.element.modal();
-                modal.close.then(function (result) {
+                modal.close
+                    .then(function (result) {
                     if (result) {
-                        for (let i = 0; i < $scope.accounts.length; i++) {
+                        for (var i = 0; i < $scope.accounts.length; i++) {
                             if ($scope.accounts[i]._id == result.sender) {
                                 $scope.accounts[i].amount = result.senderAmount;
                             }
@@ -155,7 +156,7 @@ module.exports =  function(app) {
                         $http.delete("/account/" + id)
                             .success(function (data) {
                                 if (data.success) {
-                                    for (let i = 0; i < $scope.accounts.length; i++) {
+                                    for (var i = 0; i < $scope.accounts.length; i++) {
                                         if ($scope.accounts[i]._id == id) {
                                             $scope.accounts.splice(i, 1);
                                         }
