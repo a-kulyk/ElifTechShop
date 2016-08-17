@@ -6,8 +6,8 @@ before_install:
   - cd Bank/
   - openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv -in config/config.json.enc -out config/config.json -d
 install:
-  - sudo npm install phantomjs -g
-  - sudo npm install webpack -g
+  - npm install phantomjs -g
+  - npm install webpack -g
   - npm install
   - webpack
 script:
