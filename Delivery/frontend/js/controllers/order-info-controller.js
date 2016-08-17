@@ -3,12 +3,15 @@
  */
 var moment = require('moment');
 
+var spinner = new Spinner({color: '#333333', lines: 12, top: '190px', left: '250px', position: 'absolute'});
+
 module.exports = function (app) {
     app.controller('timeOutputCtrl', function ($rootScope, $scope, $routeParams, $http, orderStates) {
         if ($routeParams.trackingCode) {
             $scope.trackingCode = $routeParams.trackingCode;
             $http.get('/order/' + $routeParams.trackingCode).success(function (data, status, headers) {
                 if (data.success) {
+                    spinner.spin(document.getElementById('map'));
                     $scope.isInfoVisible = true;
                     $scope.arrivalTime = moment(data.arrivalTime).format('DD.MM.YY, HH:mm');
                     var tempTime = moment.duration(data.travelTime, 'seconds');
@@ -20,8 +23,12 @@ module.exports = function (app) {
                     var coordinates = {};
                     coordinates.from = data.from;
                     coordinates.to = data.to;
-                    initMap(coordinates);
+                    setTimeout(function () {
+                        initMap(coordinates);
+                    },1000);
+                    
                 } else {
+                 //   $scope.isInfoVisible = false;
                     $scope.isNotFoundVisible = true;
                 }
                 console.log(data);
@@ -35,9 +42,6 @@ module.exports = function (app) {
         var directionsService = new google.maps.DirectionsService;
         var map = new google.maps.Map(document.getElementById('map'), {});
         directionsDisplay.setMap(map);
-        var target = document.getElementById('map');
-        var spinner = new Spinner({color: '#333333', lines: 12, top: '190px', left: '250px', position: 'absolute'});
-        spinner.spin(target);
         calculateAndDisplayRoute(directionsService, directionsDisplay, coordinates, spinner);
     }
 
