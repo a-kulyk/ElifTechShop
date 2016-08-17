@@ -22,6 +22,7 @@ module.exports = function (app) {
                     $window.location.href = '#/cars'
                 } else {
                     console.log(data);
+                    $scope.accessError = true;
                 }
             }).error(function (data, status, headers) {
                 console.log(status + ' ' + data);
