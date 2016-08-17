@@ -49,15 +49,6 @@ gulp.task('webpack', function () {
                     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
                     loader: 'url?limit=10000&mimetype=image/svg+xml'
                 }
-                
-                /*                {
-                 test: /\.js$/,
-                 exclude: /(node_modules|bower_components)/,
-                 loader: 'babel',
-                 query: {
-                 presets: ['es2015']
-                 }
-                 }*/
             ]
         },
         plugins: [
