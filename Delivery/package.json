@@ -64,9 +64,10 @@
     "webpack": "^1.13.1"
   },
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "description": "To run this project you must have NodeJS and NPM installed on your computer. Follow next steps to run Delivery application on Linux:"
+  "description": "delivery web app"
 }
