@@ -21,6 +21,7 @@ module.exports = function (app) {
                     AclService.setUserIdentity(admin);
                     $window.location.href = '#/cars'
                 } else {
+                   // $scope.shake ='animated wobble';
                     console.log(data);
                 }
             }).error(function (data, status, headers) {
