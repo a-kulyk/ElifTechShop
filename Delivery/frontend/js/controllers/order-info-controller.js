@@ -20,10 +20,9 @@ module.exports = function (app) {
                     var coordinates = {};
                     coordinates.from = data.from;
                     coordinates.to = data.to;
-
                     initMap(coordinates);
                 } else {
-
+                    $scope.isNotFoundVisible = true;
                 }
                 console.log(data);
             }).error(function (data, status, headers) {

@@ -1,6 +1,13 @@
 <link rel="stylesheet" href="css/order-info.css">
 <div class="col-md-3"></div>
 <div class="col-md-6">
+    <div class="panel panel-danger animated tada" ng-show="isNotFoundVisible" ng-init="isNotFoundVisible=false">
+        <div class="panel-heading">Not found</div>
+        <div class="panel-body" id="notFound">
+            <h1>There is no order with such tracking code</h1>
+            <img src="../images/cat.ico">
+        </div>
+    </div>
     <div class="panel panel-primary animated zoomIn" ng-show="isInfoVisible" ng-init="isInfoVisible=false">
         <div class="panel-heading">Order info</div>
         <div class="panel-body">
