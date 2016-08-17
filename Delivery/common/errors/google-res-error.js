@@ -1,6 +1,7 @@
 /**
  * Created by dmytro on 31.07.16.
  */
+'use strict'
 function GoogleResError(message) {
     Error.call(this, message);
     this.name = 'GoogleResError';

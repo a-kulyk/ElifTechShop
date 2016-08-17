@@ -1,6 +1,7 @@
 /**
  * Created by dmytro on 07.07.16.
  */
+'use strict'
 module.exports = {
     'title': {
         notEmpty: true,

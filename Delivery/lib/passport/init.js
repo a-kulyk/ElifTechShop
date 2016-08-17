@@ -1,8 +1,10 @@
 /**
  * Created by dmytro on 13.08.16.
  */
-var login = require('./login');
-var User = require('../../models/user');
+'use strict'
+
+let login = require('./login');
+let User = require('../../models/user');
 
 module.exports = function(passport){
     passport.serializeUser(function(user, done) {

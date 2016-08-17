@@ -1,27 +1,25 @@
 "use strict";
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const validator = require('express-validator');
-const config = require('./config');
-const MongoStore = require('connect-mongo')(session);
-const app = express();
+let express = require('express');
+let path = require('path');
+let bodyParser = require('body-parser');
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
+let validator = require('express-validator');
+let config = require('./config');
+let app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use(cookieParser());
 
-// Configuring Passport
-var passport = require('passport');
-var expressSession = require('express-session');
+let passport = require('passport');
+let expressSession = require('express-session');
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-var initPassport = require('./lib/passport/init');
+let initPassport = require('./lib/passport/init');
 initPassport(passport);
 
 app.use(validator());

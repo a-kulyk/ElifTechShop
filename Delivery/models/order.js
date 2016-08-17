@@ -1,12 +1,13 @@
 /**
  * Created by dmytro on 28.06.16.
  */
-var mongoose = require('../lib/mongoose');
-var orderStates = require('../common/enums/order-states').orderStates;
+'use strict'
+let mongoose = require('../lib/mongoose');
+let orderStates = require('../common/enums/order-states').orderStates;
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var schema = new Schema({
+let schema = new Schema({
         title: {
             type: String,
             required: true

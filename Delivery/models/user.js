@@ -2,7 +2,7 @@
  * Created by dmytro on 08.08.16.
  */
 'use strict'
-var mongoose = require('../lib/mongoose');
+let mongoose = require('../lib/mongoose');
 
 module.exports = mongoose.model('User', {
     username: {

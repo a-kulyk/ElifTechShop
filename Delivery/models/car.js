@@ -2,10 +2,10 @@
  * Created by dmytro on 09.07.16.
  */
 'use strict';
-var mongoose = require('../lib/mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('../lib/mongoose');
+let Schema = mongoose.Schema;
 
-var schema = new Schema({
+let schema = new Schema({
         isAvailable: {
             type: Boolean,
             required: true,

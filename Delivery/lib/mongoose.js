@@ -1,9 +1,11 @@
-var mongoose = require('mongoose');
-var config = require('../config');
+'use strict'
+
+let mongoose = require('mongoose');
+let config = require('../config');
 
 mongoose.connect(config.get('mongoose:uri'));
 
-var db = mongoose.connection;
+let db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 

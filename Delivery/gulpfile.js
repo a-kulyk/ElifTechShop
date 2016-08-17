@@ -1,12 +1,12 @@
 "use strict";
-const gulp = require('gulp');
-const webpackStream = require('webpack-stream');
-const webpack = webpackStream.webpack;
-const plumber = require('gulp-plumber');
-const notify = require('gulp-notify');
-const named = require('vinyl-named');
-const del = require('del');
-const nodemon = require('gulp-nodemon');
+let gulp = require('gulp');
+let webpackStream = require('webpack-stream');
+let webpack = webpackStream.webpack;
+let plumber = require('gulp-plumber');
+let notify = require('gulp-notify');
+let named = require('vinyl-named');
+let del = require('del');
+let nodemon = require('gulp-nodemon');
 
 gulp.task('clean', function () {
     return del('public')
