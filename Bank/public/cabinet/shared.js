@@ -2,9 +2,9 @@
 
 module.exports = function(app) {
     return app.service('shared', function () {
-        let account;
-        let confirmMessage;
-        let accounts;
+        var account;
+        var confirmMessage;
+        var accounts;
 
         return {
             getAccount: function () {
@@ -28,4 +28,3 @@ module.exports = function(app) {
         }
     });
 };
-
