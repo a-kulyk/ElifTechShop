@@ -6,6 +6,7 @@ var ngRoute = require('angular-route');
 var ngMessages = require('angular-messages');
 var pagination = require('angular-utils-pagination');
 require('angularjs-acl/dist/acl.js');
+require('animate.css/animate.min.css');
 
 var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl']);
 fetchData().then(bootstrapApplication);
