@@ -31,3 +31,5 @@ app.listen(config.get('port'), function () {
 });
 
 require('./routes')(app, passport);
+
+module.exports = app;
