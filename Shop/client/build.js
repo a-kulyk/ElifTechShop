@@ -17343,6 +17343,7 @@
 	                    }
 	                });
 	            }
+	            return resp;
 	        }).then(function (bank_resp) {
 	            console.log("bank_resp : ", bank_resp.data);
 	            if (bank_resp.data.success === true) {

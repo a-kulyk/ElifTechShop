@@ -3,7 +3,7 @@
   "name": "elifTechSop",
   "scripts": {
     "start": "nodemon ./app.js",
-    "test": "mocha ./server/api/catalog/tests/*.js --recursive --watch"
+    "test": "mocha tests/*.js --recursive"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

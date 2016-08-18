@@ -1,6 +1,6 @@
 let chai = require('chai');
 let expect = chai.expect;
-var Filter = require('../filter.js');
+var Filter = require('../server/api/catalog/filter.js');
 
 describe('Filter',function () {
     let filter;

@@ -67,6 +67,7 @@ angular.module('app')
                                 }
                             });
                         }
+                        return resp;
                     })
                     .then(function(bank_resp) {
                         console.log("bank_resp : ", bank_resp.data);

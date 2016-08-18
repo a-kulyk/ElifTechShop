@@ -3,10 +3,9 @@
  */
 let chai = require('chai');
 let expect = chai.expect;
-var Filter = require('../filter.js');
 var request = require("request");
-var app = require('./../../../app');
-var config = require('./../../../config');
+var app = require('../server/app');
+var config = require('../server/config');
 
 describe('Integration tests',function () {
     let server;
