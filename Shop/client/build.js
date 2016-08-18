@@ -17328,24 +17328,42 @@
 	    };
 
 	    order.pay = function () {
-	        orderService.pay().then(function (bank_resp) {
-	            console.log("bank_resp : ", bank_resp.data);
-	            if (bank_resp.data.success === true) {
-	                saveOrder();
-	            } else if (bank_resp.data.success === false) {
-	                console.log("Insufficient funds on Your bank account");
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/paymentFail.html'
-	                });
-	            } else if (bank_resp.data.error) {
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/connectionErr.html'
-	                });
-	                console.log('Could not connect to Your bank');
-	            } else if (bank_resp.data.warning === "No bankAccount") {
-	                openInputModal();
-	            }
-	        });
+	        saveOrder();
+	        // orderService.pay()
+	        //     .then(function(resp) {
+	        //     console.log(resp);
+	        //     if (resp.data.outOfStock) {
+	        //         $uibModal.open({
+	        //             templateUrl: './app/order/modals/outOfStock.html',
+	        //             controller: function($uibModalInstance, $scope, outOfStock) {
+	        //                 $scope.outOfStock = outOfStock;
+	        //             },
+	        //             resolve: {
+	        //                 outOfStock: function() {
+	        //                     return resp.data.outOfStock;
+	        //                 }
+	        //             }
+	        //         });
+	        //     }
+	        // })
+	        // .then(function(bank_resp) {
+	        // console.log("bank_resp : ", bank_resp.data);
+	        // if (bank_resp.data.success === true) {
+	        //     saveOrder();
+	        // } else if (bank_resp.data.success === false) {
+	        //     console.log("Insufficient funds on Your bank account");
+	        //     $uibModal.open({
+	        //         templateUrl: './app/order/modals/paymentFail.html'
+	        //     });
+	        // } else if (bank_resp.data.error) {
+	        //     $uibModal.open({
+	        //         templateUrl: './app/order/modals/connectionErr.html'
+	        //     });
+	        //     console.log('Could not connect to Your bank');
+	        // } else if (bank_resp.data.warning === "No bankAccount") {
+	        //    openInputModal();
+	        // }
+	        // });
 	    };
 
 	    function saveOrder() {
@@ -17376,7 +17394,7 @@
 	            }
 	        });
 	    }
-	}]).controller('HistoryCtrl', ['$scope', 'orderService', function ($scope, orderService) {
+	}]).controller('HistoryCtrl', ['$scope', 'orderService', '$location', function ($scope, orderService, $location) {
 	    var history = this;
 	    history.propertyName = 'date.created';
 	    history.sortReverse = true;
@@ -17389,6 +17407,11 @@
 	    orderService.all().then(function (resp) {
 	        history.allOrders = resp.data;
 	    });
+
+	    history.openOrder = function (order) {
+	        console.log(order._id);
+	        $location.path("/order/" + order._id);
+	    };
 	}]).controller('OrderDetailController', ['$route', 'orderService', function ($route, orderService) {
 	    var detail = this;
 
