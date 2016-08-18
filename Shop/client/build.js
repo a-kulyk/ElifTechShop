@@ -17328,42 +17328,39 @@
 	    };
 
 	    order.pay = function () {
-	        saveOrder();
-	        // orderService.pay()
-	        //     .then(function(resp) {
-	        //     console.log(resp);
-	        //     if (resp.data.outOfStock) {
-	        //         $uibModal.open({
-	        //             templateUrl: './app/order/modals/outOfStock.html',
-	        //             controller: function($uibModalInstance, $scope, outOfStock) {
-	        //                 $scope.outOfStock = outOfStock;
-	        //             },
-	        //             resolve: {
-	        //                 outOfStock: function() {
-	        //                     return resp.data.outOfStock;
-	        //                 }
-	        //             }
-	        //         });
-	        //     }
-	        // })
-	        // .then(function(bank_resp) {
-	        // console.log("bank_resp : ", bank_resp.data);
-	        // if (bank_resp.data.success === true) {
-	        //     saveOrder();
-	        // } else if (bank_resp.data.success === false) {
-	        //     console.log("Insufficient funds on Your bank account");
-	        //     $uibModal.open({
-	        //         templateUrl: './app/order/modals/paymentFail.html'
-	        //     });
-	        // } else if (bank_resp.data.error) {
-	        //     $uibModal.open({
-	        //         templateUrl: './app/order/modals/connectionErr.html'
-	        //     });
-	        //     console.log('Could not connect to Your bank');
-	        // } else if (bank_resp.data.warning === "No bankAccount") {
-	        //    openInputModal();
-	        // }
-	        // });
+	        orderService.pay().then(function (resp) {
+	            console.log(resp);
+	            if (resp.data.outOfStock) {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/outOfStock.html',
+	                    controller: function controller($uibModalInstance, $scope, outOfStock) {
+	                        $scope.outOfStock = outOfStock;
+	                    },
+	                    resolve: {
+	                        outOfStock: function outOfStock() {
+	                            return resp.data.outOfStock;
+	                        }
+	                    }
+	                });
+	            }
+	        }).then(function (bank_resp) {
+	            console.log("bank_resp : ", bank_resp.data);
+	            if (bank_resp.data.success === true) {
+	                saveOrder();
+	            } else if (bank_resp.data.success === false) {
+	                console.log("Insufficient funds on Your bank account");
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/paymentFail.html'
+	                });
+	            } else if (bank_resp.data.error) {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/connectionErr.html'
+	                });
+	                console.log('Could not connect to Your bank');
+	            } else if (bank_resp.data.warning === "No bankAccount") {
+	                openInputModal();
+	            }
+	        });
 	    };
 
 	    function saveOrder() {
