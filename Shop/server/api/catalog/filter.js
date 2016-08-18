@@ -7,7 +7,7 @@ class Filter {
         this.min_price = 0;
         this.max_price = Math.pow(10, 6);
         this.pages = 1;
-        this.perPage = 1000;
+        this.perPage = 9;
         this.company = [];
         this.sort = {
             'price': 1
@@ -16,11 +16,7 @@ class Filter {
 
     setPerPage(perpage) {
         if (perpage) {
-            try {
-                this.perPage = parseInt(perpage)
-            } catch (err) {
-                this.perPage = 1000;
-            }
+            this.perPage = parseInt(perpage) || 9;
         }
     }
 

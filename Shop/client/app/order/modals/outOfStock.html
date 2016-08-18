@@ -2,6 +2,13 @@
     <h4 class="modal-title text-warning"><strong> Out of stock</strong></h4>
 </div>
 <div class="modal-body text-center">
-    <p >There are no more items of this product in stock</p>
+	<table class="table outOfStock" style="font-size: 14px">
+		<tr ng-repeat="item in outOfStock">
+			<td></td>
+			<td class="text-left">Item <strong>{{item.name}}</strong></td>
+			<td class="text-left">available in quantity:<strong>{{item.quan}}</strong></td>
+		</tr>
+	</table>
+    <p >There is not enough items in stock</p>
     <p>Sorry :)</p>
 </div>

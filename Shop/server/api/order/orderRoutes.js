@@ -1,9 +1,11 @@
-
 var router = require('express').Router();
 var querystring = require('querystring');
 var bodyParser = require('body-parser');
 var http = require('http');
+var _ = require('underscore');
 var config = require('../../config');
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 var Order = require('./orderModel.js');
 var Product = require('../catalog/catalogModel');
@@ -64,34 +66,19 @@ router.get('/info/:track', function(req, res, next) {
 });
 
 router.post('/create', function(req, res, next) {
-    Product.findById(req.body.itemId)
-        .then(product => {
-            if (product.quantity >= req.body.quantity) {
-                product.quantity -= req.body.quantity;
-            } else {
-                req.body.quantity = product.quantity;
-                product.quantity = 0;
-                console.log('req.body.quantity: ',req.body.quantity);
+    Order.create({
+            userId: req.user._id.toString(),
+            itemSet: [{
+                productId: req.body.itemId,
+                quantity: req.body.quantity
+            }],
+            email: req.user.email,
+            status: 'shoppingCart',
+            date: {
+                created: new Date(),
+                paid: '',
+                completed: ''
             }
-
-            console.log('product.quantity: ',product.quantity);
-            product.save();
-        })
-        .then(() => {
-            return Order.create({
-                userId: req.user._id.toString(),
-                itemSet: [{
-                    productId: req.body.itemId,
-                    quantity: req.body.quantity
-                }],
-                email: req.user.email,
-                status: 'shoppingCart',
-                date: {
-                    created: new Date(),
-                    paid: '',
-                    completed: ''
-                }
-            });
         })
         .then(order => Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' }))
         .then(
@@ -102,14 +89,46 @@ router.post('/create', function(req, res, next) {
 
 router.post('/pay', function(req, res, next) {
     if (!req.user.bankAccount) {
-        res.json({ warning: "No bankAccount" })
+        res.json({ warning: "No bankAccount" });
         res.end();
     } else {
         Order.findOne({ userId: req.user._id, status: "shoppingCart" })
+
             .populate({ path: 'itemSet.productId', select: 'price' })
             .exec()
+            .then(order => {                
+                let outOfStock = [];
+
+                let promises = order.itemSet.map(function(item) {
+                    return new Promise(function(resolve, reject) {
+                        Product.findById(item.productId._id)
+                            .then(inStock => {
+                                if (inStock.quantity < item.quantity)
+                                outOfStock.push({id: inStock._id, name: inStock.name, quan: inStock.quantity})
+                            })
+                            .then(() => resolve());
+                    });
+                });
+
+                Promise.all(promises)
+                .then(() => {
+                    if (outOfStock.length) {
+                        res.send({outOfStock});
+                    } else {
+                        order.itemSet.forEach(function(item) {
+                            Product.findById(item.productId._id)
+                                .then(inStock => {
+                                    inStock.quantity -= item.quantity;
+                                    inStock.save();
+                                });
+                        });
+                    }
+                });
+                return order;
+            })
             .then(order => {
                 let total = order.findTotal();
+                console.log("...TOTAL...", total);
                 return total;
             })
             .then(total => {
@@ -153,26 +172,11 @@ router.post('/pay', function(req, res, next) {
 });
 
 router.put('/addToCart', function(req, res, next) {
-    Product.findById(req.body.itemId)
-        .then(product => {
-            if (product.quantity >= req.body.quantity) {
-                product.quantity -= req.body.quantity;
-            } else {
-                req.body.quantity = product.quantity;
-                product.quantity = 0;
-                console.log('req.body.quantity: ',req.body.quantity);
-            }
-
-            console.log('product.quantity: ',product.quantity);
-            product.save();
-        })
-        .then(() => {
-            return Order.findOne({ userId: req.user._id, status: "shoppingCart" });
-        })
+    Order.findOne({ userId: req.user._id, status: "shoppingCart" })
         .then(order => {
             var arr = order.itemSet;
-            var item = arr.find(function(i) {
-                return i.productId.toString() === req.body.itemId;
+            var item = arr.find(function(elem) {
+                return elem.productId.toString() === req.body.itemId;
             });
             if (item) {
                 item.quantity += req.body.quantity;
@@ -189,45 +193,28 @@ router.put('/addToCart', function(req, res, next) {
 });
 
 router.put('/updateQuantity', function(req, res, next) {
-    let outOfStock = false;
-    Product.findById(req.body.itemId)
-        .then(product => {
-            if (product.quantity === 0 && req.body.quantity === 1) {
-                req.body.quantity = 0;
-                outOfStock = true;
-            }
-            product.quantity -= req.body.quantity;
-            console.log('product.quantity: ',product.quantity);
-            product.save();
-        })
-        .then(() => {
-            return Order.findOne({ userId: req.user._id, status: "shoppingCart" })
-        })
+    Order.findOne({ userId: req.user._id, status: "shoppingCart" })
         .then(order => {
-            var item = order.itemSet.find(function(i) {
-                return i.productId.toString() === req.body.itemId;
+            var item = order.itemSet.find(function(elem) {
+                return elem.productId.toString() === req.body.itemId;
             });
             item.quantity += req.body.quantity;
             return order.save();
         })
         .then(order => Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' }))
         .then(
-            order => res.json({ order: order, total: order.findTotal(), outOfStock: outOfStock }),
+            order => res.json({ order: order, total: order.findTotal() }),
             err => next(err)
-        );
-
+        );    
 });
 
 router.put('/removeItem', function(req, res, next) {
-    let itemQuan = null;
     Order.findOne({ userId: req.user._id, status: "shoppingCart" })
         .then(order => {
             var arr = order.itemSet;
-            var index = arr.findIndex(function(i) {
-                return i.productId.toString() === req.body.itemId;
+            var index = arr.findIndex(function(elem) {
+                return elem.productId.toString() === req.body.itemId;
             });
-            itemQuan = arr[index].quantity;
-            console.log("itemQuan: ", itemQuan);
             arr.splice(index, 1);
             return order.save();
         })
@@ -236,17 +223,10 @@ router.put('/removeItem', function(req, res, next) {
                 return Order.populate(order, { path: 'itemSet.productId', select: 'category name price images' });
             } else { res.json({ order: order }); }
         })
-        .then( order => {
-            Product.findById(req.body.itemId)
-                .then(product => {
-                    product.quantity += itemQuan;
-                    console.log('product.quantity: ',product.quantity);
-                    product.save();
-                });
-            res.json({ order: order, total: order.findTotal() });
-
-        },
-        err => next(err));
+        .then(
+            order => res.json({ order: order, total: order.findTotal() }),
+            err => next(err)
+        );
 });
 
 
@@ -259,11 +239,7 @@ router.put('/saveOrderDetails', function(req, res, next) {
         })
         .then(order => {
             order.itemSet.forEach(function(obj) {
-                obj.name = obj.productId.name;
-                obj.category = obj.productId.category;
-                obj.price = obj.productId.price;
-                obj.images = obj.productId.images;
-                return obj;
+                _.extend(obj, _.pick(obj.productId, 'name', 'category', 'price', 'images'));
             });
             order.date.paid = new Date();
             return order.save();

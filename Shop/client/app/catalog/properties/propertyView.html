@@ -8,7 +8,7 @@
 	<div style="clear:both"></div>
 <div ng-show="isCat" class="sidebar-category" category-items></div>
 <div ng-hide="isCat">
-	<div ng-show="complete" class="properties">
+	<div ng-show="complete && !error && !notFound" class="properties">
 		<div ng-repeat="property in data.properties" class="property_name col-xs-6 col-sm-3 col-md-12">{{property.name}}
 			
 			<div ng-repeat="value in property.value" style="display: block;min-height: 20px">
@@ -21,8 +21,11 @@
 		<input type="button" class="send_form" ng-click="clickToProperty()" value="OK" >
 	</div>
 	<div ng-hide="complete" class="loader"></div>
+	<div ng-show="notFound" class="empty">Not properties</div>
 </div>
 </form>
+
+
 
 <!-- <a class="send_form"  ng-href="#/?{{data | setUrl}}">Send</a> -->
 

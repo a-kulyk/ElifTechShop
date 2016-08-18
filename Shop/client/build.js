@@ -17328,24 +17328,42 @@
 	    };
 
 	    order.pay = function () {
-	        orderService.pay().then(function (bank_resp) {
-	            console.log("bank_resp : ", bank_resp.data);
-	            if (bank_resp.data.success === true) {
-	                saveOrder();
-	            } else if (bank_resp.data.success === false) {
-	                console.log("Insufficient funds on Your bank account");
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/paymentFail.html'
-	                });
-	            } else if (bank_resp.data.error) {
-	                $uibModal.open({
-	                    templateUrl: './app/order/modals/connectionErr.html'
-	                });
-	                console.log('Could not connect to Your bank');
-	            } else if (bank_resp.data.warning === "No bankAccount") {
-	                openInputModal();
-	            }
-	        });
+	        saveOrder();
+	        // orderService.pay()
+	        //     .then(function(resp) {
+	        //     console.log(resp);
+	        //     if (resp.data.outOfStock) {
+	        //         $uibModal.open({
+	        //             templateUrl: './app/order/modals/outOfStock.html',
+	        //             controller: function($uibModalInstance, $scope, outOfStock) {
+	        //                 $scope.outOfStock = outOfStock;
+	        //             },
+	        //             resolve: {
+	        //                 outOfStock: function() {
+	        //                     return resp.data.outOfStock;
+	        //                 }
+	        //             }
+	        //         });
+	        //     }
+	        // })
+	        // .then(function(bank_resp) {
+	        // console.log("bank_resp : ", bank_resp.data);
+	        // if (bank_resp.data.success === true) {
+	        //     saveOrder();
+	        // } else if (bank_resp.data.success === false) {
+	        //     console.log("Insufficient funds on Your bank account");
+	        //     $uibModal.open({
+	        //         templateUrl: './app/order/modals/paymentFail.html'
+	        //     });
+	        // } else if (bank_resp.data.error) {
+	        //     $uibModal.open({
+	        //         templateUrl: './app/order/modals/connectionErr.html'
+	        //     });
+	        //     console.log('Could not connect to Your bank');
+	        // } else if (bank_resp.data.warning === "No bankAccount") {
+	        //    openInputModal();
+	        // }
+	        // });
 	    };
 
 	    function saveOrder() {
@@ -17376,7 +17394,7 @@
 	            }
 	        });
 	    }
-	}]).controller('HistoryCtrl', ['$scope', 'orderService', function ($scope, orderService) {
+	}]).controller('HistoryCtrl', ['$scope', 'orderService', '$location', function ($scope, orderService, $location) {
 	    var history = this;
 	    history.propertyName = 'date.created';
 	    history.sortReverse = true;
@@ -17389,6 +17407,11 @@
 	    orderService.all().then(function (resp) {
 	        history.allOrders = resp.data;
 	    });
+
+	    history.openOrder = function (order) {
+	        console.log(order._id);
+	        $location.path("/order/" + order._id);
+	    };
 	}]).controller('OrderDetailController', ['$route', 'orderService', function ($route, orderService) {
 	    var detail = this;
 
@@ -17476,23 +17499,31 @@
 	        $scope.currentSort = capitalizeFirstLetter($routeParams.sort);
 	    }
 	    $scope.sort = ['Name', 'Price'];
-	    $scope.sortBy = $routeParams.sortBy < 0 ? 1 : -1;
+	    if ($routeParams.sortBy) $scope.sortBy = $routeParams.sortBy < 0 ? 1 : -1;
 	    $scope.sortThis = function () {
 	        /** @namespace $scope.sorted */
-	        $routeParams.sort = $scope.sorted || 'name';
+	        $routeParams.sort = _.lowerCase($scope.sorted) || 'name';
 	        $routeParams.sortBy = $scope.sortBy || 1;
 	        $location.url('?' + $httpParamSerializer($routeParams));
 	    };
 	    Items.all($route.current.params).then(function (response) {
-	        response.data.items.forEach(function (element) {
-	            element.smallDescription = element.description.slice(0, 105) + "...";
-	        });
 
-	        if (response.data.items.length == 0) {
+	        if (response.status >= 500) {
+	            console.log(response);
+	            $scope.error = true;
+	            $scope.complete = true;
+	            return;
+	        }
+	        if (response.data.items.length === 0) {
+	            console.log(response);
 	            $scope.notItems = true;
 	            $scope.complete = true;
 	            return;
 	        }
+
+	        response.data.items.forEach(function (element) {
+	            element.smallDescription = element.description.slice(0, 105) + "...";
+	        });
 
 	        _(response.data.items).forEach(function (value) {
 	            value.smallDescription = value.description.slice(0, 105) + "...";
@@ -17518,12 +17549,24 @@
 	    }, function (error) {
 	        console.log(error);
 	        $scope.items = [];
-	        $scope.items.error = true;
+	        $scope.error = true;
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
 	    $scope.complete = false;
 	    Items.item($route.current.params.id).then(function (respone) {
+	        //console.log(respone);
+	        if (respone.status >= 500) {
+	            $scope.error = true;
+	            $scope.complete = true;
+	            return;
+	        }
+	        console.log(respone.data);
+	        if (respone.data.error) {
+	            $scope.notFound = true;
+	            $scope.complete = true;
+	            return;
+	        }
 	        $scope.product = respone.data;
 
 	        $scope.addToCart = function (cart) {
@@ -17548,8 +17591,8 @@
 	        }, 0);
 	    }, function (error) {
 	        console.log(error);
-	        $scope.items = [];
-	        $scope.items.error = true;
+	        $scope.product = [];
+	        $scope.error = true;
 	        $scope.complete = true;
 	    });
 	}]);
@@ -17564,6 +17607,7 @@
 	  var that = this;
 	  $scope.complete = false;
 	  Parameters.all().success(function (data) {
+
 	    that.data = [];
 	    _(data).forEach(function (value) {
 	      var url = {};
@@ -17586,7 +17630,7 @@
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-	    debugger;
+
 	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    var currentCategory = $route.current.params.categories;
@@ -17595,6 +17639,7 @@
 	        $scope.price = _.cloneDeep($rootScope.data.price);
 	    }
 	    var defineProperty = function defineProperty() {
+	        debugger;
 	        if (!$rootScope.data.properties) return;
 	        var currentUrl = _.cloneDeep($route.current.params);
 	        if (currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
@@ -17677,6 +17722,16 @@
 
 	    if ($rootScope.category != currentCategory) {
 	        Parameters.paramsOfCat(currentCategory).then(function (result) {
+	            if (result.status >= 500) {
+	                $scope.error = true;
+	                $scope.complete = true;
+	                return;
+	            }
+	            if (result.data.length === 0) {
+	                $scope.notFound = true;
+	                $scope.complete = true;
+	                return;
+	            }
 	            if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
 	            $rootScope.category = currentCategory;
 	            var newResult = _.cloneDeep(result.data);
@@ -17700,6 +17755,7 @@
 	        }, function (error) {
 	            console.log(error);
 	            $scope.categories = [];
+	            $scope.error = true;
 	            $scope.complete = true;
 	        });
 	    }
@@ -17709,6 +17765,7 @@
 	        delete params.page;
 	        if (!currentCategory) return;
 	        Parameters.countOfCat(currentCategory, params).then(function (result) {
+	            if (result.status >= 500 || result.data.length === 0) return;
 	            $rootScope.data = result.data;
 	            $scope.displayCount = true;
 	            defineProperty();

@@ -1,10 +1,9 @@
 <div class="container">
     <h3>Order's History</h3>
     <div class="well">
-        <table class="table table-hover">
+        <table class="table table-hover history">
             <thead>
                 <tr>
-                    <th>Order Number</th>
                     <th>
                         <a href="" ng-click="history.sortBy('date.created')">
                             Created
@@ -29,12 +28,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="order in history.allOrders | orderBy:history.propertyName:history.sortReverse" ng-hide="order._id === shoppingCart.order._id">
-                    <td>
-                        <a ng-href="#/order/{{order._id}}">{{ order._id }}</a>
-                    </td>
+                <tr ng-repeat="order in history.allOrders | orderBy:history.propertyName:history.sortReverse" ng-hide="order._id === shoppingCart.order._id" ng-click="history.openOrder(order)">
                     <td>{{ order.date.created | moment }}</td>
-                    <td>{{ order.total }}</td>
+                    <td>{{ order.total | currency}}</td>
                     <td>{{ order.status }}</td>
                 </tr>
             </tbody>

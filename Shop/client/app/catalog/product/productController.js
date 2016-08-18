@@ -11,24 +11,32 @@ angular.module('app')
             $scope.currentSort = capitalizeFirstLetter($routeParams.sort);
         }
         $scope.sort = ['Name','Price'];
-        $scope.sortBy = $routeParams.sortBy < 0 ? 1 : -1;
+        if($routeParams.sortBy) $scope.sortBy = $routeParams.sortBy < 0 ? 1 : -1;
         $scope.sortThis = function() {
             /** @namespace $scope.sorted */
-            $routeParams.sort = $scope.sorted || 'name';
+            $routeParams.sort = _.lowerCase($scope.sorted) || 'name';
             $routeParams.sortBy =  $scope.sortBy || 1;
             $location.url('?'+$httpParamSerializer($routeParams));
         };
         Items.all($route.current.params)
             .then (response => {
-                response.data.items.forEach(function (element) {
-                element.smallDescription = element.description.slice(0,105) + "...";
-                });
 
-                if(response.data.items.length == 0) {
+                if(response.status >= 500) {
+                    console.log(response);
+                    $scope.error = true;
+                    $scope.complete = true;
+                    return;
+                }
+                if(response.data.items.length === 0) {
+                    console.log(response);
                     $scope.notItems = true;
                     $scope.complete = true;
                     return;
                 }
+
+                response.data.items.forEach(function (element) {
+                element.smallDescription = element.description.slice(0,105) + "...";
+                });
 
                 _(response.data.items).forEach(function (value) {
                     value.smallDescription = value.description.slice(0,105) + "...";
@@ -60,7 +68,7 @@ angular.module('app')
             }, error => {
             console.log(error);
             $scope.items  = [];
-            $scope.items.error = true;
+            $scope.error = true;
             $scope.complete = true;
 
         })
@@ -71,7 +79,20 @@ angular.module('app')
     .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
         $scope.complete = false;
         Items.item($route.current.params.id).then(respone => {
+            //console.log(respone);
+            if(respone.status >= 500) {
+                $scope.error = true;
+                $scope.complete = true;
+                return;
+            }
+            console.log(respone.data);
+            if(respone.data.error) {
+                $scope.notFound = true;
+                $scope.complete = true;
+                return;
+            }
             $scope.product = respone.data;
+
 
             $scope.addToCart = function(cart) {
                 if (!$rootScope.shoppingCart) {
@@ -98,8 +119,8 @@ angular.module('app')
 
         },error => {
                 console.log(error);
-                $scope.items  = [];
-                $scope.items.error = true;
+                $scope.product  = [];
+                $scope.error = true;
                 $scope.complete = true;
         });
     }]);

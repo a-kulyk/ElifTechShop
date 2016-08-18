@@ -52,6 +52,22 @@ angular.module('app')
 
             order.pay = function() {
                 orderService.pay()
+                    .then(function(resp) {
+                        console.log(resp);
+                        if (resp.data.outOfStock) {
+                            $uibModal.open({
+                                templateUrl: './app/order/modals/outOfStock.html',
+                                controller: function($uibModalInstance, $scope, outOfStock) {
+                                    $scope.outOfStock = outOfStock;
+                                },
+                                resolve: {
+                                    outOfStock: function() {
+                                        return resp.data.outOfStock;
+                                    }
+                                }
+                            });
+                        }
+                    })
                     .then(function(bank_resp) {
                         console.log("bank_resp : ", bank_resp.data);
                         if (bank_resp.data.success === true) {
@@ -105,7 +121,7 @@ angular.module('app')
             }
         }
     ])
-    .controller('HistoryCtrl', ['$scope', 'orderService', function($scope, orderService) {
+    .controller('HistoryCtrl', ['$scope', 'orderService', '$location', function($scope, orderService, $location) {
         var history = this;
         history.propertyName = 'date.created';
         history.sortReverse = true;
@@ -118,6 +134,11 @@ angular.module('app')
         orderService.all().then(function(resp) {
             history.allOrders = resp.data;
         });
+
+        history.openOrder = function(order) {
+            console.log(order._id);
+            $location.path("/order/" + order._id);
+        };
     }])
     .controller('OrderDetailController', ['$route', 'orderService',
         function($route, orderService) {
