@@ -3,6 +3,7 @@ angular.module('app')
       var that = this;
       $scope.complete = false;
       Parameters.all().success(function(data){
+
         that.data = [];
         _(data).forEach(function(value) {
           var url = {};

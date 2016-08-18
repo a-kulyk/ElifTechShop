@@ -1,6 +1,6 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
-        debugger;
+
         $scope.displayCount = false;
         $scope.complete = false;
         var currentCategory = $route.current.params.categories;
@@ -9,6 +9,7 @@ angular.module('app')
             $scope.price = _.cloneDeep($rootScope.data.price);
         }
         let defineProperty = function() {
+            debugger;
             if(!$rootScope.data.properties) return;
             let currentUrl = _.cloneDeep($route.current.params);
             if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField
@@ -90,6 +91,16 @@ angular.module('app')
         if($rootScope.category != currentCategory) {
             Parameters.paramsOfCat(currentCategory)
                 .then(result => {
+                    if(result.status >= 500) {
+                        $scope.error = true;
+                        $scope.complete = true;
+                        return;
+                    }
+                    if(result.data.length === 0) {
+                        $scope.notFound = true;
+                        $scope.complete = true;
+                        return;
+                    }
                     if (result.data.price) $scope.price =_.cloneDeep(result.data.price);
                     $rootScope.category = currentCategory;
                     let newResult = _.cloneDeep(result.data);
@@ -115,6 +126,7 @@ angular.module('app')
                 error => {
                     console.log(error);
                     $scope.categories = [];
+                    $scope.error = true;
                     $scope.complete = true;
                 });
         }
@@ -125,6 +137,7 @@ angular.module('app')
             if(!currentCategory) return;
             Parameters.countOfCat(currentCategory, params)
                 .then(result => {
+                        if(result.status >= 500 || result.data.length === 0) return;
                         $rootScope.data = result.data;
                         $scope.displayCount = true;
                         defineProperty();
