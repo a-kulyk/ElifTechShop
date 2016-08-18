@@ -6,7 +6,7 @@
     right: 0;
     z-index: -1;
 }
-body{
+#formForOrder{
     text-align: left;
     font-family: "Bitstream Charter", "Times New Roman", Times, serif;
     font-size: 15px;
