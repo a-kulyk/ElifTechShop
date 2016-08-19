@@ -35,7 +35,8 @@ exports.post = function (req, res) {
     let failedMsg = responseFactory.failedMessage();
     req.checkBody(validationSchema);
     let errors = req.validationErrors();
-    if (errors) {
+    if (errors || req.body.from.lat === req.body.to.lat &&
+        req.body.from.lng === req.body.to.lng) {
         console.error(errors);
         failedMsg.error = new ValidationError('Incorrect fields');
         res.json(failedMsg);
