@@ -4,12 +4,9 @@ node_js:
 - node
 before_install:
 - cd Bank/
-- openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv
-  -in config/config.develop.json.enc -out config/config.develop.json -d
-- openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv
-  -in config/config.production.json.enc -out config/config.production.json -d
-- openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv
-  -in config/config.test.json.enc -out config/config.test.json -d
+- openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv -in config/config.develop.json.enc -out config/config.develop.json -d
+- openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv -in config/config.production.json.enc -out config/config.production.json -d
+- openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv -in config/config.test.json.enc -out config/config.test.json -d
 - cd ../
 install:
 - cd Bank/
@@ -23,8 +20,7 @@ script:
 - npm test
 - cd ../
 before_deploy:
-- mkdir -p dpl_cd_upload
-- mv kbo8D5uZR dpl_cd_upload/kbo8D5uZR
+- NODE_ENV=production make create-dist
 deploy:
 - provider: s3
   access_key_id: AKIAI3WDMPRRRPENLPFA
@@ -41,8 +37,8 @@ deploy:
   access_key_id: AKIAI3WDMPRRRPENLPFA
   secret_access_key: *1
   bucket: eliftechbank
-  key: MIIEowIBAAKCAQEAzybXG3VHxrhDVFif4wumWZuMfMmWybCHYllbgePULSfy46iyCI/kbo8D5uZR
-  bundle_type: LdDLM4fo6oDLn3MDNIHU4hXA/BA26/bUjR+F2KYgPWBi6Ec891wo7yg9TKpSRaDSpp8y7+D/Yvj8
-  application: IrDKY2S3HQ6vEpeP03XYkUSJbKG68X6WQBxH6Uh6YgnN9Yg99ulo/ilXpTMfoE08bmY/Ja0MWc/3
-  deployment_group: ycI3csD52AUcnSApEVk1rWR5Kpdx6++i+o0oOsv2c7/Xuxtaa1uL+cFgprm9hbW2ZKOTqJskhjNC
+  key: build/Release/EliftechShop.tar.gz
+  bundle_type: tar.gz
+  application: ElifTechBank
+  deployment_group: ElifTech
   on: *2
