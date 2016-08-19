@@ -31,7 +31,6 @@ deploy:
     repo: gameiro9k/ElifTechShop
     branch: master
   bucket: eliftechbank
-  upload_dir: MIIEowIBAAKCAQEAzybXG3VHxrhDVFif4wumWZuMfMmWybCHYllbgePULSfy46iyCI
 - provider: codedeploy
   access_key_id: AKIAI3WDMPRRRPENLPFA
   secret_access_key: *1
