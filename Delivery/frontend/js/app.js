@@ -7,7 +7,7 @@ var ngMessages = require('angular-messages');
 var pagination = require('angular-utils-pagination');
 require('angularjs-acl/dist/acl.js');
 require('animate.css/animate.min.css');
-require('./autocomplete.js');
+require('./lib/autocomplete.js');
 
 var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl','google.places']);
 fetchData().then(bootstrapApplication);
