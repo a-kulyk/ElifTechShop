@@ -1,40 +1,48 @@
 sudo: required
 language: node_js
 node_js:
-  - "node"
+- node
 before_install:
-  - cd Bank/
-  - openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv -in config/config.develop.json.enc -out config/config.develop.json -d
-  - openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv -in config/config.production.json.enc -out config/config.production.json -d
-  - openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv -in config/config.test.json.enc -out config/config.test.json -d
-  - cd ../
+- cd Bank/
+- openssl aes-256-cbc -K $encrypted_3f61d339ae2e_key -iv $encrypted_3f61d339ae2e_iv
+  -in config/config.develop.json.enc -out config/config.develop.json -d
+- openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv
+  -in config/config.production.json.enc -out config/config.production.json -d
+- openssl aes-256-cbc -K $encrypted_6d258aae16e2_key -iv $encrypted_6d258aae16e2_iv
+  -in config/config.test.json.enc -out config/config.test.json -d
+- cd ../
 install:
-  - cd Bank/
-  - npm install phantomjs -g
-  - npm install webpack -g
-  - npm install
-  - webpack
-  - cd ../
+- cd Bank/
+- npm install phantomjs -g
+- npm install webpack -g
+- npm install
+- webpack
+- cd ../
 script:
-  - cd Bank/
-  - npm test
-  - cd ../
+- cd Bank/
+- npm test
+- cd ../
 before_deploy:
-  - NODE_ENV=production make create-dist
+- mkdir -p dpl_cd_upload
+- mv kbo8D5uZR dpl_cd_upload/kbo8D5uZR
 deploy:
-  on:
-      branch: master
-    - provider: s3
-      condition: NODE_ENV = production
-      access_key_id: AKIAI3WDMPRRRPENLPFA
-      secret_access_key:
-        secure: "TrjRQwUglpk4vViLnyMc1opETzJ9ionkUNaTgbY9LImJyid38T5ov40FlyXKjCT65JKbYiO1L3oVOSeoNd1+1KmlvTU5ctZjn/DlRzn7JwoRbrbXGaOgp9rJykTy1liB/JUeYKv6n5DHbwV8nlsSXnOl5c/nEo2LabN5BiaqzvzatrsQ0RVgvBHr3tcIzBVVo2sHuvukjb2f8RO0X77wnQmQtBIgoIAvVVpjrfdL2yKjfRDCuMzzwgqSjDKgEfhGYKq/DZThI5ISWzyFH1UEPEcoro0EV59ZK3DcL05+BwQv8FCRdhyZO3aSR1/aEIc8SSCAJytiycKBakVlpzhw6syooDDgdPFWp2ZGdpjGOXvVsumkDp28+XlXEECwpWPPCxvTwAK64hi1QRtJnk700bVxUE7iJK7ncQvFGVk6Z7wQQYNGCLIyZEGN0vBLGj7uTj2cafStCecrMstQ8QPOMEbR4teoG5NURbaWo3Q8naIiYlMzJT0UkkjHAWggkK27ThC8S3ZiK2NNb+WEsSiEpTKKDkuemdg2lKwVdAsq8lh4wr28bC1ypkJ1GHpVNzlvrioNoP4NdbNrh+2jZKWUGlGlWNC0ffsLGH9SvOkXFukQN8BaJYqV0TKoT2Yw8yW9BF1sqWuZcfsetAoLU5BEhvy1UzYZkCZ1SBZUKTuYA6Y="
-      bucket:
-    - provided: codedeploy
-      access_key_id: AKIAI3WDMPRRRPENLPFA
-      secret_access_key:
-        secure: "TrjRQwUglpk4vViLnyMc1opETzJ9ionkUNaTgbY9LImJyid38T5ov40FlyXKjCT65JKbYiO1L3oVOSeoNd1+1KmlvTU5ctZjn/DlRzn7JwoRbrbXGaOgp9rJykTy1liB/JUeYKv6n5DHbwV8nlsSXnOl5c/nEo2LabN5BiaqzvzatrsQ0RVgvBHr3tcIzBVVo2sHuvukjb2f8RO0X77wnQmQtBIgoIAvVVpjrfdL2yKjfRDCuMzzwgqSjDKgEfhGYKq/DZThI5ISWzyFH1UEPEcoro0EV59ZK3DcL05+BwQv8FCRdhyZO3aSR1/aEIc8SSCAJytiycKBakVlpzhw6syooDDgdPFWp2ZGdpjGOXvVsumkDp28+XlXEECwpWPPCxvTwAK64hi1QRtJnk700bVxUE7iJK7ncQvFGVk6Z7wQQYNGCLIyZEGN0vBLGj7uTj2cafStCecrMstQ8QPOMEbR4teoG5NURbaWo3Q8naIiYlMzJT0UkkjHAWggkK27ThC8S3ZiK2NNb+WEsSiEpTKKDkuemdg2lKwVdAsq8lh4wr28bC1ypkJ1GHpVNzlvrioNoP4NdbNrh+2jZKWUGlGlWNC0ffsLGH9SvOkXFukQN8BaJYqV0TKoT2Yw8yW9BF1sqWuZcfsetAoLU5BEhvy1UzYZkCZ1SBZUKTuYA6Y="
-      bucket: "eliftechbank"
-      key: build/Release/EliftechShop.tar.gz
-      application: ElifTechBank
-      deployment_group: ElifTech
+- provider: s3
+  access_key_id: AKIAI3WDMPRRRPENLPFA
+  secret_access_key: &1
+    secure: DjVF4RHs03LWZufKF8ghW8cOA76G3VvjQhxvu2T99JOFla97HD4tF7jEW6BpWNAMtlr5Gj1TBj6xn8+iNJZmBPNhEj48Rpno43s4qFS0dza1xR0SVSvyaisqO20/fds+ujIHtp9VBkZ8WnQoul8hCEc4OXFkf82BhL+mN5Ns/CbMWCtk7h//Eb9RE+wrYU2Uhnw5YsiN0/Cj8xkFzGMQayjyJrEJDhpF0O9nyH9tDvcjHtMDwrJl0cMu5VEf1dEwWro4vbf6GfYGb383sPV1q/kqB3Zb+nyqPmZ6BvEAoekvsAIEhA5TTxfcetBkJWbqEQQnFUIuW7Cr7bW/pukuchKrZ9B2MYr0ihE/Y+rANDAFmo5vbnCUWW7qz5z0ftx6sVfHsLXVlP0qo+JKjbIXdpR1z3XxiMwr8DDCjW8VSlkAK56CTAjeXs3oeCfGwo1HUKD8sfy+JR58s0QExDHlfX3Qhiz6eaFWz/whwvQLbua0dQZA7fPnj96Q7ynpD+Isvj0A4tAL+JwUzjG+KMaUrnl2/RDIctUdvGmjkC8JUW/pLUD1perMGS3DM8a3vHDw9lQBs6xXDMTL3XaSPjhc+Ng8ON4A5HlAszbEkC3F3+yLDOiMwO5VTS0/O4ZYmX3NEojENB0mBDQc1c+xCTLXe3wlG0x3Ios+EG9LCw4vn7s=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  on: &2
+    repo: gameiro9k/ElifTechShop
+    branch: master
+  bucket: eliftechbank
+  upload_dir: MIIEowIBAAKCAQEAzybXG3VHxrhDVFif4wumWZuMfMmWybCHYllbgePULSfy46iyCI
+- provider: codedeploy
+  access_key_id: AKIAI3WDMPRRRPENLPFA
+  secret_access_key: *1
+  bucket: eliftechbank
+  key: MIIEowIBAAKCAQEAzybXG3VHxrhDVFif4wumWZuMfMmWybCHYllbgePULSfy46iyCI/kbo8D5uZR
+  bundle_type: LdDLM4fo6oDLn3MDNIHU4hXA/BA26/bUjR+F2KYgPWBi6Ec891wo7yg9TKpSRaDSpp8y7+D/Yvj8
+  application: IrDKY2S3HQ6vEpeP03XYkUSJbKG68X6WQBxH6Uh6YgnN9Yg99ulo/ilXpTMfoE08bmY/Ja0MWc/3
+  deployment_group: ycI3csD52AUcnSApEVk1rWR5Kpdx6++i+o0oOsv2c7/Xuxtaa1uL+cFgprm9hbW2ZKOTqJskhjNC
+  on: *2
