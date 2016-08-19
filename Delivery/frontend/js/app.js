@@ -7,8 +7,9 @@ var ngMessages = require('angular-messages');
 var pagination = require('angular-utils-pagination');
 require('angularjs-acl/dist/acl.js');
 require('animate.css/animate.min.css');
+require('./autocomplete.js');
 
-var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl']);
+var app = angular.module('delivery', [ngRoute, ngMessages, pagination, 'ng-acl','google.places']);
 fetchData().then(bootstrapApplication);
 function fetchData() {
     var initInjector = angular.injector(["ng"]);
@@ -26,7 +27,6 @@ function bootstrapApplication() {
         angular.bootstrap(document, ['delivery']);
     });
 }
-
 
 require('./config/app-config')(app);
 require('./services/order-states-service')(app);

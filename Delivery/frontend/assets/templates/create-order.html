@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="css/create-order.css">
+<link rel="stylesheet" href="css/autocomplete.css">
 <div class="row">
     <div class="col-md-3">
     </div>
@@ -40,8 +41,19 @@
                                 <div ng-messages-include="templates/validation-messages.html"></div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" id="fromAddress" class="form-control">
+                        <div class="form-group" ng-class="{ 'has-error': orderForm.fromPlace.$touched
+                             && orderForm.fromPlace.$invalid }">
+                            <div ng-show="fromPlace && !validateAddress(fromPlace)" class="alert alert-info">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                You must specify city, street name and number
+                            </div>
+                            <input type="text" class="form-control" name="fromPlace" g-places-autocomplete
+                                   force-selection="true" options="autocompleteOptions"
+                                   ng-model="fromPlace" required autocomplete="off" placeholder="Address">
+                            <div class="help-block" ng-messages="orderForm.fromPlace.$error"
+                                 ng-if="orderForm.fromPlace.$touched">
+                                <div ng-messages-include="templates/validation-messages.html"></div>
+                            </div>
                         </div>
                         <div class="form-group" ng-class="{ 'has-error': orderForm.toUsername.$touched
                                  && orderForm.toUsername.$invalid }">
@@ -53,16 +65,30 @@
                                 <div ng-messages-include="templates/validation-messages.html"></div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" id="toAddress" class="form-control">
+                        <div class="form-group" ng-class="{ 'has-error': orderForm.toPlace.$touched
+                             && orderForm.toPlace.$invalid }">
+                            <div ng-show="toPlace && !validateAddress(toPlace)" class="alert alert-info">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+                                You must specify city, street name and number
+                            </div>
+                            <input type="text" class="form-control" name="toPlace" g-places-autocomplete
+                                   force-selection="true" options="autocompleteOptions"
+                                   ng-model="toPlace" required autocomplete="off" placeholder="Address">
+                            <div class="help-block" ng-messages="orderForm.toPlace.$error"
+                                 ng-if="orderForm.toPlace.$touched">
+                                <div ng-messages-include="templates/validation-messages.html"></div>
+                            </div>
                         </div>
                         <br>
-                        <input type="submit" value="Submit" class="form-control btn btn-success">
+                        <input type="submit" value="Submit" class="form-control btn btn-success"
+                               ng-class="orderForm.$valid&&toPlace&&fromPlace
+                               &&validateAddress(toPlace)&&
+                               validateAddress(fromPlace)?'':'disabled'">
                     </form>
                 </div>
             </div>
         </div>
-        <img id="createOrderLogo" class="animated bounceInDown" src="images/box.png" >
+        <img id="createOrderLogo" class="animated bounceInDown" src="images/box.png">
     </div>
 </div>
 </div>

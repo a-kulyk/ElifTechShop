@@ -3,6 +3,15 @@
  */
 module.exports = function (app) {
     app.controller('createOrderCtrl', function ($rootScope, $scope, $http, $window) {
+        $scope.fromPlace = null;
+        $scope.toPlace = null;
+        $scope.autocompleteOptions = {
+            componentRestrictions: {country: 'ua'},
+            types: ['address']
+        };
+        $scope.validFromAddress = true;
+        $scope.validToAddress = true;
+
         $scope.createOrder = function () {
             var requestJSON = {};
             requestJSON.title = $scope.title;
@@ -11,42 +20,43 @@ module.exports = function (app) {
             requestJSON.to = {};
             requestJSON.from.username = $scope.fromUsername;
             requestJSON.to.username = $scope.toUsername;
-            if (autocompleteFrom.getPlace()) {
-                console.log(autocompleteFrom.getPlace());
-                var fromPlace = autocompleteFrom.getPlace();
-                requestJSON.from.lat = fromPlace.geometry.location.lat();
-                requestJSON.from.lng = fromPlace.geometry.location.lng();
-            }
-            if (autocompleteTo.getPlace()) {
-                console.log(autocompleteTo.getPlace());
-                var toPlace = autocompleteTo.getPlace();
-                requestJSON.to.lat = toPlace.geometry.location.lat();
-                requestJSON.to.lng = toPlace.geometry.location.lng();
-            }
-            $http.post("/order", requestJSON).success(function (data, status, headers) {
-                console.log(data);
-                if (data.success) {
-                    $window.location.href = '#/order_info/' + data.trackingCode;
-                } else {
-                    switch (data.error.name) {
-                        case'GoogleResError':
-                            alert('The service is currently unavailable, please try again later');
-                            break;
-                        case 'ValidationError':
-                            alert('Some fields doesn`t match the requirements');
-                            break;
+            requestJSON.from.lat = $scope.fromPlace.geometry.location.lat();
+            requestJSON.from.lng = $scope.fromPlace.geometry.location.lng();
+            requestJSON.to.lat = $scope.toPlace.geometry.location.lat();
+            requestJSON.to.lng = $scope.toPlace.geometry.location.lng();
+
+            $scope.validFromAddress = $scope.validateAddress($scope.fromPlace)
+            $scope.validToAddress = $scope.validateAddress($scope.toPlace)
+
+            console.log('post:' + ($scope.validFromAddress && $scope.validToAddress));
+
+                $http.post("/order", requestJSON).success(function (data, status, headers) {
+                    console.log(data);
+                    if (data.success) {
+                        $window.location.href = '#/order_info/' + data.trackingCode;
+                    } else {
+                        switch (data.error.name) {
+                            case'GoogleResError':
+                                alert('The service is currently unavailable, please try again later');
+                                break;
+                            case 'ValidationError':
+                                alert('Some fields doesn`t match the requirements');
+                                break;
+                        }
                     }
+                }).error(function (data, status, headers) {
+                    console.log(status);
+                });
+            }
+        $scope.validateAddress = function (place) {
+            var streetNumberPresent = false;
+            for (var i = 0; i < place.address_components.length; i++) {
+                var addressType = place.address_components[i].types[0];
+                if (addressType == 'street_number') {
+                    streetNumberPresent = true;
                 }
-            }).error(function (data, status, headers) {
-                console.log(status);
-            });
+            }
+            return streetNumberPresent;
         }
-        var options = {types: ["address"]};
-        var fromAddress = document.getElementById('fromAddress');
-        var autocompleteFrom = new google.maps.places.Autocomplete(fromAddress, options);
-        var toAddress = document.getElementById('toAddress');
-        var autocompleteTo = new google.maps.places.Autocomplete(toAddress, options);
-        autocompleteFrom.setComponentRestrictions({country: 'ua'});
-        autocompleteTo.setComponentRestrictions({country: 'ua'});
     });
 }
