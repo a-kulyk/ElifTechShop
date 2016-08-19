@@ -6,6 +6,8 @@ files:
 hooks:
   BeforeInstall:
     - location: aws/unzip.sh
+  Install:
+    - location: aws/install.sh
   ApplicationStart:
     - location: aws/start.sh
   ApplicationStop:
