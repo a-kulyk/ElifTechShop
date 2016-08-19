@@ -14,6 +14,12 @@
 			<div ng-repeat="value in property.value" style="display: block;min-height: 20px">
 				<input ng-change="clickToProperty()" type="checkbox"  ng-model="value.state"><span class="property_value">{{value.respond}}  <span ng-show="displayCount" ng-class="{property_count: value.count}">{{value.count}}</span>  </span>
 			</div>
+
+		</div>
+		<div  class="property_name col-xs-6 col-sm-3 col-md-12">Companies
+			<div ng-repeat="company in data.company" style="display: block;min-height: 20px">
+				<input ng-change="clickToProperty()" type="checkbox"  ng-model="company.state"><span class="property_value">{{company.name}}  <span ng-show="displayCount" ng-class="{property_count: company.count}">{{company.count}}</span>  </span>
+			</div>
 		</div>
 		<div style="clear: both;"></div>
 

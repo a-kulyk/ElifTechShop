@@ -9,10 +9,9 @@ angular.module('app')
             $scope.price = _.cloneDeep($rootScope.data.price);
         }
         let defineProperty = function() {
-            debugger;
-            if(!$rootScope.data.properties) return;
             let currentUrl = _.cloneDeep($route.current.params);
-            if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField
+            if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
+            if(!$rootScope.data.properties) return;
             for(let item in currentUrl) {
                 $rootScope.data.properties.forEach(function(property) {
                     if(property.name == item) {
@@ -28,6 +27,23 @@ angular.module('app')
                                 }
                             }
                         })
+                    }
+                })
+                $rootScope.data.company.forEach(function(company) {
+                    if("company" == item) {
+                            if(angular.isArray(currentUrl[item])) {
+                                if(currentUrl[item].includes(company.name)) {
+                                    console.log(company.respond,true);
+                                    company.state = true;
+                                    company.count = null;
+                                }
+                            } else {
+                                if (currentUrl[item] == company.name) {
+                                    company.state = true;
+                                    company.count = null;
+                                }
+                            }
+
                     }
                 })
 
@@ -67,12 +83,22 @@ angular.module('app')
 
                 })
             }
+            if(data.hasOwnProperty('company')) {
+                data.company.forEach(function (item) {
+                            if (item.state) {
+                                if (!propertyScreen['company']) {
+                                    propertyScreen['company'] = []
+                                }
+                                propertyScreen['company'].push(item.name)
+                            }
+                })
+            }
 
             return propertyScreen;
         };
 
         $scope.clickToProperty = function () {
-            let urlObj = $scope.createFilterParams()
+            let urlObj = $scope.createFilterParams();
             $location.url("?" + $httpParamSerializer(urlObj));
         };
 
@@ -86,7 +112,7 @@ angular.module('app')
                 Object.assign(urlObj,additionalPriceQuery);
             }
             return urlObj;
-        }
+        };
 
         if($rootScope.category != currentCategory) {
             Parameters.paramsOfCat(currentCategory)
@@ -104,6 +130,17 @@ angular.module('app')
                     if (result.data.price) $scope.price =_.cloneDeep(result.data.price);
                     $rootScope.category = currentCategory;
                     let newResult = _.cloneDeep(result.data);
+                    if (newResult.hasOwnProperty('company')) {
+                        _(newResult.company).forEach( function(value, key) {
+                            let newCompany = {
+                                name : value,
+                                state : false,
+                                count: null
+                            };
+                            newResult.company[key] = newCompany
+                        });
+
+                    };
                     if (newResult.hasOwnProperty('properties')) {
                         newResult.properties.forEach(function (item) {
                             if (item.hasOwnProperty('value')) {
@@ -118,6 +155,7 @@ angular.module('app')
                             }
                         });
                     }
+
                     $rootScope.data = newResult || [];
                     defineProperty();
                     $scope.complete = true;

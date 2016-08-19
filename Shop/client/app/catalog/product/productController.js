@@ -49,7 +49,6 @@ angular.module('app')
 
                 let pages = _.range(1,response.data.pages+1) || 0;
                 $scope.pages = [];
-                console.log(response.data.pages);
                 _(pages).forEach(function(pageNumber) {
                     let params = $route.current.params;
                     params.page = pageNumber;
@@ -86,7 +85,7 @@ angular.module('app')
                 return;
             }
             console.log(respone.data);
-            if(respone.data.error) {
+            if(!respone.data || respone.data.error) {
                 $scope.notFound = true;
                 $scope.complete = true;
                 return;
