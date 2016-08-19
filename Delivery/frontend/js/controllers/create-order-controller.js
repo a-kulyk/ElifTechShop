@@ -11,6 +11,7 @@ module.exports = function (app) {
         };
         $scope.validFromAddress = true;
         $scope.validToAddress = true;
+        $scope.placesAreUnique = true;
 
         $scope.createOrder = function () {
             var requestJSON = {};
@@ -30,24 +31,24 @@ module.exports = function (app) {
 
             console.log('post:' + ($scope.validFromAddress && $scope.validToAddress));
 
-                $http.post("/order", requestJSON).success(function (data, status, headers) {
-                    console.log(data);
-                    if (data.success) {
-                        $window.location.href = '#/order_info/' + data.trackingCode;
-                    } else {
-                        switch (data.error.name) {
-                            case'GoogleResError':
-                                alert('The service is currently unavailable, please try again later');
-                                break;
-                            case 'ValidationError':
-                                alert('Some fields doesn`t match the requirements');
-                                break;
-                        }
+            $http.post("/order", requestJSON).success(function (data, status, headers) {
+                console.log(data);
+                if (data.success) {
+                    $window.location.href = '#/order_info/' + data.trackingCode;
+                } else {
+                    switch (data.error.name) {
+                        case'GoogleResError':
+                            alert('The service is currently unavailable, please try again later');
+                            break;
+                        case 'ValidationError':
+                            alert('Some fields doesn`t match the requirements');
+                            break;
                     }
-                }).error(function (data, status, headers) {
-                    console.log(status);
-                });
-            }
+                }
+            }).error(function (data, status, headers) {
+                console.log(status);
+            });
+        }
         $scope.validateAddress = function (place) {
             var streetNumberPresent = false;
             for (var i = 0; i < place.address_components.length; i++) {
@@ -57,6 +58,15 @@ module.exports = function (app) {
                 }
             }
             return streetNumberPresent;
+        }
+        $scope.placesUnique = function () {
+            if ($scope.fromPlace.geometry.location.lat() === $scope.toPlace.geometry.location.lat() &&
+                $scope.fromPlace.geometry.location.lng() === $scope.fromPlace.geometry.location.lng()) {
+                $scope.placesAreUnique = false;
+                return false;
+            }
+            $scope.placesAreUnique = true;
+            return true;
         }
     });
 }

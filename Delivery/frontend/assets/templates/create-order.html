@@ -80,10 +80,15 @@
                             </div>
                         </div>
                         <br>
+                        <div class="alert alert-danger" ng-show="!placesAreUnique">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            Cannot use the same address twice
+                        </div>
+                        <br>
                         <input type="submit" value="Submit" class="form-control btn btn-success"
                                ng-class="orderForm.$valid&&toPlace&&fromPlace
                                &&validateAddress(toPlace)&&
-                               validateAddress(fromPlace)?'':'disabled'">
+                               validateAddress(fromPlace)&& placesUnique()?'':'disabled'">
                     </form>
                 </div>
             </div>
