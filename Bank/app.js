@@ -30,7 +30,6 @@ http.createServer(app).listen(app.get('port'),function () {
     console.log('Listening on port '+app.get('port'));
 });
 
-
+console.log(process.env.NODE_ENV ? process.env.NODE_ENV : 'develop');
 
 require('./routes')(app);
-

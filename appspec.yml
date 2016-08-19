@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/
+hooks:
+  BeforeInstall:
+    - location: aws/unzip.sh
+  Install:
+    - location: aws/install.sh
+  ApplicationStart:
+    - location: aws/start.sh
+  ApplicationStop:
+    - location: aws/stop.sh
