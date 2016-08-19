@@ -12,8 +12,11 @@ module.exports = function (app) {
         $scope.validFromAddress = true;
         $scope.validToAddress = true;
         $scope.placesAreUnique = true;
-
+        $scope.loader = '';
+        
         $scope.createOrder = function () {
+            $scope.showContent = false;
+            $scope.loader = 'loader';
             var requestJSON = {};
             requestJSON.title = $scope.title;
             requestJSON.price = $scope.price;
@@ -29,13 +32,13 @@ module.exports = function (app) {
             $scope.validFromAddress = $scope.validateAddress($scope.fromPlace)
             $scope.validToAddress = $scope.validateAddress($scope.toPlace)
 
-            console.log('post:' + ($scope.validFromAddress && $scope.validToAddress));
-
             $http.post("/order", requestJSON).success(function (data, status, headers) {
                 console.log(data);
                 if (data.success) {
                     $window.location.href = '#/order_info/' + data.trackingCode;
                 } else {
+                    $scope.showContent=true;
+                    $scope.loader = '';
                     switch (data.error.name) {
                         case'GoogleResError':
                             alert('The service is currently unavailable, please try again later');

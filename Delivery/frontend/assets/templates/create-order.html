@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="css/create-order.css">
 <link rel="stylesheet" href="css/lib/autocomplete.css">
-<div class="row">
+<div class="row" ng-show="showContent" ng-init="showContent=true">
     <div class="col-md-3">
     </div>
     <div class="col-md-6">
         <div class="panel panel-success animated fadeInUp" id="formForOrder">
             <div class="panel-heading">Make order</div>
             <div class="panel-body">
-                <div id="me">
+                <div>
                     <form ng-submit="orderForm.$valid && createOrder()" role="form" name="orderForm" novalidate>
                         <div class="form-group" ng-class="{ 'has-error': orderForm.title.$touched
                              && orderForm.title.$invalid }">
@@ -97,4 +97,9 @@
     </div>
 </div>
 </div>
+</div>
+<div ng-class="loader">
+    <span></span>
+    <span></span>
+    <span></span>
 </div>
