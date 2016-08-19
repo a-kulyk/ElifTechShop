@@ -1,0 +1,196 @@
+@import 'https://fonts.googleapis.com/css?family=Pacifico';
+@import 'https://fonts.googleapis.com/css?family=Signika';
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #F5F8FA;
+  font-family: 'Signika', sans-serif;
+  color: #1E4586 !important;
+}
+.content{
+  margin: 3%;
+}
+a {
+  color: #00B7FF;
+}
+input{
+  margin-bottom: 1%;
+  background-color: #99DFC5;
+}
+header{
+  padding: 0 5%;
+  width: 100%;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0f5738+0,499273+50,75af96+100 */
+  background: #2F94CD;
+  border-bottom: solid 1px #1c73a5;
+}
+header span{
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 2em;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #1E4586;
+}
+.panel-default{
+  background-color: white;
+  padding: 0;
+}
+.panel-default>.panel-heading{
+  background-color: white;
+}
+.panel-heading{
+  width: 100%;
+  color: #1E4586 !important;
+  background-color: white;
+  text-align: left;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.btn.btn-danger{
+  opacity: 0.8;
+  border: solid 1px #d9534f;
+  color: #d9534f;
+  background-color: transparent;
+}
+.btn.btn-danger:hover{
+  opacity: 0.8;
+  background-color: #d9534f;
+  color: white;
+}
+.btn.btn-success{
+  opacity: 0.8;
+  border: solid 1px #449d44;
+  color: #449d44;
+  background-color: transparent;
+}
+.btn.btn-success:hover{
+  opacity: 0.8;
+  background-color: #449d44;
+  color: white;
+}
+/*#cabinet{*/
+  /*display: none;*/
+/*}*/
+#cabinet>.panel-default{
+  display: inline-block;
+  padding: 0;
+  text-align: center
+}
+/*#cabinet .panel-default .panel-heading{*/
+  /*display: inline-block;*/
+  /*width: 100%;*/
+/*}*/
+
+.btn.btn-primary{
+  opacity: 0.8;
+  background-color: transparent;
+  color: #337ab7;
+  border: solid 1px #337ab7;
+}
+.btn.btn-primary:hover{
+  opacity: 0.8;
+  background-color: #337ab7;
+  color: white;
+}
+#modalTransfer>.panel-default,
+#modal>.panel-default{
+  display: block;
+  position: relative;
+  width: 300px;
+  height: 140px;
+  margin: auto;
+  margin-top: 10%;
+}
+#modalTransfer>.panel-default{
+  height: 170px;
+}
+#modal,
+#modalTransfer{
+  top: 0;
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+button#close,
+button#closeWindow{
+  float: right;
+  background-color: transparent;
+  border: none;
+}
+button#close:focus,
+button#closeWindow:focus{
+  outline: none;
+}
+#cabinet table{
+  width: 100%;
+}
+#cabinet table tr{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#cabinet table td{
+  padding: 10px;
+}
+tr#receive,
+tr#payment{
+  color: #449d44;
+}
+tr#transfer{
+  color: #d9534f;
+}
+/*#cabinet .item{*/
+  /*float: left;*/
+  /*margin-left: 2%;*/
+/*}*/
+/*#cabinet .item span{*/
+  /*color: white;*/
+  /*font-size: 1.4em;*/
+/*}*/
+/*#cabinet .item .title{*/
+  /*font-size: 1.5em;*/
+  /*color: #333333;*/
+/*}*/
+.buttonBar{
+  display: inline-block;
+  position: absolute;
+  top: 2%;
+  left: 20%;
+  padding: 0;
+}
+.buttonBar .button{
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+.buttonBar .button:focus{
+  outline: none;
+}
+
+/*.blur{*/
+  /*-webkit-filter: blur(5px);*/
+  /*-moz-filter: blur(5px);*/
+  /*-o-filter: blur(5px);*/
+  /*-ms-filter: blur(5px);*/
+  /*filter: blur(5px);*/
+/*}*/
+.border-left {
+  border-left: solid 1px #D4DBE0;
+}
+button{
+  background-color: transparent;
+  border: none;
+}
+button:focus {
+  outline: none;
+}
+.account{
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 3%;
+}
+#auth .panel.panel-default{
+  margin: 0 3%;
+}

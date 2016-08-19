@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="bank" ng-controller="main">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <script src="/assets/app.build.js"></script>
+    <link rel="icon" href="favicon.ico" type="image/png" sizes="32x32">
+</head>
+<body id="main" class="norm">
+<header>
+    <span>ElifTech Bank</span>
+    <!--<button ng-click="transaction()">Transaction</button>-->
+</header>
+
+<div class="content">
+
+    <div ng-view></div>
+
+</div>
+<div ng-include="'modals/pay.html'"></div>
+<div ng-include="'modals/transfer.html'"></div>
+</body>
+</html>

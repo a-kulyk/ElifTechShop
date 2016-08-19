@@ -1,0 +1,18 @@
+{
+  "port" : 3000,
+  "key" : "d6911f567ef734f18ea176481638cc8a",
+  "mongoose" : {
+    "uri" : "mongodb://banker:baguwix16@ds021994.mlab.com:21994/eliftechbank"
+  },
+  "session" : {
+    "secret" : "bankSecret",
+    "key" : "sid",
+    "resave": true,
+    "saveUninitialized": true,
+    "cookie" : {
+      "path" : "/",
+      "httpOnly" : true,
+      "maxAge" : null
+    }
+  }
+}
