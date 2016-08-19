@@ -2,11 +2,11 @@
     <property-items></property-items>
 </div>
 <div class="col-md-9 col-xs-12">
-    <div ng-show="notFound" class="empty">There is not nothing to find</div>
+    <div ng-show="product.notFound" class="empty">There is not nothing to find</div>
     <div ng-show="error" class="empty find_error ">Something went wrong.</div>
     <div ng-hide="complete" class="loader "></div>
 </div>
-<div  ng-show="complete && !notFound && !error"  class="product_show_view col-md-9 col-xs-12">
+<div  ng-show="complete && !product.notFound && !error"  class="product_show_view col-md-9 col-xs-12">
         <div class="product_view col-md-12 col-xs-12">
             <div class="product_image col-md-4 col-sm-4 col-xs-12">
                 <div class="main_photo">

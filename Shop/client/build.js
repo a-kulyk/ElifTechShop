@@ -17550,6 +17550,7 @@
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
+	    self = this;
 	    $scope.complete = false;
 	    Items.item($route.current.params.id).then(function (respone) {
 	        //console.log(respone);
@@ -17559,8 +17560,9 @@
 	            return;
 	        }
 	        console.log(respone.data);
+
 	        if (!respone.data || respone.data.error) {
-	            $scope.notFound = true;
+	            self.notFound = true;
 	            $scope.complete = true;
 	            return;
 	        }

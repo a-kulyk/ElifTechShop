@@ -76,6 +76,7 @@ angular.module('app')
     }])
 
     .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
+        self = this;
         $scope.complete = false;
         Items.item($route.current.params.id).then(respone => {
             //console.log(respone);
@@ -85,8 +86,9 @@ angular.module('app')
                 return;
             }
             console.log(respone.data);
+
             if(!respone.data || respone.data.error) {
-                $scope.notFound = true;
+                self.notFound = true;
                 $scope.complete = true;
                 return;
             }
