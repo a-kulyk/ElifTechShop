@@ -20,7 +20,6 @@ function makeVisualEffects() {
             'width': '100%'})
         }
         if(image.prop('naturalHeight') === image.prop('naturalWidth')) {
-            console.log('square');
             image.css({'width' : '100%','height': '100%'});
 
         }

@@ -17328,42 +17328,40 @@
 	    };
 
 	    order.pay = function () {
-	        saveOrder();
-	        // orderService.pay()
-	        //     .then(function(resp) {
-	        //     console.log(resp);
-	        //     if (resp.data.outOfStock) {
-	        //         $uibModal.open({
-	        //             templateUrl: './app/order/modals/outOfStock.html',
-	        //             controller: function($uibModalInstance, $scope, outOfStock) {
-	        //                 $scope.outOfStock = outOfStock;
-	        //             },
-	        //             resolve: {
-	        //                 outOfStock: function() {
-	        //                     return resp.data.outOfStock;
-	        //                 }
-	        //             }
-	        //         });
-	        //     }
-	        // })
-	        // .then(function(bank_resp) {
-	        // console.log("bank_resp : ", bank_resp.data);
-	        // if (bank_resp.data.success === true) {
-	        //     saveOrder();
-	        // } else if (bank_resp.data.success === false) {
-	        //     console.log("Insufficient funds on Your bank account");
-	        //     $uibModal.open({
-	        //         templateUrl: './app/order/modals/paymentFail.html'
-	        //     });
-	        // } else if (bank_resp.data.error) {
-	        //     $uibModal.open({
-	        //         templateUrl: './app/order/modals/connectionErr.html'
-	        //     });
-	        //     console.log('Could not connect to Your bank');
-	        // } else if (bank_resp.data.warning === "No bankAccount") {
-	        //    openInputModal();
-	        // }
-	        // });
+	        orderService.pay().then(function (resp) {
+	            console.log(resp);
+	            if (resp.data.outOfStock) {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/outOfStock.html',
+	                    controller: function controller($uibModalInstance, $scope, outOfStock) {
+	                        $scope.outOfStock = outOfStock;
+	                    },
+	                    resolve: {
+	                        outOfStock: function outOfStock() {
+	                            return resp.data.outOfStock;
+	                        }
+	                    }
+	                });
+	            }
+	            return resp;
+	        }).then(function (bank_resp) {
+	            console.log("bank_resp : ", bank_resp.data);
+	            if (bank_resp.data.success === true) {
+	                saveOrder();
+	            } else if (bank_resp.data.success === false) {
+	                console.log("Insufficient funds on Your bank account");
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/paymentFail.html'
+	                });
+	            } else if (bank_resp.data.error) {
+	                $uibModal.open({
+	                    templateUrl: './app/order/modals/connectionErr.html'
+	                });
+	                console.log('Could not connect to Your bank');
+	            } else if (bank_resp.data.warning === "No bankAccount") {
+	                openInputModal();
+	            }
+	        });
 	    };
 
 	    function saveOrder() {
@@ -17533,7 +17531,6 @@
 
 	        var pages = _.range(1, response.data.pages + 1) || 0;
 	        $scope.pages = [];
-	        console.log(response.data.pages);
 	        _(pages).forEach(function (pageNumber) {
 	            var params = $route.current.params;
 	            params.page = pageNumber;
@@ -17553,6 +17550,7 @@
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
+	    self = this;
 	    $scope.complete = false;
 	    Items.item($route.current.params.id).then(function (respone) {
 	        //console.log(respone);
@@ -17562,8 +17560,9 @@
 	            return;
 	        }
 	        console.log(respone.data);
-	        if (respone.data.error) {
-	            $scope.notFound = true;
+
+	        if (!respone.data || respone.data.error) {
+	            self.notFound = true;
 	            $scope.complete = true;
 	            return;
 	        }
@@ -17639,10 +17638,9 @@
 	        $scope.price = _.cloneDeep($rootScope.data.price);
 	    }
 	    var defineProperty = function defineProperty() {
-	        debugger;
-	        if (!$rootScope.data.properties) return;
 	        var currentUrl = _.cloneDeep($route.current.params);
 	        if (currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
+	        if (!$rootScope.data.properties) return;
 
 	        var _loop = function _loop(item) {
 	            $rootScope.data.properties.forEach(function (property) {
@@ -17659,6 +17657,22 @@
 	                            }
 	                        }
 	                    });
+	                }
+	            });
+	            $rootScope.data.company.forEach(function (company) {
+	                if ("company" == item) {
+	                    if (angular.isArray(currentUrl[item])) {
+	                        if (currentUrl[item].includes(company.name)) {
+	                            console.log(company.respond, true);
+	                            company.state = true;
+	                            company.count = null;
+	                        }
+	                    } else {
+	                        if (currentUrl[item] == company.name) {
+	                            company.state = true;
+	                            company.count = null;
+	                        }
+	                    }
 	                }
 	            });
 	        };
@@ -17699,6 +17713,16 @@
 	                }
 	            });
 	        }
+	        if (data.hasOwnProperty('company')) {
+	            data.company.forEach(function (item) {
+	                if (item.state) {
+	                    if (!propertyScreen['company']) {
+	                        propertyScreen['company'] = [];
+	                    }
+	                    propertyScreen['company'].push(item.name);
+	                }
+	            });
+	        }
 
 	        return propertyScreen;
 	    };
@@ -17735,6 +17759,16 @@
 	            if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
 	            $rootScope.category = currentCategory;
 	            var newResult = _.cloneDeep(result.data);
+	            if (newResult.hasOwnProperty('company')) {
+	                _(newResult.company).forEach(function (value, key) {
+	                    var newCompany = {
+	                        name: value,
+	                        state: false,
+	                        count: null
+	                    };
+	                    newResult.company[key] = newCompany;
+	                });
+	            };
 	            if (newResult.hasOwnProperty('properties')) {
 	                newResult.properties.forEach(function (item) {
 	                    if (item.hasOwnProperty('value')) {
@@ -17749,6 +17783,7 @@
 	                    }
 	                });
 	            }
+
 	            $rootScope.data = newResult || [];
 	            defineProperty();
 	            $scope.complete = true;

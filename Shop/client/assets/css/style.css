@@ -24,8 +24,6 @@ body {
 
 #sidebar{
     border-right: 1px solid #eee;
-    -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s;
 }
 
 .container {
@@ -59,10 +57,11 @@ body {
     margin-bottom: 15px;
 }
 
-.all_product {
+.all_product,.properties,.categories {
     -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
 }
+
 .send_form {
     background: #FFF;
     width: 100%;
@@ -369,9 +368,7 @@ p.product_price {
     max-width: 100%;
 }
 
-.product_properties {
 
-}
 .product_properties p {
     padding: 10px;
     background: #eeeeee;

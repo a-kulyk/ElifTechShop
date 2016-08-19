@@ -108,7 +108,7 @@ router.get('/filtration/:category', function (req, res, next) {
                 Products.count(query)
                     .then(
                         countOfCompany => {
-                            newCompany.count = countOfCompany;
+                            newCompany.count = countOfCompany > 0 ? countOfCompany : null;
                             companies[index] = newCompany;
                             forCompany(index + 1);
                         },

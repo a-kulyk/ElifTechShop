@@ -3,11 +3,22 @@
  */
 let chai = require('chai');
 let expect = chai.expect;
-var Filter = require('../filter.js');
 var request = require("request");
+var app = require('../server/app');
+var config = require('../server/config');
 
 describe('Integration tests',function () {
-
+    let server;
+    before(function () {
+         server = app.listen(config.port);
+    })
+    let serverUrl = "http://localhost:3000/";
+    it("server return status 200", function(done) {
+        request(serverUrl, function(error, response, body) {
+            expect(response.statusCode).to.equal(200);
+            done();
+        });
+    });
     let url = "http://localhost:3000/catalog/filter";
     it("filter return status 200", function(done) {
         request(url, function(error, response, body) {
@@ -36,5 +47,8 @@ describe('Integration tests',function () {
             done();
         });
     });
+    after(function () {
+        server.close();
+    })
 
 });

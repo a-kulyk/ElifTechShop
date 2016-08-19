@@ -1,4 +1,4 @@
-require('strict-mode')(function () {
+
   var app = require('./server/app');
   var config = require('./server/config');
 
@@ -6,4 +6,3 @@ require('strict-mode')(function () {
     console.log('listening on port ' + config.port);
   });
 
-})

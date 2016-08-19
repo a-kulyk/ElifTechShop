@@ -1,7 +1,9 @@
+
 {
   "name": "elifTechSop",
   "scripts": {
-    "start": "nodemon ./app.js"
+    "start": "nodemon ./app.js",
+    "test": "mocha tests/*.js --recursive"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
