@@ -4,7 +4,7 @@
     <div class="col-md-3">
     </div>
     <div class="col-md-6">
-        <div class="panel panel-success animated fadeInUp" id="formForOrder">
+        <div class="panel panel-success animated fadeIn" id="formForOrder">
             <div class="panel-heading">Make order</div>
             <div class="panel-body">
                 <div>
@@ -86,14 +86,14 @@
                         </div>
                         <br>
                         <input type="submit" value="Submit" class="form-control btn btn-success"
-                               ng-class="orderForm.$valid&&toPlace&&fromPlace
+                               ng-class="toPlace&&fromPlace
                                &&validateAddress(toPlace)&&
-                               validateAddress(fromPlace)&& placesUnique()?'':'disabled'">
+                               validateAddress(fromPlace)&& placesUnique()&&orderForm.$valid?'':'disabled'">
                     </form>
                 </div>
             </div>
         </div>
-        <img id="createOrderLogo" class="animated bounceInDown" src="images/box.png">
+        <img id="createOrderLogo" class="animated  animated fadeInDown" src="images/box.png">
     </div>
 </div>
 </div>
