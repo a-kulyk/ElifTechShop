@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var Product = require('../catalog/catalogModel');
 
 var Order = new Schema({
-    userId: String,
+    userId: { type: String, required: true },
     itemSet: [{
         productId: {
             type: Schema.Types.ObjectId,
@@ -17,7 +17,7 @@ var Order = new Schema({
         images: [String],
         quantity: Number
     }],
-    email: String,
+    email: { type: String, required: true },
     status: String,
     total: Number,
     date: {

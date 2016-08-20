@@ -4,11 +4,11 @@
 <div class="modal-body text-center">
 	<table class="table outOfStock" style="font-size: 14px">
 		<tr ng-repeat="item in outOfStock">
-			<td></td>
-			<td class="text-left">Item <strong>{{item.name}}</strong></td>
-			<td class="text-left">available in quantity:<strong>{{item.quan}}</strong></td>
+			<td class="text-right"><strong>{{item.name}} </strong></td>
+			<td class="text-left">available in quantity: </td>
+			<td class="text-left" style="width: 110px"><strong>{{item.quantity}}</strong></td>
 		</tr>
 	</table>
-    <p >There is not enough items in stock</p>
+    <p >There are not enough items in stock</p>
     <p>Sorry :)</p>
 </div>

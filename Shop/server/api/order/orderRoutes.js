@@ -93,7 +93,6 @@ router.post('/pay', function(req, res, next) {
         res.end();
     } else {
         Order.findOne({ userId: req.user._id, status: "shoppingCart" })
-
             .populate({ path: 'itemSet.productId', select: 'price' })
             .exec()
             .then(order => {                
@@ -104,27 +103,28 @@ router.post('/pay', function(req, res, next) {
                         Product.findById(item.productId._id)
                             .then(inStock => {
                                 if (inStock.quantity < item.quantity)
-                                outOfStock.push({id: inStock._id, name: inStock.name, quan: inStock.quantity})
+                                outOfStock.push( _.pick(inStock, '_id', 'name', 'quantity'));
                             })
                             .then(() => resolve());
                     });
                 });
 
-                Promise.all(promises)
-                .then(() => {
-                    if (outOfStock.length) {
-                        res.send({outOfStock});
-                    } else {
-                        order.itemSet.forEach(function(item) {
-                            Product.findById(item.productId._id)
-                                .then(inStock => {
-                                    inStock.quantity -= item.quantity;
-                                    inStock.save();
-                                });
-                        });
-                    }
-                });
-                return order;
+                return Promise.all(promises)
+                    .then(() => {
+                        if (outOfStock.length) {
+                            res.send({outOfStock});
+                            return;
+                        } else {
+                            order.itemSet.forEach(function(item) {
+                                Product.findById(item.productId._id)
+                                    .then(inStock => {
+                                        inStock.quantity -= item.quantity;
+                                        inStock.save();
+                                    });
+                            });
+                            return order;
+                        }
+                    });
             })
             .then(order => {
                 let total = order.findTotal();
@@ -151,19 +151,19 @@ router.post('/pay', function(req, res, next) {
                 };
 
                 var httpreq = http.request(options, (response) => {
-                    let bodyChunks = [];
+                    let body = '';
                     response.setEncoding('utf8');
                     response.on('data', (chunk) => {
-                        bodyChunks.push(chunk);
+                        body += chunk;
                     });
                     response.on('end', () => {
-                        let body = Buffer.concat(bodyChunks).toString();
+                        // let body = Buffer.concat(bodyChunks);
                         res.send(body);
                     });
                 });
                 httpreq.write(post_data);
                 httpreq.on('error', function(e) {
-                    console.log("Got error: " + e.message);
+                    console.log(e.message);
                     next(e);
                 });
                 httpreq.end();

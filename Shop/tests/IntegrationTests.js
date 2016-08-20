@@ -3,52 +3,58 @@
  */
 let chai = require('chai');
 let expect = chai.expect;
-var request = require("request");
+let request = require('supertest');
 var app = require('../server/app');
 var config = require('../server/config');
 
 describe('Integration tests',function () {
-    let server;
-    before(function () {
-         server = app.listen(config.port);
-    })
-    let serverUrl = "http://localhost:3000/";
+
     it("server return status 200", function(done) {
-        request(serverUrl, function(error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            done();
-        });
+        request(app)
+            .get('/')
+            .end(function(err, res) {
+                expect(res.statusCode).to.equal(200);
+                done();
+            });
+
     });
-    let url = "http://localhost:3000/catalog/filter";
     it("filter return status 200", function(done) {
-        request(url, function(error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            done();
-        });
+        request(app)
+            .get('/catalog/filter')
+            .end(function(err, res) {
+                expect(res.statusCode).to.equal(200);
+                done();
+            });
+
     });
     it("have items", function(done) {
-        request(url, function(error, response, body) {
-            let answer = JSON.parse(body)
-            expect(answer.items).to.exist;
-            done();
-        });
+        request(app)
+            .get('/catalog/filter')
+            .end(function(err, res) {
+                let answer = JSON.parse(res.body)
+                expect(answer.items).to.exist;
+                done();
+            });
     });
     it("have pages", function(done) {
-        request(url, function(error, response, body) {
-            let answer = JSON.parse(body)
-            expect(answer.pages).to.exist;
-            done();
-        });
+        request(app)
+            .get('/catalog/filter')
+            .end(function(err, res) {
+                let answer = JSON.parse(res.body)
+                expect(answer.pages).to.exist;
+                done();
+            });
+
     });
     it("not items pages", function(done) {
-        request(url+'?categories=blabla', function(error, response, body) {
-            let answer = JSON.parse(body)
-            expect(answer).to.exist;
-            done();
-        });
+        request(app)
+            .get('/catalog/filter?categories=blabla')
+            .end(function(err, res) {
+                let answer = JSON.parse(res.body)
+                expect(answer).to.exist;
+                done();
+            });
+
     });
-    after(function () {
-        server.close();
-    })
 
 });
