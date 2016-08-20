@@ -8,6 +8,8 @@ let named = require('vinyl-named');
 let del = require('del');
 let nodemon = require('gulp-nodemon');
 
+const NODE_ENV = process.env.NODE_ENV || 'development'
+
 gulp.task('clean', function () {
     return del('public')
 })
@@ -17,8 +19,8 @@ gulp.task('assets', function () {
 });
 gulp.task('webpack', function () {
     let options = {
-        watch: true,
-        devtool: 'eval',
+        watch: NODE_ENV == 'development',
+        devtool: NODE_ENV == 'development' ? 'eval' : null,
         module: {
             loaders: [
                 {
@@ -69,4 +71,8 @@ gulp.task('webpack', function () {
 
 gulp.task('build', gulp.series('clean', 'assets', 'webpack'));
 
-gulp.watch('frontend/assets/**/*.*', gulp.series('assets'));
+gulp.task('watch', function () {
+    gulp.watch('frontend/assets/**/*.*', gulp.series('assets'));
+})
+
+gulp.task('dev', gulp.series('clean', gulp.parallel(gulp.series('assets', 'watch'), 'webpack')));
