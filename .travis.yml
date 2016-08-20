@@ -25,13 +25,11 @@ deploy:
   access_key_id: AKIAI3WDMPRRRPENLPFA
   secret_access_key: &1
     secure: DjVF4RHs03LWZufKF8ghW8cOA76G3VvjQhxvu2T99JOFla97HD4tF7jEW6BpWNAMtlr5Gj1TBj6xn8+iNJZmBPNhEj48Rpno43s4qFS0dza1xR0SVSvyaisqO20/fds+ujIHtp9VBkZ8WnQoul8hCEc4OXFkf82BhL+mN5Ns/CbMWCtk7h//Eb9RE+wrYU2Uhnw5YsiN0/Cj8xkFzGMQayjyJrEJDhpF0O9nyH9tDvcjHtMDwrJl0cMu5VEf1dEwWro4vbf6GfYGb383sPV1q/kqB3Zb+nyqPmZ6BvEAoekvsAIEhA5TTxfcetBkJWbqEQQnFUIuW7Cr7bW/pukuchKrZ9B2MYr0ihE/Y+rANDAFmo5vbnCUWW7qz5z0ftx6sVfHsLXVlP0qo+JKjbIXdpR1z3XxiMwr8DDCjW8VSlkAK56CTAjeXs3oeCfGwo1HUKD8sfy+JR58s0QExDHlfX3Qhiz6eaFWz/whwvQLbua0dQZA7fPnj96Q7ynpD+Isvj0A4tAL+JwUzjG+KMaUrnl2/RDIctUdvGmjkC8JUW/pLUD1perMGS3DM8a3vHDw9lQBs6xXDMTL3XaSPjhc+Ng8ON4A5HlAszbEkC3F3+yLDOiMwO5VTS0/O4ZYmX3NEojENB0mBDQc1c+xCTLXe3wlG0x3Ios+EG9LCw4vn7s=
-  local_dir: dpl_cd_upload
   skip_cleanup: true
   on: &2
     repo: gameiro9k/ElifTechShop
     branch: master
   bucket: eliftechbank
-  upload_dir: MIIEowIBAAKCAQEAzybXG3VHxrhDVFif4wumWZuMfMmWybCHYllbgePULSfy46iyCI
 - provider: codedeploy
   access_key_id: AKIAI3WDMPRRRPENLPFA
   secret_access_key: *1
