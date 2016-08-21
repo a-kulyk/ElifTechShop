@@ -1,1 +1,1 @@
-tar -xvf  ElifTechShop.tar ElifTechShop/
+tar -xvf  build/Release/ElifTechShop.tar ElifTechShop/
