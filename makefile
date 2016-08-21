@@ -23,7 +23,7 @@ create-dist:
 	cp Bank/app.js $(BUILD_DIR_BANK)
 	cp Bank/package.json $(BUILD_DIR_BANK)
 	# BANK ENDS HERE
-	tar czvf $(BUILD_DIR)/${APP_NAME}.tar.gz $(BUILD_DIR_BANK)/** \
+	tar -cvf $(BUILD_DIR)/${APP_NAME}.tar $(BUILD_DIR_BANK)/** \
 	aws/** \
 	appspec.yml
-	chmod 755 $(BUILD_DIR)/${APP_NAME}.tar.gz
+	chmod 755 $(BUILD_DIR)/${APP_NAME}.tar

@@ -17301,7 +17301,7 @@
 	                });
 	            }
 	        });
-	    }, 500);
+	    }, 300);
 
 	    order.decrement = function (id, quan) {
 	        --quan;
@@ -17531,7 +17531,6 @@
 
 	        var pages = _.range(1, response.data.pages + 1) || 0;
 	        $scope.pages = [];
-	        console.log(response.data.pages);
 	        _(pages).forEach(function (pageNumber) {
 	            var params = $route.current.params;
 	            params.page = pageNumber;
@@ -17551,6 +17550,7 @@
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
+	    self = this;
 	    $scope.complete = false;
 	    Items.item($route.current.params.id).then(function (respone) {
 	        //console.log(respone);
@@ -17560,8 +17560,9 @@
 	            return;
 	        }
 	        console.log(respone.data);
-	        if (respone.data.error) {
-	            $scope.notFound = true;
+
+	        if (!respone.data || respone.data.error) {
+	            self.notFound = true;
 	            $scope.complete = true;
 	            return;
 	        }
@@ -17628,7 +17629,7 @@
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-
+	    $rootScope.data.searchField = undefined;
 	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    var currentCategory = $route.current.params.categories;
@@ -17637,9 +17638,12 @@
 	        $scope.price = _.cloneDeep($rootScope.data.price);
 	    }
 	    var defineProperty = function defineProperty() {
-	        if (!$rootScope.data.properties) return;
 	        var currentUrl = _.cloneDeep($route.current.params);
-	        if (currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
+	        console.log(currentUrl.searchField);
+	        if (currentUrl.searchField && !$rootScope.data.searchField) {
+	            $rootScope.data.searchField = currentUrl.searchField;
+	        }
+	        if (!$rootScope.data.properties) return;
 
 	        var _loop = function _loop(item) {
 	            $rootScope.data.properties.forEach(function (property) {
@@ -17656,6 +17660,22 @@
 	                            }
 	                        }
 	                    });
+	                }
+	            });
+	            $rootScope.data.company.forEach(function (company) {
+	                if ("company" == item) {
+	                    if (angular.isArray(currentUrl[item])) {
+	                        if (currentUrl[item].includes(company.name)) {
+	                            console.log(company.respond, true);
+	                            company.state = true;
+	                            company.count = null;
+	                        }
+	                    } else {
+	                        if (currentUrl[item] == company.name) {
+	                            company.state = true;
+	                            company.count = null;
+	                        }
+	                    }
 	                }
 	            });
 	        };
@@ -17696,6 +17716,16 @@
 	                }
 	            });
 	        }
+	        if (data.hasOwnProperty('company')) {
+	            data.company.forEach(function (item) {
+	                if (item.state) {
+	                    if (!propertyScreen['company']) {
+	                        propertyScreen['company'] = [];
+	                    }
+	                    propertyScreen['company'].push(item.name);
+	                }
+	            });
+	        }
 
 	        return propertyScreen;
 	    };
@@ -17732,6 +17762,16 @@
 	            if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
 	            $rootScope.category = currentCategory;
 	            var newResult = _.cloneDeep(result.data);
+	            if (newResult.hasOwnProperty('company')) {
+	                _(newResult.company).forEach(function (value, key) {
+	                    var newCompany = {
+	                        name: value,
+	                        state: false,
+	                        count: null
+	                    };
+	                    newResult.company[key] = newCompany;
+	                });
+	            };
 	            if (newResult.hasOwnProperty('properties')) {
 	                newResult.properties.forEach(function (item) {
 	                    if (item.hasOwnProperty('value')) {
@@ -17746,6 +17786,7 @@
 	                    }
 	                });
 	            }
+
 	            $rootScope.data = newResult || [];
 	            defineProperty();
 	            $scope.complete = true;
@@ -17763,7 +17804,8 @@
 	        if (!currentCategory) return;
 	        Parameters.countOfCat(currentCategory, params).then(function (result) {
 	            if (result.status >= 500 || result.data.length === 0) return;
-	            $rootScope.data = result.data;
+	            $rootScope.data.properties = result.data.properties;
+	            $rootScope.data.company = result.data.company;
 	            $scope.displayCount = true;
 	            defineProperty();
 	        }, function (error) {

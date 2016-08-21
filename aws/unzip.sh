@@ -1,2 +1,2 @@
 cd /home/ubuntu/
-tar xvzf  ElifTechShop.tar.gz ElifTechShop/
+tar -xvf  ElifTechShop.tar ElifTechShop/

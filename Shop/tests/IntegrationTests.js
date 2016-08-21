@@ -12,36 +12,43 @@ describe('Integration tests',function () {
     it("server return status 200", function(done) {
         request(app)
             .get('/')
+            .expect(200)
             .end(function(err, res) {
-                expect(res.statusCode).to.equal(200);
+                if (err) return done(err);
                 done();
             });
-
     });
     it("filter return status 200", function(done) {
         request(app)
             .get('/catalog/filter')
+            .expect(200)
             .end(function(err, res) {
-                expect(res.statusCode).to.equal(200);
+                if (err) return done(err);
                 done();
             });
+
 
     });
     it("have items", function(done) {
         request(app)
             .get('/catalog/filter')
+            .expect(function(res) {
+                expect(res.body.items).to.exist;
+            })
             .end(function(err, res) {
-                let answer = JSON.parse(res.body)
-                expect(answer.items).to.exist;
+                if (err) return done(err);
                 done();
             });
+
     });
     it("have pages", function(done) {
         request(app)
             .get('/catalog/filter')
+            .expect(function(res) {
+                expect(res.body.pages).to.exist;
+            })
             .end(function(err, res) {
-                let answer = JSON.parse(res.body)
-                expect(answer.pages).to.exist;
+                if (err) return done(err);
                 done();
             });
 
@@ -49,9 +56,11 @@ describe('Integration tests',function () {
     it("not items pages", function(done) {
         request(app)
             .get('/catalog/filter?categories=blabla')
+            .expect(function(res) {
+                expect(res.body).to.exist;
+            })
             .end(function(err, res) {
-                let answer = JSON.parse(res.body)
-                expect(answer).to.exist;
+                if (err) return done(err);
                 done();
             });
 

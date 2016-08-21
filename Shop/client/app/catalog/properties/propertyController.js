@@ -1,6 +1,6 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
-
+        $rootScope.data.searchField = undefined;
         $scope.displayCount = false;
         $scope.complete = false;
         var currentCategory = $route.current.params.categories;
@@ -10,7 +10,10 @@ angular.module('app')
         }
         let defineProperty = function() {
             let currentUrl = _.cloneDeep($route.current.params);
-            if(currentUrl.searchField) $rootScope.data.searchField = currentUrl.searchField;
+            console.log(currentUrl.searchField);
+            if(currentUrl.searchField && !$rootScope.data.searchField) {
+                $rootScope.data.searchField = currentUrl.searchField;
+            }
             if(!$rootScope.data.properties) return;
             for(let item in currentUrl) {
                 $rootScope.data.properties.forEach(function(property) {
@@ -176,7 +179,8 @@ angular.module('app')
             Parameters.countOfCat(currentCategory, params)
                 .then(result => {
                         if(result.status >= 500 || result.data.length === 0) return;
-                        $rootScope.data = result.data;
+                        $rootScope.data.properties = result.data.properties;
+                        $rootScope.data.company = result.data.company;
                         $scope.displayCount = true;
                         defineProperty();
                     },
