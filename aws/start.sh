@@ -1,2 +1,2 @@
-cd /home/ubuntu/ElifTechShop/build/Release/Bank
+cd ElifTechShop/Bank
 NODE_ENV=production npm start
