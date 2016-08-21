@@ -2,10 +2,10 @@
  * Created by dmytro on 18.08.16.
  */
 'use strict';
-let app = require('../app');
+let app = require('../../app');
 let chai = require('chai');
 let expect = chai.expect();
-let distanceDeterminer = require('../lib/distance-determiner');
+let distanceDeterminer = require('../../lib/distance-determiner');
 
 describe("Distance determiner", function () {
     it("get order travel time", function () {

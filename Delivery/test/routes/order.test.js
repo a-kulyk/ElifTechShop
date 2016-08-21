@@ -3,11 +3,12 @@
  */
 'use strict';
 
-let app = require('../app');
-let Order = require('../models/order');
+let app = require('../../app');
+let Order = require('../../models/order');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
+let uuid = require('uuid');
 
 chai.use(chaiHttp);
 
@@ -46,7 +47,6 @@ describe('/GET order by tracking code', ()=> {
             chai.request(app)
                 .get('/order/' + trackingCode)
                 .end((err, res)=> {
-                    console.log(res.body);
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.property('success').eql(true);
@@ -58,6 +58,19 @@ describe('/GET order by tracking code', ()=> {
                     done();
                 })
         })
+    })
+})
+
+describe('/GET order by non existing tracking code', ()=> {
+    it('it should response with failed message', (done)=> {
+        let nonExistTrackingCode = uuid.v4();
+        chai.request(app)
+            .get('/order/' + nonExistTrackingCode)
+            .end((err, res)=> {
+                res.should.have.status(200);
+                res.body.should.have.property('success').eql(false);
+                done();
+            })
     })
 })
 
