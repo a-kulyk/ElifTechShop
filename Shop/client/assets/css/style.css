@@ -249,7 +249,7 @@ a:hover  {
 .cart-count {
   position: absolute;
   top: 23px;
-  right: -4px;
+  left: 55px;
   height: 23px;
   width: 23px;
   text-align: center;
