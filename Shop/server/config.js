@@ -1,7 +1,7 @@
 var config = {
   dev: 'development',
   prod: 'production',
-  port: process.env.PORT || 80,
+  port: process.env.PORT || 443,
   API_KEY: "d6911f567ef734f18ea176481638cc8a",
   shopBankAccount: "57a9152719e3cdbc10730705",
   shopEmail: "shop@gmail.com",
