@@ -6,7 +6,7 @@ let Order = require('../models/order');
 let googleConnector = require('../lib/distance-determiner');
 let uuid = require('uuid');
 let carService = require('./car-service');
-let shipmentTimeDeterminer = require('./shipment-time-determiner');
+let shipmentTimeDeterminer = require('../lib/shipment-time-determiner');
 let orderStates = require('../common/enums/order-states').orderStates;
 
 exports.createOrder = function (order) {
@@ -86,6 +86,16 @@ exports.pollOrderFromQueue = function () {
                 reject(err);
             }
             resolve(docs[0]);
+        })
+    })
+}
+exports.getShippingOrders = function () {
+    return new Promise((resolve, reject)=> {
+        Order.find({"state": 0}).sort("created").exec(function (err, orders) {
+            if (err) {
+                reject(err);
+            }
+            resolve(orders)
         })
     })
 }
