@@ -40,9 +40,10 @@ deploy:
 - provider: codedeploy
   access_key_id: AKIAI3WDMPRRRPENLPFA
   secret_access_key: *1
+  region: us-west-2
   bucket: eliftechbank
-  key: build/Release/EliftechShop.tar.gz
-  bundle_type: tar.gz
+  key: build/Release/EliftechShop.tar
+  bundle_type: tar
   application: ElifTechBank
   deployment_group: ElifTech
   on: *2
