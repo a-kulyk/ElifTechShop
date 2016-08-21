@@ -17629,7 +17629,7 @@
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-	    $rootScope.data.searchField = undefined;
+	    $rootScope.data = {};
 	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    var currentCategory = $route.current.params.categories;
