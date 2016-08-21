@@ -17301,7 +17301,7 @@
 	                });
 	            }
 	        });
-	    }, 500);
+	    }, 300);
 
 	    order.decrement = function (id, quan) {
 	        --quan;
