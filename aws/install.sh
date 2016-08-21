@@ -1,2 +1,2 @@
-cd /home/ubuntu/ElifTechShop/build/Release/Bank
+cd Bank
 npm install --production
