@@ -14,8 +14,15 @@ install:
 - npm install
 - webpack
 - cd ../
+- cd Shop/
+- npm install 
+- webpack
+- cd ../
 script:
 - cd Bank/
+- npm test
+- cd ../
+- cd Shop/
 - npm test
 - cd ../
 before_deploy:
