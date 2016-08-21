@@ -1,2 +1,2 @@
-cd Bank
+cd ElifTechShop/Bank
 npm install --production
