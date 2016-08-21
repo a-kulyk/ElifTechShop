@@ -36,8 +36,21 @@ describe('/POST order', ()=> {
                 res.body.should.have.property('success').eql(true);
                 res.body.should.have.property('trackingCode');
                 done();
-            })
-    })
+            });
+    });
+});
+
+describe('/POST order with missing fields', function () {
+    it('it should POST order', (done)=> {
+        chai.request(app).post('/order')
+            .send({})
+            .end((err, res)=> {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                res.body.should.have.property('success').eql(false);
+                done();
+            });
+    });
 })
 
 describe('/GET order by tracking code', ()=> {
@@ -56,10 +69,10 @@ describe('/GET order by tracking code', ()=> {
                     res.body.should.have.property('from');
                     res.body.should.have.property('to');
                     done();
-                })
-        })
-    })
-})
+                });
+        });
+    });
+});
 
 describe('/GET order by non existing tracking code', ()=> {
     it('it should response with failed message', (done)=> {
@@ -70,9 +83,9 @@ describe('/GET order by non existing tracking code', ()=> {
                 res.should.have.status(200);
                 res.body.should.have.property('success').eql(false);
                 done();
-            })
-    })
-})
+            });
+    });
+});
 
 describe('/GET order by id', ()=> {
     it('it should GET order by id', (done)=> {
@@ -87,7 +100,7 @@ describe('/GET order by id', ()=> {
                     res.body.should.have.property('success').eql(true);
                     res.body.should.have.property('trackingCode');
                     done();
-                })
-        })
-    })
-})
+                });
+        });
+    });
+});
