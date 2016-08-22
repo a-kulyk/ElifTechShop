@@ -8,5 +8,3 @@ hooks:
     - location: aws/install.sh
   ApplicationStart:
     - location: aws/start.sh
-  ApplicationStop:
-    - location: aws/stop.sh
