@@ -12,11 +12,11 @@ let uuid = require('uuid');
 
 chai.use(chaiHttp);
 describe('Test order route', ()=> {
-    describe('/POST order', ()=> {
+    describe('testing /order POST', ()=> {
         it('it should POST order', (done)=> {
             let order = {
-                "title": "TestingPost",
-                "price": 777,
+                "title": "testing /order POST",
+                "price": 111,
                 "from": {
                     "username": "test@gmail.com",
                     "lat": 49.80292559999999,
@@ -40,8 +40,8 @@ describe('Test order route', ()=> {
         });
     });
 
-    describe('/POST order with missing fields', function () {
-        it('it should POST order', (done)=> {
+    describe('testing /order POST with missing fields', function () {
+        it('should response with failed message', (done)=> {
             chai.request(app).post('/order')
                 .send({})
                 .end((err, res)=> {

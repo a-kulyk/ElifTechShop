@@ -10,8 +10,8 @@ describe('Test order-service', ()=> {
     describe('createOrder', ()=> {
         it('it should create order', (done)=> {
             let order = {
-                "title": "TestingCreateOrder",
-                "price": 777,
+                "title": "createOrder()",
+                "price": 222,
                 "from": {
                     "username": "test@gmail.com",
                     "lat": 49.80292559999999,
