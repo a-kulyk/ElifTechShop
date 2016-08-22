@@ -1,10 +1,10 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ubuntu/
+  - source: build/Release/Bank
+    destination: /home/ubuntu/Bank
 hooks:
-  Install:
+  BeforeInstall:
     - location: aws/install.sh
   ApplicationStart:
     - location: aws/start.sh
