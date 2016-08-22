@@ -1,1 +1,0 @@
-tar -xvf EliftechShop.tar /

@@ -20,6 +20,7 @@ create-dist:
 	cp -a Bank/libs $(BUILD_DIR_BANK)/libs
 	cp -a Bank/public $(BUILD_DIR_BANK)/public
 	cp -a Bank/routes $(BUILD_DIR_BANK)/routes
+	cp -a Bank/models $(BUILD_DIR_BANK)/models
 	cp Bank/app.js $(BUILD_DIR_BANK)
 	cp Bank/package.json $(BUILD_DIR_BANK)
 	# BANK ENDS HERE
