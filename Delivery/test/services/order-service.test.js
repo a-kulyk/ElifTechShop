@@ -6,7 +6,7 @@ let orderService = require('../../services/order-service');
 let chai = require('chai');
 let should = chai.should();
 
-describe('Test order service', ()=> {
+describe('Test order-service', ()=> {
     describe('createOrder', ()=> {
         it('it should create order', (done)=> {
             let order = {
