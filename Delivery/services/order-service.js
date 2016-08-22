@@ -3,10 +3,10 @@
  */
 "use strict";
 let Order = require('../models/order');
-let googleConnector = require('../lib/distance-determiner');
+let googleConnector = require('../utils/distance-determiner');
 let uuid = require('uuid');
 let carService = require('./car-service');
-let shipmentTimeDeterminer = require('../lib/shipment-time-determiner');
+let shipmentTimeDeterminer = require('../utils/shipment-time-determiner');
 let orderStates = require('../common/enums/order-states').orderStates;
 
 exports.createOrder = function (order) {

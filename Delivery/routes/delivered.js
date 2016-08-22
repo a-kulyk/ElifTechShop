@@ -3,7 +3,7 @@
  */
 'use strict';
 let orderService = require('../services/order-service');
-let deliveryNotifier = require('../lib/delivery-notifier');
+let deliveryNotifier = require('../utils/delivery-notifier');
 let eachLimit = require('async/eachLimit');
 let config = require('../config');
 let responseFactory = require('../common/response-factory');

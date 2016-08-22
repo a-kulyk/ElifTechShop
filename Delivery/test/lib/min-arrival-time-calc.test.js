@@ -2,7 +2,7 @@
  * Created by dmytro on 21.08.16.
  */
 'use strict';
-let minArrivalTimeCalc = require('../../lib/min-arrival-time-calc');
+let minArrivalTimeCalc = require('../../utils/min-arrival-time-calc');
 let chai = require('chai');
 let expect = chai.expect;
 
@@ -10,7 +10,7 @@ const deviation = 1000;
 
 describe('Test min-arrival-time-calc', ()=> {
     describe('Test min-arrival-time-calc', ()=> {
-        it('it should calculate minArrival', (done)=> {
+        it('it should calculate minArrivalTime', (done)=> {
             const dateNow = Date.now();
             let carsArray = [
                 {arrivalTime: dateNow + 80 * 60 * 1000},
