@@ -28,7 +28,7 @@ describe('Test min-arrival-time-calc', ()=> {
         });
     });
     describe('Test min-arrival-time-calc', ()=> {
-        it('it should return 0, when there is free car', (done)=> {
+        it('it should return 0, because there is a free car', (done)=> {
             const dateNow = Date.now();
 
             let carsArray = [
@@ -47,6 +47,24 @@ describe('Test min-arrival-time-calc', ()=> {
             done();
         });
     });
-})
+    describe('Test min-arrival-time-calc', ()=> {
+        it('case when all cars have similar travel time left', (done)=> {
+            const dateNow = Date.now();
 
+            let carsArray = [
+                {arrivalTime: dateNow + 50 * 60 * 1000},
+                {arrivalTime: dateNow + 50 * 60 * 1000},
+                {arrivalTime: dateNow + 50 * 60 * 1000}
+            ];
+            let ordersArray = [
+                {travelTime: 60 * 60},
+                {travelTime: 30 * 60},
+                {travelTime: 40 * 60}
+            ];
 
+            let minArrivalTime = minArrivalTimeCalc(ordersArray, carsArray);
+            expect(Math.abs(4800000 - minArrivalTime) < deviation).to.be.ok;
+            done();
+        })
+    });
+});
