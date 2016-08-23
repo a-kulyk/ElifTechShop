@@ -5,7 +5,7 @@ var config = require('./config');
 var mongoose = require('./libs/mongoose');
  var session = require('express-session');
 var bodyParser = require('body-parser');
-
+var ping = require('express-ping').ping;
 var app = express();
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -25,7 +25,7 @@ app.use(session({
         mongooseConnection: mongoose.connection
     })
 }));
-
+app.use(ping());
 http.createServer(app).listen(app.get('port'),function () {
     console.log('Listening on port '+app.get('port'));
 });

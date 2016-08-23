@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-pm2 stop app.js
+killall node
 cd /home/ubuntu/EliftechShop
 sudo rm -r Bank
