@@ -1,4 +1,4 @@
-killall node
-rm appspec.yml
-rm -r aws
-rm -r build
+#!/usr/bin/env bash
+pm2 kill
+cd /home/ubuntu/EliftechShop
+rm -rf Bank
