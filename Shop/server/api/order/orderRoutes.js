@@ -139,8 +139,7 @@ router.post('/pay', function(req, res, next) {
                 });
 
                 let options = {
-                    host: 'localhost',
-                    port: 3000,
+                    host: 'ec2-54-201-172-12.us-west-2.compute.amazonaws.com',
                     path: '/api/transaction/',
                     method: 'POST',
                     headers: {
