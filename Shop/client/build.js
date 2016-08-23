@@ -17693,7 +17693,8 @@
 	        }
 	        if ($route.current.params.sort) {
 	            var additionalSortQuery = {
-	                sort: $route.current.params.sort || 'cheap'
+	                sort: $route.current.params.sort || 'cheap',
+	                sortBy: $route.current.params.sortBy || 1
 	            };
 	            Object.assign(propertyScreen, additionalSortQuery);
 	        }

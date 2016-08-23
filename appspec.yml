@@ -1,11 +1,11 @@
 version: 0.0
 os: linux
 files:
-  - source: build/Release/Bank
+  - source: Bank
     destination: /home/ubuntu/EliftechShop/Bank
-  - source: build/Release/Shop
+  - source: Shop
     destination: /home/ubuntu/EliftechShop/Shop
-  - source: build/Release/Delivery
+  - source: Delivery
     destination: /home/ubuntu/EliftechShop/Delivery
 hooks:
   AfterInstall:

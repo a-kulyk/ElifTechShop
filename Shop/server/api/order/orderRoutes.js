@@ -39,7 +39,7 @@ router.get('/:id', function(req, res, next) {
 router.get('/info/:track', function(req, res, next) {
 
     let options = {
-        host: 'localhost',
+        host: 'ec2-52-58-250-63.eu-central-1.compute.amazonaws.com',
         port: 9000,
         path: '/order/' + req.params.track,
         method: 'GET',
@@ -127,7 +127,6 @@ router.post('/pay', function(req, res, next) {
             })
             .then(order => {
                 let total = order.findTotal();
-                console.log("...TOTAL...", total);
                 return total;
             })
             .then(total => {
@@ -270,7 +269,7 @@ router.put('/setAddress', function(req, res, next) {
                 });
 
                 let options = {
-                    host: 'localhost',
+                    host: 'ec2-52-58-250-63.eu-central-1.compute.amazonaws.com',
                     port: 9000,
                     path: '/order/',
                     method: 'POST',
