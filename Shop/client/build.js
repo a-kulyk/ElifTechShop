@@ -17629,10 +17629,12 @@
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-	    $rootScope.data = {};
+	    var currentCategory = $route.current.params.categories;
+	    if ($rootScope.category != currentCategory) {
+	        $rootScope.data = {};
+	    }
 	    $scope.displayCount = false;
 	    $scope.complete = false;
-	    var currentCategory = $route.current.params.categories;
 	    $scope.isCat = typeof currentCategory == "undefined";
 	    if ($rootScope.data.price) {
 	        $scope.price = _.cloneDeep($rootScope.data.price);
@@ -17746,57 +17748,56 @@
 	        }
 	        return urlObj;
 	    };
-
-	    if ($rootScope.category != currentCategory) {
-	        Parameters.paramsOfCat(currentCategory).then(function (result) {
-	            if (result.status >= 500) {
-	                $scope.error = true;
-	                $scope.complete = true;
-	                return;
-	            }
-	            if (result.data.length === 0) {
-	                $scope.notFound = true;
-	                $scope.complete = true;
-	                return;
-	            }
-	            if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
-	            $rootScope.category = currentCategory;
-	            var newResult = _.cloneDeep(result.data);
-	            if (newResult.hasOwnProperty('company')) {
-	                _(newResult.company).forEach(function (value, key) {
-	                    var newCompany = {
-	                        name: value,
-	                        state: false,
-	                        count: null
-	                    };
-	                    newResult.company[key] = newCompany;
-	                });
-	            };
-	            if (newResult.hasOwnProperty('properties')) {
-	                newResult.properties.forEach(function (item) {
-	                    if (item.hasOwnProperty('value')) {
-	                        for (var i = 0; i < item.value.length; i++) {
-	                            var newValue = {
-	                                respond: item.value[i],
-	                                state: false,
-	                                count: null
-	                            };
-	                            item.value[i] = newValue;
-	                        }
-	                    }
-	                });
-	            }
-
-	            $rootScope.data = newResult || [];
-	            defineProperty();
-	            $scope.complete = true;
-	        }, function (error) {
-	            console.log(error);
-	            $scope.categories = [];
+	    Parameters.paramsOfCat(currentCategory).then(function (result) {
+	        if (result.status >= 500) {
 	            $scope.error = true;
 	            $scope.complete = true;
-	        });
-	    }
+	            return;
+	        }
+	        if (result.data.length === 0) {
+	            $scope.notFound = true;
+	            $scope.complete = true;
+	            return;
+	        }
+	        if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
+	        $rootScope.category = currentCategory;
+	        var newResult = _.cloneDeep(result.data);
+	        if (newResult.hasOwnProperty('company')) {
+	            _(newResult.company).forEach(function (value, key) {
+	                var newCompany = {
+	                    name: value,
+	                    state: false,
+	                    count: null
+	                };
+	                newResult.company[key] = newCompany;
+	            });
+	        };
+	        if (newResult.hasOwnProperty('properties')) {
+	            newResult.properties.forEach(function (item) {
+	                if (item.hasOwnProperty('value')) {
+	                    for (var i = 0; i < item.value.length; i++) {
+	                        var newValue = {
+	                            respond: item.value[i],
+	                            state: false,
+	                            count: null
+	                        };
+	                        item.value[i] = newValue;
+	                    }
+	                }
+	            });
+	        }
+
+	        $rootScope.data = newResult || [];
+	        defineProperty();
+	        debugger;
+	        $scope.complete = true;
+	    }, function (error) {
+	        console.log(error);
+	        $scope.categories = [];
+	        $scope.error = true;
+	        $scope.complete = true;
+	    });
+
 	    (function () {
 	        var params = _.cloneDeep($route.current.params);
 	        delete params.per_page;
@@ -17808,6 +17809,7 @@
 	            $rootScope.data.company = result.data.company;
 	            $scope.displayCount = true;
 	            defineProperty();
+	            $scope.complete = true;
 	        }, function (error) {
 	            console.log(error);
 	        });

@@ -227,15 +227,15 @@ function addGalleryView() {
         on: {'opacity':'1'},
         off : {'opacity':'0.7'}
     }
-    active.css(activeStyle.on);
+    active.attr('class',"active");
     $('.main_photo').css({'height':currentImage.height() * percent});
     $('.thumbnails').each(function () {
         $(this).on('click', function () {
-            active.css(activeStyle.off);
-            active = $(this);
+            active.attr('class',"non_active");
+            active = $(this).find('img');
             currentImage.attr('src', ($(this).children().attr('src')))
-            $(this).children().css({'opacity':'1'});
-            active.css(activeStyle.on);
+            $(this).children().attr('class',"active");
+            active.attr('class',"active");
         })
     })
 }
