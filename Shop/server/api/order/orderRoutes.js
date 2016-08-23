@@ -140,7 +140,7 @@ router.post('/pay', function(req, res, next) {
 
                 let options = {
                     host: 'localhost',
-                    port: 3000,
+                    port: 80,
                     path: '/api/transaction/',
                     method: 'POST',
                     headers: {
@@ -308,6 +308,7 @@ router.put('/setAddress', function(req, res, next) {
 });
 
 router.put('/delivered', function(req, res, next) {
+    console.log("REQ: ",req);
     Order.findOne({ trackingCode: req.body.trackingCode })
         .then(order => {
             order.status = "completed";
