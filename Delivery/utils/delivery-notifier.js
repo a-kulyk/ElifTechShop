@@ -2,7 +2,7 @@
  * Created by dmytro on 23.07.16.
  */
 "use strict";
-let config = require('../config');
+let config = require('../config/index');
 let nodemailer = require('nodemailer');
 let request = require('request');
 

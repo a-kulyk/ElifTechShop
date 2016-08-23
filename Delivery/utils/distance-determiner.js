@@ -3,7 +3,7 @@
  */
 "use strict";
 let request = require('request');
-let config = require('../config');
+let config = require('../config/index');
 let GoogleResError = require('../common/errors/google-res-error');
 
 module.exports = function (from, to) {

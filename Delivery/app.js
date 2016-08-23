@@ -3,7 +3,6 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
-let session = require('express-session');
 let validator = require('express-validator');
 let config = require('./config');
 let app = express();

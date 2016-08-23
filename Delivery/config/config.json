@@ -1,8 +1,9 @@
 {
   "host": "localhost",
-  "port": 3000,
+  "port": 9000,
   "mongoose": {
-    "uri": "mongodb://root:1111@ds023664.mlab.com:23664/delivery_bd"
+    "development_uri": "mongodb://root:1111@ds013366.mlab.com:13366/test_delivery_db",
+    "production_uri": "mongodb://root:1111@ds013366.mlab.com:13366/delivery_db"
   },
   "googleApi": {
     "host": "maps.googleapis.com",
@@ -23,7 +24,7 @@
       "maxAge": null
     }
   },
-  "shop":{
-    "url":"http://localhost:5000/order/delivered"
+  "shop": {
+    "url": "http://localhost:5000/order/delivered"
   }
 }

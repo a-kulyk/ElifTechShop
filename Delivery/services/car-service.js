@@ -87,7 +87,7 @@ exports.activateByIdAsAvailable = function (id) {
                         }
                     )
                 } else {
-                    Car.update({_id: id}, {$set:{isActive: true}}, function (err) {
+                    Car.update({_id: id}, {$set: {isActive: true}}, function (err) {
                         if (!err) {
                             resolve();
                         } else {
@@ -131,6 +131,16 @@ exports.findAllActive = function () {
             } else {
                 resolve(docs);
             }
+        })
+    })
+}
+exports.getCarsTravelTime = function () {
+    return new Promise((resolve, reject)=> {
+        Car.find({'isActive': true}).select('arrivalTime').exec(function (err, cars) {
+            if (err) {
+                reject(err);
+            }
+            resolve(cars);
         })
     })
 }
