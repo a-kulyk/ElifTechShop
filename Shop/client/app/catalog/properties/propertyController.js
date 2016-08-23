@@ -1,16 +1,18 @@
 angular.module('app')
     .controller('PropertyController', ['Parameters','$route','$scope','$rootScope','$httpParamSerializer' ,'$location',function (Parameters,$route,$scope,$rootScope,$httpParamSerializer,$location) {
-        $rootScope.data = {};
+        var currentCategory = $route.current.params.categories;
+        if($rootScope.category != currentCategory) {
+            $rootScope.data = {}
+        }
         $scope.displayCount = false;
         $scope.complete = false;
-        var currentCategory = $route.current.params.categories;
         $scope.isCat = typeof currentCategory == "undefined";
         if($rootScope.data.price) {
             $scope.price = _.cloneDeep($rootScope.data.price);
         }
+
         let defineProperty = function() {
             let currentUrl = _.cloneDeep($route.current.params);
-            console.log(currentUrl.searchField);
             if(currentUrl.searchField && !$rootScope.data.searchField) {
                 $rootScope.data.searchField = currentUrl.searchField;
             }
@@ -21,7 +23,6 @@ angular.module('app')
                         property.value.forEach(function (value) {
                             if(angular.isArray(currentUrl[item])) {
                                 if(currentUrl[item].includes(value.respond)) {
-                                    console.log(value.respond,true);
                                     value.state = true;
                                 }
                             } else {
@@ -36,7 +37,6 @@ angular.module('app')
                     if("company" == item) {
                             if(angular.isArray(currentUrl[item])) {
                                 if(currentUrl[item].includes(company.name)) {
-                                    console.log(company.respond,true);
                                     company.state = true;
                                     company.count = null;
                                 }
@@ -116,61 +116,59 @@ angular.module('app')
             }
             return urlObj;
         };
-
-        if($rootScope.category != currentCategory) {
-            Parameters.paramsOfCat(currentCategory)
-                .then(result => {
-                    if(result.status >= 500) {
-                        $scope.error = true;
-                        $scope.complete = true;
-                        return;
-                    }
-                    if(result.data.length === 0) {
-                        $scope.notFound = true;
-                        $scope.complete = true;
-                        return;
-                    }
-                    if (result.data.price) $scope.price =_.cloneDeep(result.data.price);
-                    $rootScope.category = currentCategory;
-                    let newResult = _.cloneDeep(result.data);
-                    if (newResult.hasOwnProperty('company')) {
-                        _(newResult.company).forEach( function(value, key) {
-                            let newCompany = {
-                                name : value,
-                                state : false,
-                                count: null
-                            };
-                            newResult.company[key] = newCompany
-                        });
-
-                    };
-                    if (newResult.hasOwnProperty('properties')) {
-                        newResult.properties.forEach(function (item) {
-                            if (item.hasOwnProperty('value')) {
-                                for (let i = 0; i < item.value.length; i++) {
-                                    let newValue = {
-                                        respond: item.value[i],
-                                        state: false,
-                                        count: null
-                                    };
-                                    item.value[i] = newValue
-                                }
-                            }
-                        });
-                    }
-
-                    $rootScope.data = newResult || [];
-                    defineProperty();
-                    $scope.complete = true;
-
-                },
-                error => {
-                    console.log(error);
-                    $scope.categories = [];
+        Parameters.paramsOfCat(currentCategory)
+            .then(result => {
+                if(result.status >= 500) {
                     $scope.error = true;
                     $scope.complete = true;
-                });
-        }
+                    return;
+                }
+                if(result.data.length === 0) {
+                    $scope.notFound = true;
+                    $scope.complete = true;
+                    return;
+                }
+                if (result.data.price) $scope.price =_.cloneDeep(result.data.price);
+                $rootScope.category = currentCategory;
+                let newResult = _.cloneDeep(result.data);
+                if (newResult.hasOwnProperty('company')) {
+                    _(newResult.company).forEach( function(value, key) {
+                        let newCompany = {
+                            name : value,
+                            state : false,
+                            count: null
+                        };
+                        newResult.company[key] = newCompany
+                    });
+
+                };
+                if (newResult.hasOwnProperty('properties')) {
+                    newResult.properties.forEach(function (item) {
+                        if (item.hasOwnProperty('value')) {
+                            for (let i = 0; i < item.value.length; i++) {
+                                let newValue = {
+                                    respond: item.value[i],
+                                    state: false,
+                                    count: null
+                                };
+                                item.value[i] = newValue
+                            }
+                        }
+                    });
+                }
+
+                $rootScope.data = newResult || [];
+                defineProperty();
+                $scope.complete = true;
+
+            },
+            error => {
+                console.log(error);
+                $scope.categories = [];
+                $scope.error = true;
+                $scope.complete = true;
+            });
+
         (function() {
             let params = _.cloneDeep($route.current.params);
             delete params.per_page;
@@ -183,6 +181,7 @@ angular.module('app')
                         $rootScope.data.company = result.data.company;
                         $scope.displayCount = true;
                         defineProperty();
+                        $scope.complete = true;
                     },
                     error => {
                         console.log(error);

@@ -17329,7 +17329,6 @@
 
 	    order.pay = function () {
 	        orderService.pay().then(function (resp) {
-	            console.log(resp);
 	            if (resp.data.outOfStock) {
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/outOfStock.html',
@@ -17345,11 +17344,9 @@
 	            }
 	            return resp;
 	        }).then(function (bank_resp) {
-	            console.log("bank_resp : ", bank_resp.data);
 	            if (bank_resp.data.success === true) {
 	                saveOrder();
 	            } else if (bank_resp.data.success === false) {
-	                console.log("Insufficient funds on Your bank account");
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/paymentFail.html'
 	                });
@@ -17357,7 +17354,6 @@
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/connectionErr.html'
 	                });
-	                console.log('Could not connect to Your bank');
 	            } else if (bank_resp.data.warning === "No bankAccount") {
 	                openInputModal();
 	            }
@@ -17407,7 +17403,6 @@
 	    });
 
 	    history.openOrder = function (order) {
-	        console.log(order._id);
 	        $location.path("/order/" + order._id);
 	    };
 	}]).controller('OrderDetailController', ['$route', 'orderService', function ($route, orderService) {
@@ -17571,12 +17566,10 @@
 	        $scope.addToCart = function (cart) {
 	            if (!$rootScope.shoppingCart) {
 	                orderService.createCart(cart).then(function (response) {
-	                    console.log("create response :  ", response.data);
 	                    $rootScope.shoppingCart = response.data;
 	                });
 	            } else {
 	                orderService.addToCart(cart).then(function (response) {
-	                    console.log("addItem response :  ", response.data);
 	                    $rootScope.shoppingCart = response.data;
 	                });
 	            }
@@ -17629,17 +17622,19 @@
 	'use strict';
 
 	angular.module('app').controller('PropertyController', ['Parameters', '$route', '$scope', '$rootScope', '$httpParamSerializer', '$location', function (Parameters, $route, $scope, $rootScope, $httpParamSerializer, $location) {
-	    $rootScope.data = {};
+	    var currentCategory = $route.current.params.categories;
+	    if ($rootScope.category != currentCategory) {
+	        $rootScope.data = {};
+	    }
 	    $scope.displayCount = false;
 	    $scope.complete = false;
-	    var currentCategory = $route.current.params.categories;
 	    $scope.isCat = typeof currentCategory == "undefined";
 	    if ($rootScope.data.price) {
 	        $scope.price = _.cloneDeep($rootScope.data.price);
 	    }
+
 	    var defineProperty = function defineProperty() {
 	        var currentUrl = _.cloneDeep($route.current.params);
-	        console.log(currentUrl.searchField);
 	        if (currentUrl.searchField && !$rootScope.data.searchField) {
 	            $rootScope.data.searchField = currentUrl.searchField;
 	        }
@@ -17651,7 +17646,6 @@
 	                    property.value.forEach(function (value) {
 	                        if (angular.isArray(currentUrl[item])) {
 	                            if (currentUrl[item].includes(value.respond)) {
-	                                console.log(value.respond, true);
 	                                value.state = true;
 	                            }
 	                        } else {
@@ -17666,7 +17660,6 @@
 	                if ("company" == item) {
 	                    if (angular.isArray(currentUrl[item])) {
 	                        if (currentUrl[item].includes(company.name)) {
-	                            console.log(company.respond, true);
 	                            company.state = true;
 	                            company.count = null;
 	                        }
@@ -17746,57 +17739,55 @@
 	        }
 	        return urlObj;
 	    };
-
-	    if ($rootScope.category != currentCategory) {
-	        Parameters.paramsOfCat(currentCategory).then(function (result) {
-	            if (result.status >= 500) {
-	                $scope.error = true;
-	                $scope.complete = true;
-	                return;
-	            }
-	            if (result.data.length === 0) {
-	                $scope.notFound = true;
-	                $scope.complete = true;
-	                return;
-	            }
-	            if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
-	            $rootScope.category = currentCategory;
-	            var newResult = _.cloneDeep(result.data);
-	            if (newResult.hasOwnProperty('company')) {
-	                _(newResult.company).forEach(function (value, key) {
-	                    var newCompany = {
-	                        name: value,
-	                        state: false,
-	                        count: null
-	                    };
-	                    newResult.company[key] = newCompany;
-	                });
-	            };
-	            if (newResult.hasOwnProperty('properties')) {
-	                newResult.properties.forEach(function (item) {
-	                    if (item.hasOwnProperty('value')) {
-	                        for (var i = 0; i < item.value.length; i++) {
-	                            var newValue = {
-	                                respond: item.value[i],
-	                                state: false,
-	                                count: null
-	                            };
-	                            item.value[i] = newValue;
-	                        }
-	                    }
-	                });
-	            }
-
-	            $rootScope.data = newResult || [];
-	            defineProperty();
-	            $scope.complete = true;
-	        }, function (error) {
-	            console.log(error);
-	            $scope.categories = [];
+	    Parameters.paramsOfCat(currentCategory).then(function (result) {
+	        if (result.status >= 500) {
 	            $scope.error = true;
 	            $scope.complete = true;
-	        });
-	    }
+	            return;
+	        }
+	        if (result.data.length === 0) {
+	            $scope.notFound = true;
+	            $scope.complete = true;
+	            return;
+	        }
+	        if (result.data.price) $scope.price = _.cloneDeep(result.data.price);
+	        $rootScope.category = currentCategory;
+	        var newResult = _.cloneDeep(result.data);
+	        if (newResult.hasOwnProperty('company')) {
+	            _(newResult.company).forEach(function (value, key) {
+	                var newCompany = {
+	                    name: value,
+	                    state: false,
+	                    count: null
+	                };
+	                newResult.company[key] = newCompany;
+	            });
+	        };
+	        if (newResult.hasOwnProperty('properties')) {
+	            newResult.properties.forEach(function (item) {
+	                if (item.hasOwnProperty('value')) {
+	                    for (var i = 0; i < item.value.length; i++) {
+	                        var newValue = {
+	                            respond: item.value[i],
+	                            state: false,
+	                            count: null
+	                        };
+	                        item.value[i] = newValue;
+	                    }
+	                }
+	            });
+	        }
+
+	        $rootScope.data = newResult || [];
+	        defineProperty();
+	        $scope.complete = true;
+	    }, function (error) {
+	        console.log(error);
+	        $scope.categories = [];
+	        $scope.error = true;
+	        $scope.complete = true;
+	    });
+
 	    (function () {
 	        var params = _.cloneDeep($route.current.params);
 	        delete params.per_page;
@@ -17808,6 +17799,7 @@
 	            $rootScope.data.company = result.data.company;
 	            $scope.displayCount = true;
 	            defineProperty();
+	            $scope.complete = true;
 	        }, function (error) {
 	            console.log(error);
 	        });
