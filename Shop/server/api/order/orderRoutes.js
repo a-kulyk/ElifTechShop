@@ -141,7 +141,7 @@ router.post('/pay', function(req, res, next) {
 
                 let options = {
                     host: 'localhost',
-                    port: 4000,
+                    port: 3000,
                     path: '/api/transaction/',
                     method: 'POST',
                     headers: {
@@ -273,7 +273,7 @@ router.put('/setAddress', function(req, res, next) {
 
                 let options = {
                     host: 'localhost',
-                    port: 5000,
+                    port: 9000,
                     path: '/order/',
                     method: 'POST',
                     headers: {
