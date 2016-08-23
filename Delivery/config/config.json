@@ -25,6 +25,6 @@
     }
   },
   "shop": {
-    "url": "localhost:7000/order/delivered"
+    "url": "localhost:9000/order/delivered"
   }
 }
