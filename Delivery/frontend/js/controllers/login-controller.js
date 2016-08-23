@@ -8,10 +8,8 @@ module.exports = function (app) {
             var requestJSON = {};
             requestJSON.username = $scope.username;
             requestJSON.password = $scope.password;
-            console.log(requestJSON.username + " " + requestJSON.password);
-            $http.post("/login", requestJSON).success(function (data, status, headers) {
+            $http.post("/login", requestJSON).success(function (data) {
                 if (data.success) {
-                    console.log(data);
                     config.role = 'admin';//for otherwise routing
                     var admin = {
                         getRoles: function () {
@@ -24,7 +22,7 @@ module.exports = function (app) {
                     console.log(data);
                     $scope.accessError = true;
                 }
-            }).error(function (data, status, headers) {
+            }).error(function (data, status) {
                 console.log(status + ' ' + data);
             });
         }

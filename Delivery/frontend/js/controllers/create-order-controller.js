@@ -33,7 +33,6 @@ module.exports = function (app) {
             $scope.validToAddress = $scope.validateAddress($scope.toPlace)
 
             $http.post("/order", requestJSON).success(function (data, status, headers) {
-                console.log(data);
                 if (data.success) {
                     $window.location.href = '#/order_info/' + data.trackingCode;
                 } else {
@@ -48,7 +47,7 @@ module.exports = function (app) {
                             break;
                     }
                 }
-            }).error(function (data, status, headers) {
+            }).error(function (data, status) {
                 console.log(status);
             });
         }

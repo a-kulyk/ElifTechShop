@@ -12,20 +12,20 @@ module.exports = function (app) {
             return moment(date).format('DD.MM.YY, HH:mm');
         }
         $scope.redirectToOrder = function (order) {
-            $http.get('/order/id/' + order).success(function (data, status, headers) {
+            $http.get('/order/id/' + order).success(function (data) {
                 if (data.success) {
                     $window.location.href = '#/order_info/' + data.trackingCode;
                 }
             });
         };
         $scope.deactivateCar = function (car) {
-            $http.post("/deactivate_car", {"id": car._id}).success(function (data, status, headers) {
+            $http.post("/deactivate_car", {"id": car._id}).success(function (data) {
                 console.log("deactivated: "+data.success);
                 loadTable();
             });
         }
         $scope.activateCar=function (car) {
-            $http.post("/activate_car", {"id": car._id}).success(function (data, status, headers) {
+            $http.post("/activate_car", {"id": car._id}).success(function (data) {
                 console.log("activated: "+data.success);
                 loadTable();
             });

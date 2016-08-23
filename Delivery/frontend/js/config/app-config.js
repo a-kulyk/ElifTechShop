@@ -76,7 +76,6 @@ module.exports = function (app) {
 
 
     }).run(['$rootScope', '$http', 'AclService', 'config', function ($rootScope, $http, AclService, config) {
-        console.log('conf ' + config.role);
         AclService.addRole('guest');
         AclService.addRole('admin');
 

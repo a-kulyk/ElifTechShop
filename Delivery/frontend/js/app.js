@@ -16,7 +16,6 @@ function fetchData() {
     var $http = initInjector.get("$http");
 
     return $http.get("/status").then(function (response) {
-        console.log(response.data);
         app.constant("config", response.data);
     }, function (errorResponse) {
         console.log(errorResponse);

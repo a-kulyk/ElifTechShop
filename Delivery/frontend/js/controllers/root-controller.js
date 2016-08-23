@@ -8,9 +8,8 @@ module.exports = function (app) {
             $scope.can = AclService.can;
             $scope.logout = function () {
                 $http.post('/logout', {}).success(function (data, status, headers) {
-                    console.log('logout complete');
+                    console.log('logout: ' + data.success);
                 });
-                console.log('logout');
                 config.role = 'guest';//for otherwise routing
                 AclService.setUserIdentity({
                     getRoles: function () {
@@ -20,7 +19,7 @@ module.exports = function (app) {
             }
             $scope.isActive = function (viewLocation) {
                 if ($location.path().length == 1) {
-                    return viewLocation=='/';
+                    return viewLocation == '/';
                 } else {
                     return $location.path().slice(1).startsWith(viewLocation);
                 }

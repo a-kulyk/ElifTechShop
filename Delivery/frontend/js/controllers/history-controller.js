@@ -10,9 +10,8 @@ module.exports = function (app) {
                 $scope.fromUsername = $routeParams.fromUsername !== 'null' ? $routeParams.fromUsername : '';
                 $scope.toUsername = $routeParams.toUsername !== 'null' ? $routeParams.toUsername : '';
                 $http.get('/history/' + $routeParams.fromUsername + '/'
-                    + $routeParams.toUsername).success(function (data, status, headers) {
+                    + $routeParams.toUsername).success(function (data) {
                     $scope.isTableVisible = data.orders.length;
-                    console.log(data);
                     $scope.orders = data.orders;
                 });
             }

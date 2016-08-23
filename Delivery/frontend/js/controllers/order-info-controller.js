@@ -15,7 +15,6 @@ module.exports = function (app) {
                     $scope.isInfoVisible = true;
                     $scope.arrivalTime = moment(data.arrivalTime).format('DD.MM.YY, HH:mm');
                     var tempTime = moment.duration(data.travelTime, 'seconds');
-                    console.log(data.travelTime);
                     $scope.travelTime = tempTime.hours() + ' hours ' + tempTime.minutes() + ' minutes';
                     $scope.state = orderStates.statesArray[data.state];
                     $scope.fromUsername = data.from.username;
@@ -28,12 +27,10 @@ module.exports = function (app) {
                     },1000);
                     
                 } else {
-                 //   $scope.isInfoVisible = false;
                     $scope.isNotFoundVisible = true;
                 }
+            }).error(function (data) {
                 console.log(data);
-            }).error(function (data, status, headers) {
-                console.log('error');
             })
         }
     });
