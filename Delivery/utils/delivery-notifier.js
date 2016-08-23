@@ -46,7 +46,7 @@ exports.notifyShop = function (trackingCode) {
             if (err) {
                 reject(err);
             }
-            console.log("response: " + response)
+            console.log("response: " + response);
             resolve(response);
         });
     });
