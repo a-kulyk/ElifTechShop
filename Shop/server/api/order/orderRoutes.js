@@ -140,7 +140,7 @@ router.post('/pay', function(req, res, next) {
 
                 let options = {
                     host: 'localhost',
-                    port: 80,
+                    port: 3000,
                     path: '/api/transaction/',
                     method: 'POST',
                     headers: {
