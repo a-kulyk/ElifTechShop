@@ -16,6 +16,8 @@ create-dist:
 	# BANK STARTS HERE
 	@echo Building application BANK
 	mkdir -p $(BUILD_DIR)/Bank/config
+	mkdir -p $(BUILD_DIR)/Shop
+	mkdir -p $(BUILD_DIR)/Delivery
 	cd Bank/ && webpack
 	@echo Copy folders to Build Dir
 	cp Bank/config/config.$(NODE_ENV).json $(BUILD_DIR_BANK)/config/config.$(NODE_ENV).json
@@ -29,6 +31,7 @@ create-dist:
 	# BANK ENDS HERE
 	# SHOP STARTS HERE
 	cd Shop/ && webpack
+	ls
 	@echo Copy folders to Build Dir
 	cp -a Shop/client $(BUILD_DIR_SHOP)/client
 	cp -a Shop/server $(BUILD_DIR_SHOP)/server
