@@ -17626,6 +17626,9 @@
 	    if ($rootScope.category != currentCategory) {
 	        $rootScope.data = {};
 	    }
+	    if (!$route.current.params.searchField) {
+	        $rootScope.data.searchField = undefined;
+	    }
 	    $scope.displayCount = false;
 	    $scope.complete = false;
 	    $scope.isCat = typeof currentCategory == "undefined";
