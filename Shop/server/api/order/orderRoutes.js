@@ -308,9 +308,10 @@ router.put('/setAddress', function(req, res, next) {
 });
 
 router.put('/delivered', function(req, res, next) {
-    console.log("REQ: ",req);
+    console.log("REQ: ",req.body);
     Order.findOne({ trackingCode: req.body.trackingCode })
         .then(order => {
+            console.log(order);
             order.status = "completed";
             order.date.completed = new Date();
             return order.save();
