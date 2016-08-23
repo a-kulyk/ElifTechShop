@@ -25,6 +25,6 @@
     }
   },
   "shop": {
-    "url": "localhost:9000/order/delivered"
+    "url": "http://ec2-52-43-122-40.us-west-2.compute.amazonaws.com:7000/order/delivered"
   }
 }

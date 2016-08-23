@@ -438,15 +438,31 @@ p.product_price {
 }
 
 .sortBy {
-    background: url("../img/sort.svg") center no-repeat;
     float: right;
     margin-left: 10px;
+    width: 30px;
+    height: 28px;
+    border:1px solid #eee;
+    border-radius: 4px;
+    background: #FFF;
+}
+.sortBy_unknown {
+    background: url("../img/sort.svg") center no-repeat;
     background-size: contain;
     width: 30px;
     height: 26px;
-    border:1px solid #eee;
-    border-radius: 4px;
-
+}
+.sortBy_up {
+    background: url("../img/sort-up.svg") center no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 26px;
+}
+.sortBy_down {
+    background: url("../img/sort-down.svg") center no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 26px;
 }
 
 .outOfStock td {

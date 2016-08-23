@@ -17485,6 +17485,7 @@
 	    var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
 	        return string[0].toUpperCase() + string.slice(1);
 	    };
+
 	    var sort = _.lowerCase($routeParams.sort);
 	    if (sort != 'price' && sort != 'name') {
 	        $scope.currentSort = '';
