@@ -6,6 +6,7 @@ let cookieParser = require('cookie-parser');
 let validator = require('express-validator');
 let config = require('./config');
 let app = express();
+var ping = require('express-ping').ping;
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ let initPassport = require('./lib/passport/init');
 initPassport(passport);
 
 app.use(validator());
+app.use(ping());
 
 app.use(express.static(path.join(__dirname, 'public')));
 

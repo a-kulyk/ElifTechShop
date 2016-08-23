@@ -11,6 +11,7 @@ install:
 - cd Bank/
 - npm install phantomjs -g
 - npm install webpack -g
+- npm install gulpjs/gulp#4.0 -g
 - npm install
 - webpack
 - cd ../
@@ -18,11 +19,18 @@ install:
 - npm install 
 - webpack
 - cd ../
+- cd Delivery/
+- npm install
+- gulp build
+- cd ../
 script:
 - cd Bank/
 - npm test
 - cd ../
 - cd Shop/
+- npm test
+- cd ../
+- cd Delivery/
 - npm test
 - cd ../
 before_deploy:

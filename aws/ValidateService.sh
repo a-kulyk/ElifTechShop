@@ -14,10 +14,30 @@ function notifySlack {
         color="#D50200"
     fi
 
-    curl -X POST --data-urlencode 'payload={"channel": "#'$slackChannel'", "username": "CodeDeploy EliftechShop '$DEPLOYMENT_GROUP_NAME'", "attachments": [ { "color": "'$color'", "text": "<https://eu-west-1.console.aws.amazon.com/codedeploy/home?region=eu-west-1#/deployments/'$DEPLOYMENT_ID'|Deployment> '$status' on the instance. Commit: <https://bitbucket.org/reactmobileapp/mobileapp-api/commits/'$HASH'|'${HASH:0:7}'>" } ], "icon_emoji": "'$emoji'"}' $webHookUrl
+    curl -X POST --data-urlencode 'payload={"channel": "#'$slackChannel'", "username": "CodeDeploy EliftechShop '$DEPLOYMENT_GROUP_NAME'", "attachments": [ { "color": "'$color'", "text": "<https://eu-west-1.console.aws.amazon.com/codedeploy/home?region=eu-west-1#/deployments/'$DEPLOYMENT_ID'|Deployment> '$status' on the instance. Commit: <https://github.com/gameiro9k/ElifTechShop/commits/'$HASH'|'${HASH:0:7}'>" } ], "icon_emoji": "'$emoji'"}' $webHookUrl
 }
 
 result=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/ping)
+
+if [[ "$result" == "200" ]]; then
+    notifySlack 'success' ':yay:'
+    exit 0
+else
+    notifySlack 'failure' ':interrobang:'
+    exit 1
+fi
+
+result=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:7000/ping)
+
+if [[ "$result" == "200" ]]; then
+    notifySlack 'success' ':yay:'
+    exit 0
+else
+    notifySlack 'failure' ':interrobang:'
+    exit 1
+fi
+
+result=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/ping)
 
 if [[ "$result" == "200" ]]; then
     notifySlack 'success' ':yay:'
