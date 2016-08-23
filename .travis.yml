@@ -19,8 +19,7 @@ script:
 - npm test
 - cd ../
 before_deploy:
-- touch build/Release/.commit-hash
-- echo $TRAVIS_COMMIT > build/Release/.commit_hash
+- echo $TRAVIS_COMMIT > .commit-hash
 - NODE_ENV=production make create-dist
 - mv build/Release/EliftechShop.tar build/Release/ET-Shop-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER.tar
 deploy:
@@ -44,3 +43,5 @@ deploy:
   application: ElifTechBank
   deployment_group: ElifTech
   on: *2
+notifications:
+  slack: eliftechschool:2vvkGEg06yuxLUfAFXvsLmXz
