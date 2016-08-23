@@ -47,7 +47,8 @@
     "underscore": "^1.8.3",
     "uuid": "^2.0.2",
     "vinyl-named": "^1.1.0",
-    "webpack-stream": "^3.2.0"
+    "webpack-stream": "^3.2.0",
+    "express-ping": "^1.1.0"
   },
   "devDependencies": {
     "css-loader": "^0.23.1",

@@ -3,6 +3,10 @@ os: linux
 files:
   - source: build/Release/Bank
     destination: /home/ubuntu/EliftechShop/Bank
+  - source: build/Release/Shop
+    destination: /home/ubuntu/EliftechShop/Shop
+  - source: build/Release/Delivery
+    destination: /home/ubuntu/EliftechShop/Delivery
 hooks:
   AfterInstall:
     - location: aws/install.sh

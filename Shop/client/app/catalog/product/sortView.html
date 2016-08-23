@@ -1,6 +1,10 @@
 <div class="sort">
-	<button class="sortBy"  ng-click="sortThis()" ng-model="sortBy"> </button>
-	<select ui-select2="{minimumResultsForSearch: -1}" ng-change="sortThis()" data-placeholder="Pleas Select" ng-model="sorted" class="sort" ng-init="sorted = currentSort">
+	<button class="sortBy"  ng-click="sortThis()" ng-model="sortBy">
+		<div ng-show="!sortBy" class="sortBy_unknown"></div>
+		<div ng-show="sortBy <0" class="sortBy_down"></div>
+		<div ng-show="sortBy > 0" class="sortBy_up"></div>
+	</button>
+	<select ui-select2="{minimumResultsForSearch: -1}" ng-change="sortThis()" data-placeholder="Please Select" ng-model="sorted" class="sort" ng-init="sorted = currentSort">
 		<option value="" ng-selected="true"></option>
 		<option  ng-repeat="value in sort"  value="{{value}}" ><span class="firstLetter">{{value}}</span></option>
 	</select>

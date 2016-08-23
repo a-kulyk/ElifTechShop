@@ -49,12 +49,11 @@ router.get('/info/:track', function(req, res, next) {
     };
 
     var httpreq = http.request(options, (response) => {
-        let bodyChunks = [];
+        let body = '';
         response.on('data', (chunk) => {
-            bodyChunks.push(chunk);
+            body += chunk;
         });
         response.on('end', () => {
-            let body = Buffer.concat(bodyChunks).toString();
             res.send(body);
         });
     });
@@ -157,7 +156,6 @@ router.post('/pay', function(req, res, next) {
                         body += chunk;
                     });
                     response.on('end', () => {
-                        // let body = Buffer.concat(bodyChunks);
                         res.send(body);
                     });
                 });
@@ -310,8 +308,10 @@ router.put('/setAddress', function(req, res, next) {
 });
 
 router.put('/delivered', function(req, res, next) {
+    console.log("REQ: ",req.body);
     Order.findOne({ trackingCode: req.body.trackingCode })
         .then(order => {
+            console.log(order);
             order.status = "completed";
             order.date.completed = new Date();
             return order.save();

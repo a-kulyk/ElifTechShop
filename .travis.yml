@@ -11,12 +11,17 @@ install:
 - cd Bank/
 - npm install phantomjs -g
 - npm install webpack -g
+- npm install gulpjs/gulp#4.0 -g
 - npm install
 - webpack
 - cd ../
 - cd Shop/
 - npm install 
 - webpack
+- cd ../
+- cd Delivery/
+- npm install
+- NODE_ENV=production gulp build
 - cd ../
 script:
 - cd Bank/
@@ -25,8 +30,11 @@ script:
 - cd Shop/
 - npm test
 - cd ../
+- cd Delivery/
+- npm test
+- cd ../
 before_deploy:
-- echo $TRAVIS_COMMIT > .commit-hash
+- echo "$TRAVIS_COMMIT" > .commit-hash
 - NODE_ENV=production make create-dist
 - mv build/Release/EliftechShop.tar build/Release/ET-Shop-$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER.tar
 deploy:
