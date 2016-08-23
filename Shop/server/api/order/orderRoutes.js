@@ -39,7 +39,7 @@ router.get('/:id', function(req, res, next) {
 router.get('/info/:track', function(req, res, next) {
 
     let options = {
-        host: 'ec2-52-58-250-63.eu-central-1.compute.amazonaws.com',
+        host: 'localhost',
         port: 9000,
         path: '/order/' + req.params.track,
         method: 'GET',
@@ -139,7 +139,7 @@ router.post('/pay', function(req, res, next) {
 
                 let options = {
                     host: 'localhost',
-                    port: 3000,
+                    port: 80,
                     path: '/api/transaction/',
                     method: 'POST',
                     headers: {
@@ -265,11 +265,12 @@ router.put('/setAddress', function(req, res, next) {
                         username: req.user.email,
                         lat: +order.shippingAddress.lat,
                         lng: +order.shippingAddress.lng
-                    }
+                    },
+                    API_KEY: config.API_KEY
                 });
 
                 let options = {
-                    host: 'ec2-52-58-250-63.eu-central-1.compute.amazonaws.com',
+                    host: 'localhost',
                     port: 9000,
                     path: '/order/',
                     method: 'POST',
