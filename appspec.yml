@@ -2,9 +2,17 @@ version: 0.0
 os: linux
 files:
   - source: build/Release/Bank
-    destination: /home/ubuntu/Bank
+    destination: /home/ubuntu/EliftechShop/Bank
 hooks:
-  BeforeInstall:
+  AfterInstall:
     - location: aws/install.sh
+      runas: root
   ApplicationStart:
     - location: aws/start.sh
+      runas: root
+  ApplicationStop:
+    - location: aws/stop.sh
+      runas: root
+  ValidateService:
+    - location: aws/ValidateService.sh
+      runas: root

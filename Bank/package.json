@@ -37,7 +37,8 @@
     "requirejs": "^2.2.0",
     "serve-favicon": "~2.3.0",
     "url-loader": "^0.5.7",
-    "util": "^0.10.3"
+    "util": "^0.10.3",
+    "express-ping": "^1.1.0"
   },
   "devDependencies": {
     "webpack": "^1.13.1",

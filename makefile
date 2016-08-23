@@ -10,6 +10,7 @@ configure:
 create-dist:
 	rm -rf $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
+	cp .commit-hash $(BUILD_DIR)/
 	# BANK STARTS HERE
 	@echo Building application BANK
 	mkdir -p $(BUILD_DIR)/Bank/config
@@ -28,3 +29,4 @@ create-dist:
 	aws/** \
 	appspec.yml
 	chmod 755 $(BUILD_DIR)/${APP_NAME}.tar
+	rm -rf build/Release/Bank
