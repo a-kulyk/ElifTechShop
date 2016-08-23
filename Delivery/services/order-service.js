@@ -20,6 +20,7 @@ exports.createOrder = function (order) {
                 lng: order.to.lng
             });
         googlePromise.then(resultJSON=> {
+            console.log(order.API_KEY);
             order.travelTime = JSON.parse(resultJSON).rows[0].elements[0].duration.value;
             var trackingCode = uuid.v4();
             order.trackingCode = trackingCode;

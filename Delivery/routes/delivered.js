@@ -11,11 +11,20 @@ let responseFactory = require('../common/response-factory');
 exports.post = function (req, res) {
     let ordersIdArray = req.body;
     eachLimit(ordersIdArray, config.get('email-sender:send-at-once'), function (orderId, callback) {
+        let deliveredOrder;
         let servicePromise = orderService.findById(orderId);
         servicePromise.then((order)=> {
-            return deliveryNotifier.sendEmail(order.to.username, order.trackingCode);
-        }).then((trackingCode)=> {
-            return deliveryNotifier.notifyShop(trackingCode);
+            deliveredOrder = order;
+            console.log(deliveredOrder.API_KEY);
+            if (deliveredOrder.API_KEY === config.get("shop:API_KEY")) {
+                return deliveryNotifier.notifyShop(deliveredOrder);
+            }
+            return;
+        }).catch(err=> {
+            console.log('error with shop notification ' + err);
+            return;
+        }).then(()=> {
+            return deliveryNotifier.sendEmail(deliveredOrder.to.username, deliveredOrder.trackingCode);
         }).then(()=> {
             callback();
         }).catch((error=> {

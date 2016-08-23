@@ -8,6 +8,10 @@ let orderStates = require('../common/enums/order-states').orderStates;
 let Schema = mongoose.Schema;
 
 let schema = new Schema({
+        API_KEY: {
+            type: String,
+            default: null
+        },
         title: {
             type: String,
             required: true
