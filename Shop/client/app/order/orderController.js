@@ -53,7 +53,6 @@ angular.module('app')
             order.pay = function() {
                 orderService.pay()
                     .then(function(resp) {
-                        console.log(resp);
                         if (resp.data.outOfStock) {
                             $uibModal.open({
                                 templateUrl: './app/order/modals/outOfStock.html',
@@ -70,11 +69,9 @@ angular.module('app')
                         return resp;
                     })
                     .then(function(bank_resp) {
-                        console.log("bank_resp : ", bank_resp.data);
                         if (bank_resp.data.success === true) {
                             saveOrder();
                         } else if (bank_resp.data.success === false) {
-                            console.log("Insufficient funds on Your bank account");
                             $uibModal.open({
                                 templateUrl: './app/order/modals/paymentFail.html'
                             });
@@ -82,7 +79,6 @@ angular.module('app')
                             $uibModal.open({
                                 templateUrl: './app/order/modals/connectionErr.html'
                             });
-                            console.log('Could not connect to Your bank');
                         } else if (bank_resp.data.warning === "No bankAccount") {
                            openInputModal();
                         }
@@ -137,7 +133,6 @@ angular.module('app')
         });
 
         history.openOrder = function(order) {
-            console.log(order._id);
             $location.path("/order/" + order._id);
         };
     }])

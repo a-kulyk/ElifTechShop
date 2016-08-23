@@ -99,13 +99,11 @@ angular.module('app')
                 if (!$rootScope.shoppingCart) {
                     orderService.createCart(cart)
                         .then(function(response) {
-                            console.log("create response :  ", response.data);
                             $rootScope.shoppingCart = response.data;
                         });
                 } else {
                     orderService.addToCart(cart)
                         .then(function(response) {
-                            console.log("addItem response :  ", response.data);
                             $rootScope.shoppingCart = response.data;
                         });
                 }

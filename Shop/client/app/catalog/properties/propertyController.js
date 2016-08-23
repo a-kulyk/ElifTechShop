@@ -10,9 +10,9 @@ angular.module('app')
         if($rootScope.data.price) {
             $scope.price = _.cloneDeep($rootScope.data.price);
         }
+
         let defineProperty = function() {
             let currentUrl = _.cloneDeep($route.current.params);
-            console.log(currentUrl.searchField);
             if(currentUrl.searchField && !$rootScope.data.searchField) {
                 $rootScope.data.searchField = currentUrl.searchField;
             }
@@ -23,7 +23,6 @@ angular.module('app')
                         property.value.forEach(function (value) {
                             if(angular.isArray(currentUrl[item])) {
                                 if(currentUrl[item].includes(value.respond)) {
-                                    console.log(value.respond,true);
                                     value.state = true;
                                 }
                             } else {
@@ -38,7 +37,6 @@ angular.module('app')
                     if("company" == item) {
                             if(angular.isArray(currentUrl[item])) {
                                 if(currentUrl[item].includes(company.name)) {
-                                    console.log(company.respond,true);
                                     company.state = true;
                                     company.count = null;
                                 }
@@ -161,7 +159,6 @@ angular.module('app')
 
                 $rootScope.data = newResult || [];
                 defineProperty();
-                debugger;
                 $scope.complete = true;
 
             },

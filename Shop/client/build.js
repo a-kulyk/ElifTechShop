@@ -17329,7 +17329,6 @@
 
 	    order.pay = function () {
 	        orderService.pay().then(function (resp) {
-	            console.log(resp);
 	            if (resp.data.outOfStock) {
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/outOfStock.html',
@@ -17345,11 +17344,9 @@
 	            }
 	            return resp;
 	        }).then(function (bank_resp) {
-	            console.log("bank_resp : ", bank_resp.data);
 	            if (bank_resp.data.success === true) {
 	                saveOrder();
 	            } else if (bank_resp.data.success === false) {
-	                console.log("Insufficient funds on Your bank account");
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/paymentFail.html'
 	                });
@@ -17357,7 +17354,6 @@
 	                $uibModal.open({
 	                    templateUrl: './app/order/modals/connectionErr.html'
 	                });
-	                console.log('Could not connect to Your bank');
 	            } else if (bank_resp.data.warning === "No bankAccount") {
 	                openInputModal();
 	            }
@@ -17407,7 +17403,6 @@
 	    });
 
 	    history.openOrder = function (order) {
-	        console.log(order._id);
 	        $location.path("/order/" + order._id);
 	    };
 	}]).controller('OrderDetailController', ['$route', 'orderService', function ($route, orderService) {
@@ -17571,12 +17566,10 @@
 	        $scope.addToCart = function (cart) {
 	            if (!$rootScope.shoppingCart) {
 	                orderService.createCart(cart).then(function (response) {
-	                    console.log("create response :  ", response.data);
 	                    $rootScope.shoppingCart = response.data;
 	                });
 	            } else {
 	                orderService.addToCart(cart).then(function (response) {
-	                    console.log("addItem response :  ", response.data);
 	                    $rootScope.shoppingCart = response.data;
 	                });
 	            }
@@ -17639,9 +17632,9 @@
 	    if ($rootScope.data.price) {
 	        $scope.price = _.cloneDeep($rootScope.data.price);
 	    }
+
 	    var defineProperty = function defineProperty() {
 	        var currentUrl = _.cloneDeep($route.current.params);
-	        console.log(currentUrl.searchField);
 	        if (currentUrl.searchField && !$rootScope.data.searchField) {
 	            $rootScope.data.searchField = currentUrl.searchField;
 	        }
@@ -17653,7 +17646,6 @@
 	                    property.value.forEach(function (value) {
 	                        if (angular.isArray(currentUrl[item])) {
 	                            if (currentUrl[item].includes(value.respond)) {
-	                                console.log(value.respond, true);
 	                                value.state = true;
 	                            }
 	                        } else {
@@ -17668,7 +17660,6 @@
 	                if ("company" == item) {
 	                    if (angular.isArray(currentUrl[item])) {
 	                        if (currentUrl[item].includes(company.name)) {
-	                            console.log(company.respond, true);
 	                            company.state = true;
 	                            company.count = null;
 	                        }
@@ -17789,7 +17780,6 @@
 
 	        $rootScope.data = newResult || [];
 	        defineProperty();
-	        debugger;
 	        $scope.complete = true;
 	    }, function (error) {
 	        console.log(error);
