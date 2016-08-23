@@ -21,7 +21,7 @@ install:
 - cd ../
 - cd Delivery/
 - npm install
-- gulp build
+- NODE_ENV=production gulp build
 - cd ../
 script:
 - cd Bank/
