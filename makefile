@@ -52,7 +52,7 @@ create-dist:
 	cp Delivery/app.js $(BUILD_DIR_DELIVERY)/
 	cp Delivery/package.json $(BUILD_DIR_DELIVERY)/
 	#DELIVERY ENDS HERE
-	tar -cvf $(BUILD_DIR)/${APP_NAME}.tar $(BUILD_DIR_BANK)/** \
+	tar -cvf $(BUILD_DIR)/${APP_NAME}.tar Bank/** \
 	aws/** \
 	Shop/** \
 	Delivery/** \
