@@ -19,6 +19,7 @@ exports.post = function (req, res) {
         }).then(()=> {
             callback();
         }).catch((error=> {
+            console.log('error in /delivered route')
             callback(error);
         }));
     }, function (err) {
