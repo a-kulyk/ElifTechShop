@@ -8,7 +8,10 @@
             <div class="panel-heading">Make order</div>
             <div class="panel-body">
                 <div>
-                    <form ng-submit="orderForm.$valid && createOrder()" role="form" name="orderForm" novalidate>
+                    <form ng-submit="toPlace&&fromPlace
+                               &&validateAddress(toPlace)&&
+                               validateAddress(fromPlace)&& placesUnique()&&orderForm.$valid && createOrder()"
+                          role="form" name="orderForm" novalidate>
                         <div class="form-group" ng-class="{ 'has-error': orderForm.title.$touched
                              && orderForm.title.$invalid }">
                             <p>Product</p>
