@@ -1,5 +1,5 @@
 {
-  "url": "http://ec2-52-58-250-63.eu-central-1.compute.amazonaws.com:9000",
+  "url": "http://ec2-54-201-172-12.us-west-2.compute.amazonaws.com:9000",
   "host": "localhost",
   "port": 9000,
   "mongoose": {
