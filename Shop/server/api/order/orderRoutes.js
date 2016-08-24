@@ -164,7 +164,8 @@ router.post('/pay', function(req, res, next) {
                     next(e);
                 });
                 httpreq.end();
-            });
+            },
+            err => next(err));
     }
 });
 
