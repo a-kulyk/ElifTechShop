@@ -17388,7 +17388,7 @@
 	            }
 	        });
 	    }
-	}]).controller('HistoryCtrl', ['$scope', 'orderService', '$location', function ($scope, orderService, $location) {
+	}]).controller('HistoryCtrl', ['$scope', '$rootScope', 'orderService', '$location', function ($scope, $rootScope, orderService, $location) {
 	    var history = this;
 	    history.propertyName = 'date.created';
 	    history.sortReverse = true;

@@ -1,7 +1,7 @@
 <div class="container">
     <h3>Order's History</h3>
     <div class="well">
-        <table class="table table-hover history" ng-show="history.allOrders.length || (history.allOrders.length === 1 && history.allOrders[0]._id !== shoppingCart.order._id)">
+        <table class="table table-hover history" ng-hide="history.allOrders.length === 0 || (history.allOrders.length === 1 && history.allOrders[0]._id == shoppingCart.order._id)">
             <thead>
                 <tr>
                     <th>
@@ -35,6 +35,6 @@
                 </tr>
             </tbody>
         </table>
-        <p ng-show="!history.allOrders.length || (history.allOrders.length === 1 && history.allOrders[0]._id === shoppingCart.order._id)">No orders yet</p>
+        <p ng-show="history.allOrders.length === 0 || (history.allOrders.length === 1 && history.allOrders[0]._id == shoppingCart.order._id)">No orders yet</p>
     </div>
 </div>

@@ -428,7 +428,7 @@ p.product_price {
   margin-bottom: 40px;
 }
 
-.shop-cart img {
+.shop-cart img, .order-detail img {
   max-width: 60px;
   max-height: 60px;
 }
