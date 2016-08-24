@@ -13,8 +13,8 @@
   },
   "email-sender": {
     "service": "Gmail",
-    "user": "super.delivery.service@gmail.com",
-    "password": "genius1111",
+    "user": "eliftech.delivery@gmail.com",
+    "password": "school201",
     "send-at-once": 3
   },
   "session": {

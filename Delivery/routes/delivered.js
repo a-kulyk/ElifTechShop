@@ -15,7 +15,7 @@ exports.post = function (req, res) {
         let servicePromise = orderService.findById(orderId);
         servicePromise.then((order)=> {
             deliveredOrder = order;
-            console.log(deliveredOrder.API_KEY);
+            console.log("API_KEY : " + deliveredOrder.API_KEY);
             if (deliveredOrder.API_KEY === config.get("shop:API_KEY")) {
                 return deliveryNotifier.notifyShop(deliveredOrder);
             }
