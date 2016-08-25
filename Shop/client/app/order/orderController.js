@@ -13,7 +13,7 @@ angular.module('app')
                     $rootScope.shoppingCart = response.data;
                 });
 
-            order.updQuantity = _.debounce(function(id, quan) {
+            order.updQuantity = function(id, quan) {
                 orderService.updQuantity(id, quan)
                     .then(function(response) {
                         $rootScope.shoppingCart = {order: response.data.order, total: response.data.total};
@@ -23,16 +23,17 @@ angular.module('app')
                             });
                         }
                     });
-            }, 300);
+            };
 
-            order.decrement = function(id, quan) {
+            order.decrement = _.debounce(function(id, quan) {
                 --quan;
                 if (quan !== 0) { 
                     order.updQuantity(id, -1);
                 } else {
                     order.removeItem(id);
+
                 }
-            };
+            }, 500);
 
             order.removeItem = function(id) {
                 orderService.removeItem(id)
@@ -118,7 +119,7 @@ angular.module('app')
             }
         }
     ])
-    .controller('HistoryCtrl', ['$scope', 'orderService', '$location', function($scope, orderService, $location) {
+    .controller('HistoryCtrl', ['$scope', '$rootScope', 'orderService', '$location', function($scope, $rootScope, orderService, $location) {
         var history = this;
         history.propertyName = 'date.created';
         history.sortReverse = true;

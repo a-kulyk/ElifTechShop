@@ -1,4 +1,5 @@
 {
+  "url": "http://ec2-54-201-172-12.us-west-2.compute.amazonaws.com:9000",
   "host": "localhost",
   "port": 9000,
   "mongoose": {
@@ -12,8 +13,8 @@
   },
   "email-sender": {
     "service": "Gmail",
-    "user": "super.delivery.service@gmail.com",
-    "password": "genius1111",
+    "user": "eliftech.delivery@gmail.com",
+    "password": "school201",
     "send-at-once": 3
   },
   "session": {
@@ -25,6 +26,7 @@
     }
   },
   "shop": {
-    "url": "http://ec2-52-43-122-40.us-west-2.compute.amazonaws.com:7000/order/delivered"
+    "url": "http://ec2-54-201-172-12.us-west-2.compute.amazonaws.com:7000/order/delivered",
+    "API_KEY": "d6911f567ef734f18ea176481638cc8a"
   }
 }
