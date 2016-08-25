@@ -19,6 +19,15 @@ require('./appMiddlware')(app);
 app.use('/user', require('./api/auth/authRoutes'));
 app.use('/order', require('./api/order/orderRoutes'));
 app.use('/catalog',require('./api/catalog/catalogRoutes'));
+app.use('/someCoolRoute', function(req, res) {
+  res.end(JSON.stringify({
+    message: 'My cool route was launched',
+    status: {
+      old: 'someCoolRoute wasnt defined',
+      new: 'someCoolRoute is defined'
+    }
+  }));
+});
 app.use(ping());
 // error handlers
 app.use(function(req, res, next) {
