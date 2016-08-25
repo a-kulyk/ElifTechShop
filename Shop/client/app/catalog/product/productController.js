@@ -1,9 +1,9 @@
 angular.module('app')
-    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location','$scope','$timeout' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location,$scope,$timeout) {
+    .controller('CatalogController', ['Items', '$route','$routeParams' ,'$httpParamSerializer','$rootScope','$location','$scope' ,function (Items, $route,$routeParams,$httpParamSerializer,$rootScope,$location,$scope) {
         $scope.complete = false;
         let capitalizeFirstLetter = function(string) {
             return string[0].toUpperCase() + string.slice(1);
-        }
+        };
 
         let sort = _.lowerCase($routeParams.sort);
         if(sort != 'price' && sort != 'name') {
@@ -23,13 +23,11 @@ angular.module('app')
             .then (response => {
 
                 if(response.status >= 500) {
-                    console.log(response);
                     $scope.error = true;
                     $scope.complete = true;
                     return;
                 }
                 if(response.data.items.length === 0) {
-                    console.log(response);
                     $scope.notItems = true;
                     $scope.complete = true;
                     return;
@@ -41,7 +39,7 @@ angular.module('app')
 
                 _(response.data.items).forEach(function (value) {
                     value.smallDescription = value.description.slice(0,105) + "...";
-                })
+                });
 
 
                 $scope.items = response.data.items;
@@ -55,9 +53,7 @@ angular.module('app')
                     params.page = pageNumber;
                     let page = {number: pageNumber, url: $httpParamSerializer(params)};
                     $scope.pages.push(page);
-                })
-
-
+                });
 
                 $scope.complete = true;
 
@@ -77,24 +73,20 @@ angular.module('app')
     }])
 
     .controller('ProductShowController',['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
-        self = this;
+        let self = this;
         $scope.complete = false;
         Items.item($route.current.params.id).then(respone => {
-            //console.log(respone);
             if(respone.status >= 500) {
                 $scope.error = true;
                 $scope.complete = true;
                 return;
             }
-            console.log(respone.data);
-
             if(!respone.data || respone.data.error) {
                 self.notFound = true;
                 $scope.complete = true;
                 return;
             }
             $scope.product = respone.data;
-
 
             $scope.addToCart = function(cart) {
                 if (!$rootScope.shoppingCart) {

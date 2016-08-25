@@ -16,6 +16,12 @@ angular.module('app')
 
         let defineProperty = function() {
             let currentUrl = _.cloneDeep($route.current.params);
+            if(currentUrl.minprice && $rootScope.data.price) {
+                $rootScope.data.price.min = parseInt(currentUrl.minprice);
+            }
+            if(currentUrl.maxprice && $rootScope.data.price) {
+                $rootScope.data.price.max = parseInt(currentUrl.maxprice);
+            }
             if(currentUrl.searchField && !$rootScope.data.searchField) {
                 $rootScope.data.searchField = currentUrl.searchField;
             }
@@ -145,8 +151,8 @@ angular.module('app')
                         newResult.company[key] = newCompany
                     });
 
-                };
-                if (newResult.hasOwnProperty('properties')) {
+                }
+                    if (newResult.hasOwnProperty('properties')) {
                     newResult.properties.forEach(function (item) {
                         if (item.hasOwnProperty('value')) {
                             for (let i = 0; i < item.value.length; i++) {

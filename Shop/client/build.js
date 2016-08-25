@@ -17480,7 +17480,7 @@
 
 	'use strict';
 
-	angular.module('app').controller('CatalogController', ['Items', '$route', '$routeParams', '$httpParamSerializer', '$rootScope', '$location', '$scope', '$timeout', function (Items, $route, $routeParams, $httpParamSerializer, $rootScope, $location, $scope, $timeout) {
+	angular.module('app').controller('CatalogController', ['Items', '$route', '$routeParams', '$httpParamSerializer', '$rootScope', '$location', '$scope', function (Items, $route, $routeParams, $httpParamSerializer, $rootScope, $location, $scope) {
 	    $scope.complete = false;
 	    var capitalizeFirstLetter = function capitalizeFirstLetter(string) {
 	        return string[0].toUpperCase() + string.slice(1);
@@ -17503,13 +17503,11 @@
 	    Items.all($route.current.params).then(function (response) {
 
 	        if (response.status >= 500) {
-	            console.log(response);
 	            $scope.error = true;
 	            $scope.complete = true;
 	            return;
 	        }
 	        if (response.data.items.length === 0) {
-	            console.log(response);
 	            $scope.notItems = true;
 	            $scope.complete = true;
 	            return;
@@ -17546,17 +17544,14 @@
 	        $scope.complete = true;
 	    });
 	}]).controller('ProductShowController', ['$scope', '$rootScope', 'Items', '$route', 'orderService', function ($scope, $rootScope, Items, $route, orderService) {
-	    self = this;
+	    var self = this;
 	    $scope.complete = false;
 	    Items.item($route.current.params.id).then(function (respone) {
-	        //console.log(respone);
 	        if (respone.status >= 500) {
 	            $scope.error = true;
 	            $scope.complete = true;
 	            return;
 	        }
-	        console.log(respone.data);
-
 	        if (!respone.data || respone.data.error) {
 	            self.notFound = true;
 	            $scope.complete = true;
@@ -17639,6 +17634,12 @@
 
 	    var defineProperty = function defineProperty() {
 	        var currentUrl = _.cloneDeep($route.current.params);
+	        if (currentUrl.minprice && $rootScope.data.price) {
+	            $rootScope.data.price.min = parseInt(currentUrl.minprice);
+	        }
+	        if (currentUrl.maxprice && $rootScope.data.price) {
+	            $rootScope.data.price.max = parseInt(currentUrl.maxprice);
+	        }
 	        if (currentUrl.searchField && !$rootScope.data.searchField) {
 	            $rootScope.data.searchField = currentUrl.searchField;
 	        }
@@ -17767,7 +17768,7 @@
 	                };
 	                newResult.company[key] = newCompany;
 	            });
-	        };
+	        }
 	        if (newResult.hasOwnProperty('properties')) {
 	            newResult.properties.forEach(function (item) {
 	                if (item.hasOwnProperty('value')) {

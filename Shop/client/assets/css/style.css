@@ -441,7 +441,7 @@ p.product_price {
     float: right;
     margin-left: 10px;
     width: 30px;
-    height: 28px;
+    height: 26px;
     border:1px solid #eee;
     border-radius: 4px;
     background: #FFF;
@@ -449,18 +449,21 @@ p.product_price {
 .sortBy_unknown {
     background: url("../img/sort.svg") center no-repeat;
     background-size: contain;
+    margin-top:-1px;
     width: 30px;
     height: 26px;
 }
 .sortBy_up {
     background: url("../img/sort-up.svg") center no-repeat;
     background-size: contain;
+    margin-top:-1px;
     width: 30px;
     height: 26px;
 }
 .sortBy_down {
     background: url("../img/sort-down.svg") center no-repeat;
     background-size: contain;
+    margin-top:-1px;
     width: 30px;
     height: 26px;
 }
