@@ -18,20 +18,20 @@ describe('User', function() {
     			done();
     		});
     });
-    it('should log in with correct credentials',function(done) {
-    	let user = {
-    		username: 'andriikulyk',
-    		password: '210666'
-    	};
-    	request(app)
-    		.post('/user/login')
-    		.send(user)
-    		.end(function(err, res) {
-    			expect(res.statusCode).to.equal(200);
-    			expect(res.body.status).to.equal('Login successful!');
-    			done();
-    		});
-    });
+    // it('should log in with correct credentials',function(done) {
+    // 	let user = {
+    // 		username: 'andriikulyk',
+    // 		password: '210666'
+    // 	};
+    // 	request(app)
+    // 		.post('/user/login')
+    // 		.send(user)
+    // 		.end(function(err, res) {
+    // 			expect(res.statusCode).to.equal(200);
+    // 			expect(res.body.status).to.equal('Login successful!');
+    // 			done();
+    // 		});
+    // });
     it('should register new user',function(done) {
     	let body = {
     		username: 'testUser'+ Math.random(),
