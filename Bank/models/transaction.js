@@ -22,6 +22,7 @@ var schema = new Schema({
 
 schema.statics.action = function (from, to, amount) {
     let Transaction = this;
+    amount = parseInt(amount, 10);
     let fromUser = Account.findOne({_id: from, enabled: true});
     let toUser = Account.findOne({_id: to, enabled: true});
     let usersAmount = Promise.all([fromUser, toUser])
