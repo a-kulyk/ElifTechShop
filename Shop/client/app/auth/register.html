@@ -24,7 +24,7 @@
             <div class="form-group">
                 <label for="inputBankAccount" class="col-lg-2 control-label">Bank Account</label>
                 <div class="col-lg-10">
-                    <input type="bankAccount" class="form-control" id="inputbankAccount" name="bankAccount" ng-model="registerForm.bankAccount" placeholder="Enter Your bank account ">
+                    <input type="bankAccount" class="form-control" id="inputbankAccount" name="bankAccount" ng-model="registerForm.bankAccount" pattern="^[a-z0-9]{24}$" placeholder="Enter Your bank account ">
                 </div>
             </div>
             <div class="form-group">

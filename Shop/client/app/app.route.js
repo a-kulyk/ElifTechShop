@@ -64,12 +64,14 @@ myApp.config(function($routeProvider) {
     .run(function($rootScope, $location, $route, AuthService) {
         $rootScope.$on('$routeChangeStart',
             function(event, next, current) {
-                AuthService.getUserStatus()
-                    .then(function() {
-                        if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()) {
-                            $location.path('/login');
-                            $route.reload();
-                        }
-                    });
+                if (!$rootScope.currentUser) {
+                    AuthService.getUserStatus()
+                        .then(function() {
+                            if (next.access !== undefined && next.access.restricted && !AuthService.isLoggedIn()) {
+                                $location.path('/login');
+                                $route.reload();
+                            }
+                        });
+                }
             });
     });

@@ -1,8 +1,10 @@
+var path = require('path');
+
 module.exports = {
-    context: __dirname + "/client",
+    context: path.join(__dirname, "client"),
     entry: "./core.js",
     output: {
-        path: __dirname + "/client",
+        path: path.join(__dirname, "client"),
         filename: "build.js"
     },
     module: {
@@ -14,11 +16,17 @@ module.exports = {
                 query: {
                     presets: ['es2015']
                 }
+            },{
+                test: /\.css$/,
+                exclude: /node_modules/,
+                loader: 'style!css'
+            },{
+                test: /\.(jpg|png|gif)$/,
+                include: /img/,
+                loader: 'url'
+            },{
+                test: /\.svg/, loader: 'svg-url-loader'
             }
         ]
     }
-
-
-};/**
- * Created by devilmini on 03.08.16.
- */
+};

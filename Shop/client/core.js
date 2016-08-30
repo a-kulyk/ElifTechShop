@@ -19,4 +19,6 @@
     require("./app/catalog/product/sortDirective.js");
     require("./app/catalog/categories/categoryDirective.js");
     require("./app/catalog/properties/propertyDirective.js");
+    require("./assets/css/shopStyle.css");
+    require("./assets/css/style.css");
     
